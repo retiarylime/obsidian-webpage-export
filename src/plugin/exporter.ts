@@ -6,6 +6,7 @@ import { Website } from "src/plugin/website/website";
 import { ExportLog, MarkdownRendererAPI } from "src/plugin/render-api/render-api";
 import { ExportInfo, ExportModal } from "src/plugin/settings/export-modal";
 import { Webpage } from "./website/webpage";
+import { ChunkedWebsiteExporter } from "src/plugin/utils/chunked-website-exporter";
 
 export class HTMLExporter
 {
@@ -53,7 +54,19 @@ export class HTMLExporter
 		let website = undefined;
 		try
 		{
-			website = await (await new Website(destination).load(files)).build();
+			// Check if this is a large vault that needs chunked processing
+			if (ChunkedWebsiteExporter.shouldUseChunkedExport(files)) {
+				ExportLog.log(`Large vault detected (${files.length} files) - using chunked export`);
+				
+				// Use configured chunk size or fall back to recommended
+				const chunkSize = Settings.exportOptions.largeVaultChunkSize || 
+					ChunkedWebsiteExporter.getRecommendedChunkSize(files.length);
+				
+				website = await ChunkedWebsiteExporter.exportInChunks(files, destination, chunkSize);
+			} else {
+				// Use standard export for smaller vaults
+				website = await (await new Website(destination).load(files)).build();
+			}
 
 			if (!website)
 			{
@@ -93,8 +106,8 @@ export class HTMLExporter
 				}
 				else
 				{
-					await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
-					await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
+					await Utils.downloadAttachments(website.index.newFiles.filter((f: any) => !(f instanceof Webpage)));
+					await Utils.downloadAttachments(website.index.updatedFiles.filter((f: any) => !(f instanceof Webpage)));
 
 					if (Settings.exportPreset != ExportPreset.RawDocuments)
 					{

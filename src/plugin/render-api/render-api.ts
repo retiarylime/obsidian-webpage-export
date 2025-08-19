@@ -96,6 +96,10 @@ export namespace MarkdownRendererAPI {
 		ExportLog.resetProgress();
 	}
 
+	export function forceCleanup() {
+		_MarkdownRendererInternal.forceCleanup();
+	}
+
 }
 
 export namespace _MarkdownRendererInternal {
@@ -1288,6 +1292,73 @@ export namespace _MarkdownRendererInternal {
 		}
 
 		electronWindow?.setProgressBar(-1);
+		
+		batchStarted = false;
+		renderLeaf = undefined;
+		electronWindow = undefined;
+	}
+
+	export function forceCleanup() {
+		// Clean up batch document
+		if (batchDocument && batchDocument.body) {
+			// Remove all children to free memory
+			while (batchDocument.body.firstChild) {
+				batchDocument.body.removeChild(batchDocument.body.firstChild);
+			}
+		}
+
+		// Clean up any temporary containers in main document
+		const tempContainers = document.querySelectorAll('.temp-export-container, .obsidian-document:not([data-permanent])');
+		tempContainers.forEach(container => {
+			try {
+				container.remove();
+			} catch (e) {
+				// Ignore removal errors
+			}
+		});
+
+		// Clear cached markdown view
+		if (markdownView) {
+			try {
+				// @ts-ignore - Force cleanup of view internals
+				if (markdownView.previewMode) {
+					const renderer = (markdownView.previewMode as any).renderer;
+					if (renderer && renderer.sections) {
+						renderer.sections.forEach((section: any) => {
+							if (section.el && section.el.empty) {
+								section.el.empty();
+							}
+						});
+					}
+				}
+			} catch (e) {
+				// Ignore cleanup errors
+			}
+			markdownView = undefined;
+		}
+
+		// Clear loading and log containers
+		if (loadingContainer) {
+			try {
+				loadingContainer.remove();
+			} catch (e) {
+				// Ignore removal errors
+			}
+			loadingContainer = undefined;
+		}
+		
+		logContainer = undefined;
+		logShowing = false;
+
+		// Force garbage collection hint if available
+		if (typeof global !== 'undefined' && global.gc) {
+			try {
+				global.gc();
+			} catch (e) {
+				// Ignore GC errors
+			}
+		}
+	}
 
 		electronWindow = undefined;
 		renderLeaf = undefined;

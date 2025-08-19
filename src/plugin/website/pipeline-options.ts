@@ -215,6 +215,12 @@ export class ExportPipelineOptions extends MarkdownRendererOptions
 	autoDisposeWebpages: boolean = true;
 
 	/**
+	 * Chunk size for processing large vaults (files per chunk).
+	 * Smaller values use less memory but may be slower.
+	 */
+	largeVaultChunkSize: number = 25;
+
+	/**
 	 * Reconstructs feature option instances to ensure constructor-set properties are preserved
 	 * after loading from JSON. This is necessary because deepAssign overwrites instance properties.
 	 */
