@@ -1366,7 +1366,7 @@ export namespace _MarkdownRendererInternal {
 		fileListContainer = undefined;
 
 		batchStarted = false;
-	}
+	// Removed extraneous closing brace here
 
 	function generateLogEl(title: string, message: any, textColor: string, backgroundColor: string): HTMLElement {
 		const logEl = batchDocument.body.createEl("div");
@@ -1519,7 +1519,6 @@ export namespace _MarkdownRendererInternal {
 
 		appendLogEl(generateLogEl(messageTitle, message, infoColor, infoBoxColor));
 	}
-
 }
 
 export namespace ExportLog {

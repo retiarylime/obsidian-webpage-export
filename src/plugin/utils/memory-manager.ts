@@ -1,7 +1,8 @@
 import { MarkdownRendererAPI } from "../render-api/render-api";
 
 export class MemoryManager {
-	private static readonly CLEANUP_THRESHOLD_MB = 300;
+	private static readonly CLEANUP_THRESHOLD_MB = 200; // More aggressive threshold
+	private static readonly CRITICAL_THRESHOLD_MB = 400; // Critical memory level
 	private static cleanupCount = 0;
 
 	/**
@@ -26,25 +27,48 @@ export class MemoryManager {
 	 */
 	public static async cleanup(): Promise<void> {
 		this.cleanupCount++;
+		const beforeCleanup = this.getMemoryUsageMB();
 		
 		try {
-			// Clean up DOM elements
+			// Clean up DOM elements first
 			this.cleanupDOMElements();
 			
 			// Force cleanup in render API
 			MarkdownRendererAPI.forceCleanup();
 			
-			// Force garbage collection if available
+			// Clear any remaining caches
+			this.clearBrowserCaches();
+			
+			// Force garbage collection multiple times for better cleanup
+			this.forceGarbageCollection();
+			await this.delay(50);
 			this.forceGarbageCollection();
 			
 			// Small delay to allow cleanup to complete
-			await this.delay(50);
+			await this.delay(100);
 			
-			console.log(`Memory cleanup #${this.cleanupCount} completed. Memory usage: ${this.getMemoryUsageMB().toFixed(1)}MB`);
+			const afterCleanup = this.getMemoryUsageMB();
+			const saved = beforeCleanup - afterCleanup;
+			console.log(`Memory cleanup #${this.cleanupCount}: ${beforeCleanup.toFixed(1)}MB -> ${afterCleanup.toFixed(1)}MB (saved ${saved.toFixed(1)}MB)`);
 			
 		} catch (error) {
 			console.warn("Memory cleanup encountered an error:", error);
 		}
+	}
+
+	/**
+	 * Critical memory cleanup - more aggressive
+	 */
+	public static async criticalCleanup(): Promise<void> {
+		console.warn("Critical memory cleanup triggered!");
+		
+		// Multiple cleanup passes
+		await this.cleanup();
+		await this.delay(200);
+		await this.cleanup();
+		
+		// Clear all possible caches
+		this.clearAllCaches();
 	}
 
 	/**
@@ -91,6 +115,60 @@ export class MemoryManager {
 	}
 
 	/**
+	 * Clear browser caches that might be holding memory
+	 */
+	private static clearBrowserCaches(): void {
+		try {
+			// Clear any cached images or resources
+			if (typeof window !== 'undefined') {
+				// Clear cached stylesheets
+				const stylesheets = document.querySelectorAll('style[data-temp], link[data-temp]');
+				stylesheets.forEach(sheet => sheet.remove());
+				
+				// Clear any cached blob URLs
+				// Note: We can't enumerate all blob URLs, but we can try to clean up known patterns
+			}
+		} catch (e) {
+			// Ignore cache clearing errors
+		}
+	}
+
+	/**
+	 * Clear all possible caches - public API method
+	 */
+	public static clearCaches(): void {
+		this.clearAllCaches();
+	}
+
+	/**
+	 * Clear all possible caches - most aggressive cleanup
+	 */
+	private static clearAllCaches(): void {
+		try {
+			this.clearBrowserCaches();
+			
+			// Clear any global caches that might exist
+			if (typeof window !== 'undefined') {
+				// Clear CSS rule caches
+				const sheets = document.styleSheets;
+				for (let i = 0; i < sheets.length; i++) {
+					try {
+						const sheet = sheets[i];
+						if (sheet.href && sheet.href.includes('blob:')) {
+							// This is a temporary stylesheet, try to clear it
+							URL.revokeObjectURL(sheet.href);
+						}
+					} catch (e) {
+						// Ignore individual sheet errors
+					}
+				}
+			}
+		} catch (e) {
+			// Ignore cache clearing errors
+		}
+	}
+
+	/**
 	 * Force garbage collection if available
 	 */
 	private static forceGarbageCollection(): void {
@@ -131,8 +209,13 @@ export class MemoryManager {
 	 * Monitor memory usage and automatically clean up if needed
 	 */
 	public static async autoCleanup(): Promise<void> {
-		if (this.needsCleanup()) {
-			console.log(`Auto cleanup triggered. Memory usage: ${this.getMemoryUsageMB().toFixed(1)}MB`);
+		const memoryUsage = this.getMemoryUsageMB();
+		
+		if (memoryUsage > this.CRITICAL_THRESHOLD_MB) {
+			console.warn(`Critical memory usage detected: ${memoryUsage.toFixed(1)}MB - performing critical cleanup`);
+			await this.criticalCleanup();
+		} else if (this.needsCleanup()) {
+			console.log(`Auto cleanup triggered. Memory usage: ${memoryUsage.toFixed(1)}MB`);
 			await this.cleanup();
 		}
 	}

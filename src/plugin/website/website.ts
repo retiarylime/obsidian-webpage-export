@@ -15,6 +15,7 @@ import { GraphView } from "src/plugin/features/graph-view";
 import { ThemeToggle } from "src/plugin/features/theme-toggle";
 import { SearchInput } from "src/plugin/features/search-input";
 import { Utils } from "src/plugin/utils/utils";
+import { MemoryManager } from "src/plugin/utils/memory-manager";
 
 
 export class Website
@@ -263,11 +264,17 @@ export class Website
 
 		
 		let progress = 0;
+		const totalWebpages = webpages.length;
+		const memoryCleanupInterval = Math.max(5, Math.floor(totalWebpages / 50)); // Clean every 5 files, or every 2% of total files
+		
+		ExportLog.log(`Processing ${totalWebpages} webpages with memory cleanup every ${memoryCleanupInterval} files`);
+		
 		for (const webpage of webpages)
 		{
 			if (ExportLog.isCancelled()) return;
 
-			ExportLog.progress(1, "Building Webpages", webpage.source.path);
+			const memoryBefore = MemoryManager.getMemoryUsageMB();
+			ExportLog.progress(1, "Building Webpages", `${webpage.source.path} (${memoryBefore.toFixed(1)}MB)`);
 
 			const rendered = await webpage.renderDocument();
 			if (!rendered) continue;
@@ -281,6 +288,7 @@ export class Website
 			await Utils.delay(0);
 			if (built) await this.index.addFile(webpage);
 			else await this.index.removeFile(webpage);
+			
 			// save the file and then dispose of the webpage
 			if (!this.exportOptions.combineAsSingleFile)
 				await webpage.download();
@@ -289,6 +297,26 @@ export class Website
 				webpage.dispose();
 
 			progress += 1;
+
+			// Aggressive memory management for large vaults
+			if (progress % memoryCleanupInterval === 0) {
+				const memoryAfter = MemoryManager.getMemoryUsageMB();
+				ExportLog.log(`Memory cleanup triggered at file ${progress}/${totalWebpages} (${memoryAfter.toFixed(1)}MB)`);
+				
+				await MemoryManager.cleanup();
+				
+				// Force cleanup in render API
+				MarkdownRendererAPI.forceCleanup();
+				
+				const memoryFinal = MemoryManager.getMemoryUsageMB();
+				ExportLog.log(`Memory cleanup completed: ${memoryAfter.toFixed(1)}MB -> ${memoryFinal.toFixed(1)}MB`);
+				
+				// Extra delay to let cleanup settle
+				await Utils.delay(100);
+			} else {
+				// Auto cleanup if memory is getting too high
+				await MemoryManager.autoCleanup();
+			}
 
 			await Utils.delay(0);
 		}
