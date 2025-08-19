@@ -144,20 +144,16 @@ export class ChunkedWebsiteExporter {
 		try {
 			ExportLog.log(`Processing chunk ${chunkIndex + 1} with ${files.length} files`);
 			
-			// Create a website for this chunk
-			const website = new Website(destination);
-			await website.load(files);
+			// Create and build website for this chunk - preserve original export path creation pattern
+			const website = await (await new Website(destination).load(files)).build();
 			
-			// Build the website
-			const result = await website.build(files);
-			
-			if (!result) {
+			if (!website) {
 				ExportLog.error(`Failed to build chunk ${chunkIndex + 1}`);
 				return undefined;
 			}
 			
 			ExportLog.log(`Successfully processed chunk ${chunkIndex + 1}`);
-			return result;
+			return website;
 			
 		} catch (error) {
 			ExportLog.error(error, `Error processing chunk ${chunkIndex + 1}`);
