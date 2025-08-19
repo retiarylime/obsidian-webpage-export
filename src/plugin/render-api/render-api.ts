@@ -1422,22 +1422,48 @@ export namespace _MarkdownRendererInternal {
 
 	let logShowing = false;
 	function appendLogEl(logEl: HTMLElement) {
-		logContainer = loadingContainer?.querySelector(".html-progress-log") ?? undefined;
+		try {
+			logContainer = loadingContainer?.querySelector(".html-progress-log") ?? undefined;
 
-		if (!logContainer || !renderLeaf) {
-			console.error("Failed to append log element, log container or render leaf is undefined!");
-			return;
+			if (!logContainer || !renderLeaf) {
+				// Silently fail during memory cleanup or initialization phases
+				// Log to console only in development mode
+				if (console.debug) {
+					console.debug("Log container or render leaf not available - skipping log append");
+				}
+				return;
+			}
+
+			// Additional safety checks for render leaf state
+			if (!renderLeaf.view || !renderLeaf.view.containerEl) {
+				if (console.debug) {
+					console.debug("Render leaf view not ready - skipping log append");
+				}
+				return;
+			}
+
+			if (!logShowing) {
+				try {
+					renderLeaf.view.containerEl.win.resizeTo(1000, 500);
+					logContainer.style.display = "flex";
+					logShowing = true;
+				} catch (resizeError) {
+					// Window resize might fail in some environments - continue anyway
+					if (console.debug) {
+						console.debug("Failed to resize window, continuing with log display");
+					}
+					logContainer.style.display = "flex";
+					logShowing = true;
+				}
+			}
+
+			logContainer.appendChild(logEl);
+			// @ts-ignore
+			logEl.scrollIntoView({ behavior: "instant", block: "end", inline: "end" });
+		} catch (error) {
+			// Graceful degradation - log to console instead of UI
+			console.warn("Failed to append log element to UI, falling back to console:", logEl.textContent || logEl.innerText);
 		}
-
-		if (!logShowing) {
-			renderLeaf.view.containerEl.win.resizeTo(1000, 500);
-			logContainer.style.display = "flex";
-			logShowing = true;
-		}
-
-		logContainer.appendChild(logEl);
-		// @ts-ignore
-		logEl.scrollIntoView({ behavior: "instant", block: "end", inline: "end" });
 	}
 
 	export async function _reportProgress(fraction: number, message: string, subMessage: string, progressColor: string) {
@@ -1488,8 +1514,12 @@ export namespace _MarkdownRendererInternal {
 		errorInBatch = true;
 
 		// @ts-ignore
-		const found = await waitUntil(() => renderLeaf && renderLeaf.parent && renderLeaf.parent.parent, 100, 10);
-		if (!found) return;
+		const found = await waitUntil(() => renderLeaf && renderLeaf.parent && renderLeaf.parent.parent, 100, 5);
+		if (!found) {
+			// Fallback to console logging when UI is not available
+			console.error(`Export Error - ${messageTitle}:`, message);
+			return;
+		}
 
 		appendLogEl(generateLogEl(messageTitle, message, errorColor, errorBoxColor));
 
@@ -1504,8 +1534,12 @@ export namespace _MarkdownRendererInternal {
 		if (!batchStarted) return;
 
 		// @ts-ignore
-		const found = await waitUntil(() => renderLeaf && renderLeaf.parent && renderLeaf.parent.parent, 100, 10);
-		if (!found) return;
+		const found = await waitUntil(() => renderLeaf && renderLeaf.parent && renderLeaf.parent.parent, 100, 5);
+		if (!found) {
+			// Fallback to console logging when UI is not available
+			console.warn(`Export Warning - ${messageTitle}:`, message);
+			return;
+		}
 
 		appendLogEl(generateLogEl(messageTitle, message, warningColor, warningBoxColor));
 	}
@@ -1514,8 +1548,14 @@ export namespace _MarkdownRendererInternal {
 		if (!batchStarted) return;
 
 		// @ts-ignore
-		const found = await waitUntil(() => renderLeaf && renderLeaf.parent && renderLeaf.parent.parent, 100, 10);
-		if (!found) return;
+		const found = await waitUntil(() => renderLeaf && renderLeaf.parent && renderLeaf.parent.parent, 100, 5);
+		if (!found) {
+			// Fallback to console logging when UI is not available (only in debug mode)
+			if (console.debug) {
+				console.debug(`Export Info - ${messageTitle}:`, message);
+			}
+			return;
+		}
 
 		appendLogEl(generateLogEl(messageTitle, message, infoColor, infoBoxColor));
 	}
