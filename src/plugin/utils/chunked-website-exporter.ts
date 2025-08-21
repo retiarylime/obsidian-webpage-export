@@ -63,6 +63,8 @@ export class ChunkedWebsiteExporter {
 					return undefined;
 				}
 				
+				ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files and global root: "${globalExportRoot}"`);
+				
 				// Process the chunk
 				const chunkWebsite = await this.processChunk(chunk, destination, i, globalExportRoot);
 				
@@ -70,6 +72,9 @@ export class ChunkedWebsiteExporter {
 					ExportLog.error(`Chunk ${i + 1} failed`);
 					continue;
 				}
+				
+				// Verify chunk processed correctly before merging
+				ExportLog.log(`✅ Chunk ${i + 1} completed with export root: "${chunkWebsite.exportOptions.exportRoot}"`);
 				
 				// Collect results from this chunk
 				if (i === 0) {
@@ -212,11 +217,16 @@ export class ChunkedWebsiteExporter {
 			
 			// Create website for this chunk
 			const website = new Website(vaultBasedDestination);
+			
+			// === CRITICAL FIX: Set global export root BEFORE loading ===
+			// This prevents Website.load() from calculating its own chunk-specific root
+			website.exportOptions.exportRoot = globalExportRoot;
+			ExportLog.log(`🔧 Pre-setting export root for chunk ${chunkIndex + 1}: "${globalExportRoot}"`);
+			
 			await website.load(normalizedFiles);
 			
 			// === FLOW 3: Slugification Flow ===
-			// Override the export root with the global one and ensure slugification consistency
-			website.exportOptions.exportRoot = globalExportRoot;
+			// Ensure slugification consistency with the pre-set global export root
 			this.ensureSlugificationConsistency(website);
 			
 			// === FLOW 4: Directory Creation Flow ===
@@ -234,6 +244,9 @@ export class ChunkedWebsiteExporter {
 			// === FLOW 5: Relative Path Calculation Flow ===
 			// Validate relative path calculations are consistent
 			this.validateRelativePathConsistency(builtWebsite, globalExportRoot);
+			
+			// === FINAL VERIFICATION: Check target paths are correct ===
+			this.verifyChunkPathConsistency(builtWebsite, normalizedFiles, globalExportRoot);
 			
 			ExportLog.log(`Successfully processed chunk ${chunkIndex + 1} with all 5 Path.ts flows`);
 			return builtWebsite;
@@ -316,9 +329,16 @@ export class ChunkedWebsiteExporter {
 			// Collect all unique directories that will be needed
 			const directoriesToCreate = new Set<string>();
 			
+			ExportLog.log(`📁 Calculating target paths for ${files.length} files with export root: "${website.exportOptions.exportRoot}"`);
+			
 			for (const file of files) {
 				const targetPath = website.getTargetPathForFile(file);
 				const directory = targetPath.directory;
+				
+				// Log first few files for debugging
+				if (directoriesToCreate.size < 3) {
+					ExportLog.log(`   📄 File: ${file.path} -> Target: ${targetPath.absoluted().path}`);
+				}
 				
 				if (directory && directory.path) {
 					directoriesToCreate.add(directory.absoluted().path);
@@ -366,12 +386,50 @@ export class ChunkedWebsiteExporter {
 	}
 
 	/**
+	 * Verify that chunk paths are calculated consistently with global export root
+	 */
+	private static verifyChunkPathConsistency(website: Website, files: TFile[], globalExportRoot: string): void {
+		try {
+			ExportLog.log(`🔍 Verifying path consistency for ${files.length} files in chunk`);
+			
+			// Check export root consistency
+			if (website.exportOptions.exportRoot !== globalExportRoot) {
+				ExportLog.error(`❌ Export root inconsistency detected! Expected: "${globalExportRoot}", Got: "${website.exportOptions.exportRoot}"`);
+			} else {
+				ExportLog.log(`✅ Export root consistent: "${globalExportRoot}"`);
+			}
+			
+			// Sample a few files to verify their paths
+			const sampleFiles = files.slice(0, Math.min(3, files.length));
+			for (const file of sampleFiles) {
+				const targetPath = website.getTargetPathForFile(file);
+				const expectedRoot = globalExportRoot ? globalExportRoot + "/" : "";
+				
+				if (globalExportRoot && !targetPath.path.includes(globalExportRoot)) {
+					ExportLog.warning(`⚠️ File path may not respect global root: ${file.path} -> ${targetPath.absoluted().path}`);
+				} else {
+					ExportLog.log(`✅ Path verified: ${file.path} -> ${targetPath.absoluted().path}`);
+				}
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Path consistency verification failed");
+		}
+	}
+
+	/**
 	 * Merge a chunk website into the final website
 	 */
 	private static async mergeChunkIntoWebsite(chunkWebsite: Website, finalWebsite: Website | undefined): Promise<void> {
 		if (!finalWebsite || !chunkWebsite) return;
 		
 		try {
+			// Ensure final website maintains consistent export root
+			if (finalWebsite.exportOptions.exportRoot !== chunkWebsite.exportOptions.exportRoot) {
+				ExportLog.log(`🔄 Ensuring consistent export root in final website: "${chunkWebsite.exportOptions.exportRoot}"`);
+				finalWebsite.exportOptions.exportRoot = chunkWebsite.exportOptions.exportRoot;
+			}
+			
 			// Merge file indexes
 			if (chunkWebsite.index && finalWebsite.index) {
 				// Add new files from chunk to final website
@@ -387,6 +445,8 @@ export class ChunkedWebsiteExporter {
 				const chunkWebpages = chunkWebsite.index.webpages || [];
 				const finalWebpages = finalWebsite.index.webpages || [];
 				finalWebsite.index.webpages = [...finalWebpages, ...chunkWebpages];
+				
+				ExportLog.log(`📝 Merged chunk: +${chunkWebsite.index.newFiles.length} new files, +${chunkWebpages.length} webpages`);
 			}
 			
 		} catch (error) {

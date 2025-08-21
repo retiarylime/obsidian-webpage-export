@@ -1,6 +1,6 @@
 import { Attachment } from "src/plugin/utils/downloadable";
 import { FileTree } from "src/plugin/features/file-tree";
-import {  TAbstractFile, TFile, TFolder } from "obsidian";
+import { TAbstractFile, TFile, TFolder } from "obsidian";
 import {  Settings } from "src/plugin/settings/settings";
 import { Path } from "src/plugin/utils/path";
 import { ExportLog, MarkdownRendererAPI } from "src/plugin/render-api/render-api";
@@ -124,9 +124,14 @@ export class Website
 
 		this.sourceFiles = files?.filter((file) => file) ?? [];
 
-		let rootPath = this.findCommonRootPath(this.sourceFiles);
-		this.exportOptions.exportRoot = rootPath;
-		console.log("Root path: " + rootPath);
+		// Only calculate root path if not already set (for chunked export compatibility)
+		if (!this.exportOptions.exportRoot || this.exportOptions.exportRoot.trim() === "") {
+			let rootPath = this.findCommonRootPath(this.sourceFiles);
+			this.exportOptions.exportRoot = rootPath;
+			console.log("Root path calculated: " + rootPath);
+		} else {
+			console.log("Root path pre-set (chunked export): " + this.exportOptions.exportRoot);
+		}
 
 		await AssetHandler.reloadAssets(this.exportOptions);
 		this.index = new WebsiteIndex();
