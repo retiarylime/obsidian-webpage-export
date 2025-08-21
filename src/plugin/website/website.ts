@@ -33,8 +33,9 @@ export class Website
 	constructor(destination: Path | string, options?: ExportPipelineOptions)
 	{
 		if (typeof destination == "string") destination = new Path(destination);
-		this.exportOptions = Object.assign(Settings.exportOptions, options);
-		if (!destination.isDirectoryFS) throw new Error("Website destination must be a folder: " + destination.path);
+		// Fix: Create a proper copy instead of modifying the global Settings.exportOptions
+		this.exportOptions = Object.assign({}, Settings.exportOptions, options);
+		if (!destination.isDirectoryFS) throw new Error("Website destination must be folder: " + destination.path);
 		this.destination = destination;
 	}
 

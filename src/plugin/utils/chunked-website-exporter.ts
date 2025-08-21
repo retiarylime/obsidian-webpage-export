@@ -35,10 +35,25 @@ export class ChunkedWebsiteExporter {
 		ExportLog.log(`✅ All chunks will use consistent root for directory structure preservation`);
 		
 		// DEBUG: Show sample file paths to verify root calculation
-		const samplePaths = files.slice(0, Math.min(5, files.length)).map(f => f.path);
+		const samplePaths = files.slice(0, Math.min(10, files.length)).map(f => f.path);
 		ExportLog.log(`🔍 Sample file paths for root calculation:`);
 		samplePaths.forEach(path => ExportLog.log(`   📄 ${path}`));
 		ExportLog.log(`🎯 Calculated common root: "${globalExportRoot}" from ${files.length} files`);
+		
+		// DEBUG: Test the root calculation with more detail
+		if (files.length > 0) {
+			const firstFile = files[0];
+			const parentPath = new Path(firstFile.path).parent?.path ?? '';
+			ExportLog.log(`🔍 First file: "${firstFile.path}" -> Parent: "${parentPath}"`);
+			
+			if (files.length > 1) {
+				const paths = files.map(file => new Path(file.path).split());
+				ExportLog.log(`🔍 Path segments comparison:`);
+				paths.slice(0, 3).forEach((pathSegments, index) => {
+					ExportLog.log(`   File ${index + 1}: [${pathSegments.join(' / ')}]`);
+				});
+			}
+		}
 		
 		// Sort files by complexity (simpler files first)
 		const sortedFiles = this.sortFilesByComplexity(files);
@@ -242,12 +257,38 @@ export class ChunkedWebsiteExporter {
 			
 			// === VERIFICATION: Ensure export root wasn't overridden ===
 			if (website.exportOptions.exportRoot !== globalExportRoot) {
-				ExportLog.error(`❌ CRITICAL: Export root was overridden! Expected: "${globalExportRoot}", Got: "${website.exportOptions.exportRoot}"`);
+				ExportLog.error(`❌ CRITICAL: Export root was overridden during load!`);
+				ExportLog.error(`   Expected: "${globalExportRoot}"`);
+				ExportLog.error(`   Got: "${website.exportOptions.exportRoot}"`);
+				ExportLog.error(`   This will cause path inconsistency!`);
+				
 				// Force restore the global export root
 				website.exportOptions.exportRoot = globalExportRoot;
-				ExportLog.log(`🔧 RESTORED export root to: "${globalExportRoot}"`);
+				ExportLog.log(`🔧 FORCE RESTORED export root to: "${globalExportRoot}"`);
 			} else {
 				ExportLog.log(`✅ Export root preserved correctly: "${globalExportRoot}"`);
+			}
+			
+			// === ADDITIONAL DEBUG: Test removeRootFromPath behavior ===
+			if (normalizedFiles.length > 0) {
+				const testFile = normalizedFiles[0];
+				const testTargetPath = website.getTargetPathForFile(testFile);
+				ExportLog.log(`🧪 Testing path behavior with first file:`);
+				ExportLog.log(`   Source: ${testFile.path}`);
+				ExportLog.log(`   Target: ${testTargetPath.absoluted().path}`);
+				ExportLog.log(`   Export root: "${website.exportOptions.exportRoot}"`);
+				
+				// Simulate what removeRootFromPath would do
+				if (website.exportOptions.exportRoot && website.exportOptions.exportRoot !== '') {
+					const rootWithSlash = website.exportOptions.exportRoot + "/";
+					if (testTargetPath.path.includes(website.exportOptions.exportRoot)) {
+						ExportLog.log(`   ✅ Target path contains export root - will be stripped`);
+					} else {
+						ExportLog.warning(`   ⚠️ Target path does NOT contain export root - will stay full path!`);
+					}
+				} else {
+					ExportLog.warning(`   ⚠️ Export root is empty - no stripping will occur!`);
+				}
 			}
 			
 			// === FLOW 3: Slugification Flow ===
@@ -260,6 +301,14 @@ export class ChunkedWebsiteExporter {
 			
 			// Build the website
 			const builtWebsite = await website.build();
+			
+			// === CRITICAL VERIFICATION: Check export root after build ===
+			if (builtWebsite && builtWebsite.exportOptions.exportRoot !== globalExportRoot) {
+				ExportLog.error(`❌ CRITICAL: Export root changed during build!`);
+				ExportLog.error(`   Expected: "${globalExportRoot}"`);
+				ExportLog.error(`   Got: "${builtWebsite.exportOptions.exportRoot}"`);
+				ExportLog.error(`   Files from this chunk will have wrong paths!`);
+			}
 			
 			if (!builtWebsite) {
 				ExportLog.error(`Failed to build chunk ${chunkIndex + 1}`);
