@@ -29,47 +29,26 @@ export class ChunkedWebsiteExporter {
 		// Prevent individual chunks from resetting progress
 		ExportLog.setPreventProgressReset(true);
 		
-		// Calculate the common root path for ALL files to ensure consistent directory structure
-		const globalExportRoot = this.findCommonRootPath(files);
-		ExportLog.log(`📁 Global export root calculated: "${globalExportRoot}"`);
-		ExportLog.log(`✅ All chunks will use consistent root for directory structure preservation`);
+		// Analyze the vault structure to understand mixed content
+		const uniqueDirs = new Set(files.map(f => {
+			const pathParts = f.path.split('/');
+			return pathParts.length > 1 ? pathParts[0] : 'ROOT_LEVEL';
+		}));
 		
-		// DEBUG: Show sample file paths to verify root calculation
-		const samplePaths = files.slice(0, Math.min(10, files.length)).map(f => f.path);
-		ExportLog.log(`🔍 Sample file paths for root calculation:`);
-		samplePaths.forEach(path => ExportLog.log(`   📄 ${path}`));
-		ExportLog.log(`🎯 Calculated common root: "${globalExportRoot}" from ${files.length} files`);
+		const hasMixedContent = uniqueDirs.has('ROOT_LEVEL') && uniqueDirs.size > 1;
+		ExportLog.log(`📂 Vault structure analysis:`);
+		ExportLog.log(`   Directory prefixes: [${Array.from(uniqueDirs).join(', ')}]`);
+		ExportLog.log(`   Mixed content detected: ${hasMixedContent ? 'Yes' : 'No'}`);
 		
-		// DEBUG: Test the root calculation with more detail
-		if (files.length > 0) {
-			const firstFile = files[0];
-			const parentPath = new Path(firstFile.path).parent?.path ?? '';
-			ExportLog.log(`🔍 First file: "${firstFile.path}" -> Parent: "${parentPath}"`);
-			
-			if (files.length > 1) {
-				const paths = files.map(file => new Path(file.path).split());
-				ExportLog.log(`🔍 Path segments comparison (first 5 files):`);
-				paths.slice(0, 5).forEach((pathSegments, index) => {
-					ExportLog.log(`   File ${index + 1}: [${pathSegments.join(' / ')}]`);
-				});
-				
-				// Test common path calculation step by step
-				const shortestLength = Math.min(...paths.map(p => p.length));
-				ExportLog.log(`🔍 Shortest path length: ${shortestLength}`);
-				
-				let commonSegments: string[] = [];
-				for (let i = 0; i < shortestLength; i++) {
-					const segment = paths[0][i];
-					const allMatch = paths.every(path => path[i] === segment);
-					ExportLog.log(`   Segment ${i}: "${segment}" - All match: ${allMatch}`);
-					if (allMatch) {
-						commonSegments.push(segment);
-					} else {
-						break;
-					}
-				}
-				ExportLog.log(`🔍 Common segments before processing: [${commonSegments.join(' / ')}]`);
-			}
+		if (hasMixedContent) {
+			ExportLog.log(`ℹ️ Mixed content structure detected - chunks will calculate individual export roots:`);
+			ExportLog.log(`   - Root level files → export root (no prefix)`);
+			ExportLog.log(`   - Subfolder files → maintain directory structure`);
+			ExportLog.log(`   - This preserves the original Obsidian vault directory tree`);
+		} else {
+			// Calculate global root for uniform content
+			const globalRoot = this.findCommonRootPath(files);
+			ExportLog.log(`✅ Uniform content - global export root: "${globalRoot}"`);
 		}
 		
 		// Sort files by complexity (simpler files first)
@@ -101,10 +80,15 @@ export class ChunkedWebsiteExporter {
 					return undefined;
 				}
 				
-				ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files and global root: "${globalExportRoot}"`);
+				ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files`);
 				
-				// Process the chunk
-				const chunkWebsite = await this.processChunk(chunk, destination, i, globalExportRoot);
+				// DEBUG: Show chunk file paths to understand chunk composition
+				ExportLog.log(`📂 Chunk ${i + 1} files:`);
+				chunk.slice(0, 5).forEach(file => ExportLog.log(`   📄 ${file.path}`));
+				if (chunk.length > 5) ExportLog.log(`   ... and ${chunk.length - 5} more files`);
+				
+				// Process the chunk - let it calculate its own natural export root
+				const chunkWebsite = await this.processChunk(chunk, destination, i);
 				
 				if (!chunkWebsite) {
 					ExportLog.error(`Chunk ${i + 1} failed`);
@@ -168,38 +152,52 @@ export class ChunkedWebsiteExporter {
 	 */
 	private static findCommonRootPath(files: { path: string }[]): string {
 		if (!files || files.length === 0) {
+			console.log("[ChunkedWebsiteExporter] No files provided, returning empty root");
 			return '';
 		}
 	
 		if (files.length === 1) {
-			return new Path(files[0].path).parent?.path ?? '';
+			const singleRoot = new Path(files[0].path).parent?.path ?? '';
+			console.log(`[ChunkedWebsiteExporter] Single file root: "${singleRoot}"`);
+			return singleRoot;
 		}
 	
 		const paths = files.map(file => new Path(file.path).split());
+		console.log(`[ChunkedWebsiteExporter] Processing ${paths.length} file paths for common root`);
+		
 		let commonPath: string[] = [];
 		const shortestPathLength = Math.min(...paths.map(p => p.length));
+		console.log(`[ChunkedWebsiteExporter] Shortest path length: ${shortestPathLength}`);
 	
 		for (let i = 0; i < shortestPathLength; i++) {
 			const segment = paths[0][i];
-			if (paths.every(path => path[i] === segment)) {
+			const allMatch = paths.every(path => path[i] === segment);
+			console.log(`[ChunkedWebsiteExporter] Segment ${i}: "${segment}", all match: ${allMatch}`);
+			if (allMatch) {
 				commonPath.push(segment);
 			} else {
 				break;
 			}
 		}
 	
-		// If the common path is just the root, return an empty string
-		if (commonPath.length <= 1) {
+		// If the common path is just the root or empty, return an empty string
+		if (commonPath.length === 0) {
+			console.log("[ChunkedWebsiteExporter] No common segments found, returning empty root");
 			return '';
 		}
-	
-		// Remove the last segment if it's not a common parent for all files
-		const lastCommonSegment = commonPath[commonPath.length - 1];
-		if (!paths.every(path => path.length > commonPath.length || path[commonPath.length - 1] !== lastCommonSegment)) {
-			commonPath.pop();
+		
+		if (commonPath.length === 1) {
+			// If only one segment (likely just a top-level folder), check if it's meaningful
+			const singleSegment = commonPath[0];
+			console.log(`[ChunkedWebsiteExporter] Only one common segment: "${singleSegment}"`);
+			// For cases like "Korean" as single segment, return it as valid root
+			return singleSegment;
 		}
 	
-		return new Path(commonPath.join('/')).path;
+		// Build the full common path
+		const result = new Path(commonPath.join('/')).path;
+		console.log(`[ChunkedWebsiteExporter] Final common root: "${result}"`);
+		return result;
 	}
 
 	/**
@@ -250,7 +248,7 @@ export class ChunkedWebsiteExporter {
 	/**
 	 * Process a single chunk of files following all 5 Path.ts flows
 	 */
-	private static async processChunk(files: TFile[], destination: Path, chunkIndex: number, globalExportRoot: string): Promise<Website | undefined> {
+	private static async processChunk(files: TFile[], destination: Path, chunkIndex: number): Promise<Website | undefined> {
 		try {
 			ExportLog.log(`Processing chunk ${chunkIndex + 1} with ${files.length} files`);
 			
@@ -262,61 +260,31 @@ export class ChunkedWebsiteExporter {
 			// Validate and normalize all file paths in this chunk
 			const normalizedFiles = this.validateAndNormalizeFilePaths(files);
 			
-			// Create website for this chunk
+			// Create website for this chunk - let it calculate its natural export root
 			const website = new Website(vaultBasedDestination);
 			
-			// === CRITICAL FIX: Set global export root BEFORE loading ===
-			// This prevents Website.load() from calculating its own chunk-specific root
-			website.exportOptions.exportRoot = globalExportRoot;
-			ExportLog.log(`🔧 Pre-setting export root for chunk ${chunkIndex + 1}: "${globalExportRoot}"`);
+			ExportLog.log(`🔧 Loading chunk ${chunkIndex + 1} - will calculate natural export root`);
 			
 			await website.load(normalizedFiles);
 			
-			// === VERIFICATION: Ensure export root wasn't overridden ===
-			if (website.exportOptions.exportRoot !== globalExportRoot) {
-				ExportLog.error(`❌ CRITICAL: Export root was overridden during load!`);
-				ExportLog.error(`   Expected: "${globalExportRoot}"`);
-				ExportLog.error(`   Got: "${website.exportOptions.exportRoot}"`);
-				ExportLog.error(`   This will cause path inconsistency!`);
-				
-				// Force restore the global export root
-				website.exportOptions.exportRoot = globalExportRoot;
-				ExportLog.log(`🔧 FORCE RESTORED export root to: "${globalExportRoot}"`);
-			} else {
-				ExportLog.log(`✅ Export root preserved correctly: "${globalExportRoot}"`);
-			}
+			// Log the natural export root this chunk calculated
+			const chunkExportRoot = website.exportOptions.exportRoot;
+			ExportLog.log(`✅ Chunk ${chunkIndex + 1} natural export root: "${chunkExportRoot}"`);
 			
-			// === ADDITIONAL DEBUG: Test removeRootFromPath behavior ===
+			// === ADDITIONAL DEBUG: Test path behavior with natural export root ===
 			if (normalizedFiles.length > 0) {
 				const testFile = normalizedFiles[0];
 				const testTargetPath = website.getTargetPathForFile(testFile);
 				ExportLog.log(`🧪 Testing path behavior with first file:`);
 				ExportLog.log(`   Source: ${testFile.path}`);
 				ExportLog.log(`   Target: ${testTargetPath.absoluted().path}`);
-				ExportLog.log(`   Export root: "${website.exportOptions.exportRoot}"`);
+				ExportLog.log(`   Chunk export root: "${chunkExportRoot}"`);
 				
-				// Simulate what removeRootFromPath would do
-				if (website.exportOptions.exportRoot && website.exportOptions.exportRoot !== '') {
-					const rootPath = new Path(website.exportOptions.exportRoot);
-					const rootSlugified = rootPath.slugify(website.exportOptions.slugifyPaths);
-					const rootForComparison = rootSlugified.path + "/";
-					
-					ExportLog.log(`   🧪 Export root processing:`);
-					ExportLog.log(`     Original: "${website.exportOptions.exportRoot}"`);
-					ExportLog.log(`     Slugified: "${rootSlugified.path}"`);
-					ExportLog.log(`     With slash: "${rootForComparison}"`);
-					
-					if (testTargetPath.path.startsWith(rootForComparison.replace(/\/$/, ""))) {
-						ExportLog.log(`   ✅ Target path contains export root - will be stripped`);
-						const remainingPath = testTargetPath.path.substring(rootForComparison.length);
-						ExportLog.log(`   📍 After stripping: "${remainingPath}"`);
-					} else {
-						ExportLog.warning(`   ⚠️ Target path does NOT start with export root - will stay full path!`);
-						ExportLog.warning(`     Target: "${testTargetPath.path}"`);
-						ExportLog.warning(`     Root: "${rootForComparison}"`);
-					}
+				// Show how the path will be processed
+				if (chunkExportRoot && chunkExportRoot !== '') {
+					ExportLog.log(`   ✅ File will be placed in subdirectory: ${chunkExportRoot}`);
 				} else {
-					ExportLog.warning(`   ⚠️ Export root is empty - no stripping will occur!`);
+					ExportLog.log(`   ✅ File will be placed at export root (no prefix)`);
 				}
 			}
 			
@@ -331,14 +299,6 @@ export class ChunkedWebsiteExporter {
 			// Build the website
 			const builtWebsite = await website.build();
 			
-			// === CRITICAL VERIFICATION: Check export root after build ===
-			if (builtWebsite && builtWebsite.exportOptions.exportRoot !== globalExportRoot) {
-				ExportLog.error(`❌ CRITICAL: Export root changed during build!`);
-				ExportLog.error(`   Expected: "${globalExportRoot}"`);
-				ExportLog.error(`   Got: "${builtWebsite.exportOptions.exportRoot}"`);
-				ExportLog.error(`   Files from this chunk will have wrong paths!`);
-			}
-			
 			if (!builtWebsite) {
 				ExportLog.error(`Failed to build chunk ${chunkIndex + 1}`);
 				return undefined;
@@ -346,12 +306,11 @@ export class ChunkedWebsiteExporter {
 			
 			// === FLOW 5: Relative Path Calculation Flow ===
 			// Validate relative path calculations are consistent
-			this.validateRelativePathConsistency(builtWebsite, globalExportRoot);
+			this.validateRelativePathConsistency(builtWebsite);
 			
-			// === FINAL VERIFICATION: Check target paths are correct ===
-			this.verifyChunkPathConsistency(builtWebsite, normalizedFiles, globalExportRoot);
-			
-			ExportLog.log(`Successfully processed chunk ${chunkIndex + 1} with all 5 Path.ts flows`);
+			// === FINAL VERIFICATION: Log successful chunk completion ===
+			ExportLog.log(`✅ Successfully processed chunk ${chunkIndex + 1} with natural export root: "${builtWebsite.exportOptions.exportRoot}"`);
+			ExportLog.log(`📄 Processed ${normalizedFiles.length} files with all 5 Path.ts flows`);
 			return builtWebsite;
 			
 		} catch (error) {
@@ -467,9 +426,9 @@ export class ChunkedWebsiteExporter {
 	/**
 	 * FLOW 5: Relative Path Calculation - Validate path relationships
 	 */
-	private static validateRelativePathConsistency(website: Website, globalExportRoot: string): void {
+	private static validateRelativePathConsistency(website: Website): void {
 		try {
-			// Test relative path calculations with the global root
+			// Test relative path calculations
 			const testSourcePath = new Path("test/source/file.md");
 			const testTargetPath = new Path("test/target/file.md");
 			
@@ -479,57 +438,11 @@ export class ChunkedWebsiteExporter {
 			// Validate getRelativePathFromVault works
 			const vaultRelativePath = Path.getRelativePathFromVault(testTargetPath);
 			
-			ExportLog.log(`Relative path validation: source->target: ${relativePath.path}, vault->target: ${vaultRelativePath.path}`);
-			
-			// Validate export root consistency
-			if (globalExportRoot !== website.exportOptions.exportRoot) {
-				ExportLog.warning(`Export root mismatch: global="${globalExportRoot}", website="${website.exportOptions.exportRoot}"`);
-			}
+			ExportLog.log(`✅ Relative path validation: source->target: ${relativePath.path}, vault->target: ${vaultRelativePath.path}`);
+			ExportLog.log(`📂 Website export root: "${website.exportOptions.exportRoot}"`);
 			
 		} catch (error) {
 			ExportLog.error(error, "Relative path validation failed");
-		}
-	}
-
-	/**
-	 * Verify that chunk paths are calculated consistently with global export root
-	 */
-	private static verifyChunkPathConsistency(website: Website, files: TFile[], globalExportRoot: string): void {
-		try {
-			ExportLog.log(`🔍 Verifying path consistency for ${files.length} files in chunk`);
-			
-			// Check export root consistency
-			if (website.exportOptions.exportRoot !== globalExportRoot) {
-				ExportLog.error(`❌ Export root inconsistency detected! Expected: "${globalExportRoot}", Got: "${website.exportOptions.exportRoot}"`);
-			} else {
-				ExportLog.log(`✅ Export root consistent: "${globalExportRoot}"`);
-			}
-			
-			// Sample a few files to verify their paths
-			const sampleFiles = files.slice(0, Math.min(5, files.length));
-			for (const file of sampleFiles) {
-				const targetPath = website.getTargetPathForFile(file);
-				
-				ExportLog.log(`🔍 Path verification for: ${file.path}`);
-				ExportLog.log(`   📁 Export root: "${globalExportRoot}"`);
-				ExportLog.log(`   🎯 Target path: "${targetPath.absoluted().path}"`);
-				ExportLog.log(`   📂 Working directory: "${targetPath.workingDirectory}"`);
-				
-				// Check if target path contains the export root
-				const targetAbsolute = targetPath.absoluted().path;
-				if (globalExportRoot && globalExportRoot !== '') {
-					if (targetAbsolute.includes(globalExportRoot)) {
-						ExportLog.log(`   ✅ Target path contains export root`);
-					} else {
-						ExportLog.warning(`   ⚠️ Target path does NOT contain export root`);
-					}
-				}
-				
-				ExportLog.log(`   ---`);
-			}
-			
-		} catch (error) {
-			ExportLog.error(error, "Path consistency verification failed");
 		}
 	}
 
@@ -540,11 +453,10 @@ export class ChunkedWebsiteExporter {
 		if (!finalWebsite || !chunkWebsite) return;
 		
 		try {
-			// Ensure final website maintains consistent export root
-			if (finalWebsite.exportOptions.exportRoot !== chunkWebsite.exportOptions.exportRoot) {
-				ExportLog.log(`🔄 Ensuring consistent export root in final website: "${chunkWebsite.exportOptions.exportRoot}"`);
-				finalWebsite.exportOptions.exportRoot = chunkWebsite.exportOptions.exportRoot;
-			}
+			// For mixed content, we DON'T force export root consistency
+			// Each chunk maintains its natural export root for proper directory structure
+			ExportLog.log(`🔄 Merging chunk with export root: "${chunkWebsite.exportOptions.exportRoot}"`);
+			ExportLog.log(`   Final website export root: "${finalWebsite.exportOptions.exportRoot}"`);
 			
 			// Merge file indexes
 			if (chunkWebsite.index && finalWebsite.index) {
@@ -563,6 +475,7 @@ export class ChunkedWebsiteExporter {
 				finalWebsite.index.webpages = [...finalWebpages, ...chunkWebpages];
 				
 				ExportLog.log(`📝 Merged chunk: +${chunkWebsite.index.newFiles.length} new files, +${chunkWebpages.length} webpages`);
+				ExportLog.log(`   Files will maintain their natural directory structure`);
 			}
 			
 		} catch (error) {

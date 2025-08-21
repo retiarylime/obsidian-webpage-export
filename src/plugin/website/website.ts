@@ -126,12 +126,13 @@ export class Website
 		this.sourceFiles = files?.filter((file) => file) ?? [];
 
 		// Only calculate root path if not already set (for chunked export compatibility)
-		if (!this.exportOptions.exportRoot || this.exportOptions.exportRoot.trim() === "") {
+		// Use a special flag to indicate when export root was explicitly set by chunked exporter
+		if (!(this.exportOptions as any).__exportRootSetByChunkedExporter) {
 			let rootPath = this.findCommonRootPath(this.sourceFiles);
 			this.exportOptions.exportRoot = rootPath;
-			console.log("Root path calculated: " + rootPath);
+			console.log("[Website.load] Root path calculated: " + rootPath);
 		} else {
-			console.log("Root path pre-set (chunked export): " + this.exportOptions.exportRoot);
+			console.log("[Website.load] Root path pre-set (chunked export): " + this.exportOptions.exportRoot);
 		}
 
 		await AssetHandler.reloadAssets(this.exportOptions);

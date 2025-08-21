@@ -67,10 +67,13 @@ export class Attachment
 	{
 		// remove the export root from the target path
 		const root = new Path(this.exportOptions.exportRoot ?? "").slugify(allowSlugify && this.exportOptions.slugifyPaths).path + "/";
+		
 		if (path.path.startsWith(root))
 		{
-			path.reparse(path.path.substring(root.length));
+			const newPath = path.path.substring(root.length);
+			path.reparse(newPath);
 		}
+		
 		return path;
 	}
 
@@ -81,7 +84,7 @@ export class Attachment
 			throw new Error("(working dir) Target should be a relative path with the working directory set to the root: " + this.targetPath.absoluted().path);
 		}
 
-		const data = this.data instanceof Buffer ? this.data : Buffer.from(this.data.toString());
+		const data = this.data instanceof Buffer ? new Uint8Array(this.data) : new Uint8Array(Buffer.from(this.data.toString()));
 		await this.targetPath.write(data);
 	}
 }
