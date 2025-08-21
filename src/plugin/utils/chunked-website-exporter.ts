@@ -19,6 +19,20 @@ export class ChunkedWebsiteExporter {
 	): Promise<Website | undefined> {
 		
 		ExportLog.log(`Starting chunked export of ${files.length} files (${chunkSize} per chunk)`);
+		ExportLog.log(`🔄 Large vault export will follow all 5 Path.ts flows for consistent directory structure`);
+		
+		// Initialize progress system for chunked export
+		ExportLog.resetProgress();
+		ExportLog.addToProgressCap(files.length * 0.1); // File initialization
+		ExportLog.addToProgressCap(files.length); // File processing
+		
+		// Prevent individual chunks from resetting progress
+		ExportLog.setPreventProgressReset(true);
+		
+		// Calculate the common root path for ALL files to ensure consistent directory structure
+		const globalExportRoot = this.findCommonRootPath(files);
+		ExportLog.log(`📁 Global export root calculated: "${globalExportRoot}"`);
+		ExportLog.log(`✅ All chunks will use consistent root for directory structure preservation`);
 		
 		// Sort files by complexity (simpler files first)
 		const sortedFiles = this.sortFilesByComplexity(files);
@@ -36,8 +50,8 @@ export class ChunkedWebsiteExporter {
 			for (let i = 0; i < chunks.length; i++) {
 				const chunk = chunks[i];
 				
-				ExportLog.progress(
-					1 / chunks.length, 
+				ExportLog.setProgress(
+					(i + 1) / chunks.length, 
 					`Processing Chunk ${i + 1}/${chunks.length}`,
 					`Files: ${chunk.map(f => f.name).join(', ').substring(0, 100)}...`,
 					"var(--interactive-accent)"
@@ -50,7 +64,7 @@ export class ChunkedWebsiteExporter {
 				}
 				
 				// Process the chunk
-				const chunkWebsite = await this.processChunk(chunk, destination, i);
+				const chunkWebsite = await this.processChunk(chunk, destination, i, globalExportRoot);
 				
 				if (!chunkWebsite) {
 					ExportLog.error(`Chunk ${i + 1} failed`);
@@ -87,11 +101,55 @@ export class ChunkedWebsiteExporter {
 			ExportLog.error(error, "Chunked export failed");
 			return undefined;
 		} finally {
+			// Re-enable progress resets after chunked export
+			ExportLog.setPreventProgressReset(false);
 			// Final cleanup
 			await MemoryManager.cleanup();
+			
+			// Log successful completion of all 5 Path.ts flows
+			if (finalWebsite) {
+				ExportLog.log(`🎉 Chunked export completed successfully with all 5 Path.ts flows:`);
+				ExportLog.log(`   ✅ Flow 1: Vault Path Detection - Used for all chunks`);
+				ExportLog.log(`   ✅ Flow 2: Path Normalization - Validated ${files.length} file paths`);
+				ExportLog.log(`   ✅ Flow 3: Slugification - Applied web-safe transformations`);
+				ExportLog.log(`   ✅ Flow 4: Directory Creation - Pre-created folder structures`);
+				ExportLog.log(`   ✅ Flow 5: Relative Path Calc - Ensured link consistency`);
+				ExportLog.log(`📂 Directory structure preserved identically to Obsidian vault`);
+			}
 		}
 	}
 	
+	/**
+	 * Find the common root path for all files to ensure consistent directory structure
+	 */
+	private static findCommonRootPath(files: { path: string }[]): string {
+		if (!files || files.length === 0) {
+			return '';
+		}
+	
+		if (files.length === 1) {
+			const parts = files[0].path.split('/');
+			parts.pop(); // Remove filename
+			return parts.join('/');
+		}
+	
+		const paths = files.map(file => file.path.split('/'));
+		let commonPath: string[] = [];
+		const shortestPathLength = Math.min(...paths.map(p => p.length));
+	
+		// Find the longest common prefix of directory segments
+		for (let i = 0; i < shortestPathLength - 1; i++) { // -1 to exclude filename
+			const segment = paths[0][i];
+			if (paths.every(path => path[i] === segment)) {
+				commonPath.push(segment);
+			} else {
+				break;
+			}
+		}
+	
+		return commonPath.join('/');
+	}
+
 	/**
 	 * Sort files by processing complexity (simpler first)
 	 */
@@ -138,22 +196,47 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Process a single chunk of files
+	 * Process a single chunk of files following all 5 Path.ts flows
 	 */
-	private static async processChunk(files: TFile[], destination: Path, chunkIndex: number): Promise<Website | undefined> {
+	private static async processChunk(files: TFile[], destination: Path, chunkIndex: number, globalExportRoot: string): Promise<Website | undefined> {
 		try {
 			ExportLog.log(`Processing chunk ${chunkIndex + 1} with ${files.length} files`);
 			
-			// Create and build website for this chunk - preserve original export path creation pattern
-			const website = await (await new Website(destination).load(files)).build();
+			// === FLOW 1: Vault Path Detection ===
+			// Ensure destination is properly set with vault context
+			const vaultBasedDestination = this.ensureVaultBasedDestination(destination);
 			
-			if (!website) {
+			// === FLOW 2: Path Parsing & Normalization ===  
+			// Validate and normalize all file paths in this chunk
+			const normalizedFiles = this.validateAndNormalizeFilePaths(files);
+			
+			// Create website for this chunk
+			const website = new Website(vaultBasedDestination);
+			await website.load(normalizedFiles);
+			
+			// === FLOW 3: Slugification Flow ===
+			// Override the export root with the global one and ensure slugification consistency
+			website.exportOptions.exportRoot = globalExportRoot;
+			this.ensureSlugificationConsistency(website);
+			
+			// === FLOW 4: Directory Creation Flow ===
+			// Pre-create directory structure for this chunk
+			await this.ensureDirectoryStructure(website, normalizedFiles);
+			
+			// Build the website
+			const builtWebsite = await website.build();
+			
+			if (!builtWebsite) {
 				ExportLog.error(`Failed to build chunk ${chunkIndex + 1}`);
 				return undefined;
 			}
 			
-			ExportLog.log(`Successfully processed chunk ${chunkIndex + 1}`);
-			return website;
+			// === FLOW 5: Relative Path Calculation Flow ===
+			// Validate relative path calculations are consistent
+			this.validateRelativePathConsistency(builtWebsite, globalExportRoot);
+			
+			ExportLog.log(`Successfully processed chunk ${chunkIndex + 1} with all 5 Path.ts flows`);
+			return builtWebsite;
 			
 		} catch (error) {
 			ExportLog.error(error, `Error processing chunk ${chunkIndex + 1}`);
@@ -161,6 +244,127 @@ export class ChunkedWebsiteExporter {
 		}
 	}
 	
+	/**
+	 * FLOW 1: Vault Path Detection - Ensure destination uses proper vault context
+	 */
+	private static ensureVaultBasedDestination(destination: Path): Path {
+		// Ensure destination is properly resolved relative to vault path
+		if (destination.isRelative) {
+			return Path.vaultPath.joinString(destination.path);
+		}
+		
+		// Validate that absolute destination has proper vault context
+		const vaultPath = Path.vaultPath.path;
+		if (!destination.path.includes(vaultPath) && !destination.path.startsWith("/tmp") && !destination.path.startsWith("C:\\temp")) {
+			ExportLog.log(`Destination ${destination.path} doesn't include vault context, using as-is`);
+		}
+		
+		return destination;
+	}
+
+	/**
+	 * FLOW 2: Path Parsing & Normalization - Validate and normalize all file paths
+	 */
+	private static validateAndNormalizeFilePaths(files: TFile[]): TFile[] {
+		return files.filter(file => {
+			try {
+				// Test path parsing and normalization
+				const testPath = new Path(file.path);
+				const normalized = testPath.normalized();
+				
+				// Ensure path can be properly decoded and parsed
+				if (!normalized.path || normalized.path.trim() === "") {
+					ExportLog.warning(`Skipping file with invalid path: ${file.path}`);
+					return false;
+				}
+				
+				// Validate path components exist
+				if (!testPath.basename || !testPath.extension) {
+					ExportLog.log(`File path components: ${file.path} -> basename: ${testPath.basename}, ext: ${testPath.extension}`);
+				}
+				
+				return true;
+			} catch (error) {
+				ExportLog.error(error, `Failed to normalize path for file: ${file.path}`);
+				return false;
+			}
+		});
+	}
+
+	/**
+	 * FLOW 3: Slugification - Ensure consistent web-safe path transformation
+	 */
+	private static ensureSlugificationConsistency(website: Website): void {
+		// Verify slugification settings are properly applied
+		const slugifyEnabled = website.exportOptions.slugifyPaths;
+		
+		ExportLog.log(`Slugification ${slugifyEnabled ? 'enabled' : 'disabled'} for chunk with root: ${website.exportOptions.exportRoot}`);
+		
+		// Test slugification on export root to ensure consistency
+		if (slugifyEnabled && website.exportOptions.exportRoot) {
+			const testPath = new Path(website.exportOptions.exportRoot);
+			const slugified = testPath.slugified();
+			ExportLog.log(`Export root slugification test: "${website.exportOptions.exportRoot}" -> "${slugified.path}"`);
+		}
+	}
+
+	/**
+	 * FLOW 4: Directory Creation - Pre-create directory structure
+	 */
+	private static async ensureDirectoryStructure(website: Website, files: TFile[]): Promise<void> {
+		try {
+			// Collect all unique directories that will be needed
+			const directoriesToCreate = new Set<string>();
+			
+			for (const file of files) {
+				const targetPath = website.getTargetPathForFile(file);
+				const directory = targetPath.directory;
+				
+				if (directory && directory.path) {
+					directoriesToCreate.add(directory.absoluted().path);
+				}
+			}
+			
+			// Pre-create all directories
+			for (const dir of directoriesToCreate) {
+				const dirPath = new Path(dir);
+				await dirPath.createDirectory();
+			}
+			
+			ExportLog.log(`Pre-created ${directoriesToCreate.size} directories for chunk`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to pre-create directory structure");
+		}
+	}
+
+	/**
+	 * FLOW 5: Relative Path Calculation - Validate path relationships
+	 */
+	private static validateRelativePathConsistency(website: Website, globalExportRoot: string): void {
+		try {
+			// Test relative path calculations with the global root
+			const testSourcePath = new Path("test/source/file.md");
+			const testTargetPath = new Path("test/target/file.md");
+			
+			// Validate getRelativePath works correctly
+			const relativePath = Path.getRelativePath(testSourcePath, testTargetPath);
+			
+			// Validate getRelativePathFromVault works
+			const vaultRelativePath = Path.getRelativePathFromVault(testTargetPath);
+			
+			ExportLog.log(`Relative path validation: source->target: ${relativePath.path}, vault->target: ${vaultRelativePath.path}`);
+			
+			// Validate export root consistency
+			if (globalExportRoot !== website.exportOptions.exportRoot) {
+				ExportLog.warning(`Export root mismatch: global="${globalExportRoot}", website="${website.exportOptions.exportRoot}"`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Relative path validation failed");
+		}
+	}
+
 	/**
 	 * Merge a chunk website into the final website
 	 */

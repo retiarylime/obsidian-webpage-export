@@ -1631,7 +1631,14 @@ export namespace ExportLog {
 		totalProgress += progress;
 	}
 
+	let preventProgressReset = false;
+
+	export function setPreventProgressReset(prevent: boolean) {
+		preventProgressReset = prevent;
+	}
+
 	export function resetProgress() {
+		if (preventProgressReset) return;
 		totalProgress = 1;
 		currentProgress = 0;
 	}
