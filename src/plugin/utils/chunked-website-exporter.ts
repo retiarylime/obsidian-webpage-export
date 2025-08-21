@@ -34,6 +34,12 @@ export class ChunkedWebsiteExporter {
 		ExportLog.log(`📁 Global export root calculated: "${globalExportRoot}"`);
 		ExportLog.log(`✅ All chunks will use consistent root for directory structure preservation`);
 		
+		// DEBUG: Show sample file paths to verify root calculation
+		const samplePaths = files.slice(0, Math.min(5, files.length)).map(f => f.path);
+		ExportLog.log(`🔍 Sample file paths for root calculation:`);
+		samplePaths.forEach(path => ExportLog.log(`   📄 ${path}`));
+		ExportLog.log(`🎯 Calculated common root: "${globalExportRoot}" from ${files.length} files`);
+		
 		// Sort files by complexity (simpler files first)
 		const sortedFiles = this.sortFilesByComplexity(files);
 		
@@ -126,6 +132,7 @@ export class ChunkedWebsiteExporter {
 	
 	/**
 	 * Find the common root path for all files to ensure consistent directory structure
+	 * (Uses the same algorithm as Website.findCommonRootPath for consistency)
 	 */
 	private static findCommonRootPath(files: { path: string }[]): string {
 		if (!files || files.length === 0) {
@@ -133,17 +140,14 @@ export class ChunkedWebsiteExporter {
 		}
 	
 		if (files.length === 1) {
-			const parts = files[0].path.split('/');
-			parts.pop(); // Remove filename
-			return parts.join('/');
+			return new Path(files[0].path).parent?.path ?? '';
 		}
 	
-		const paths = files.map(file => file.path.split('/'));
+		const paths = files.map(file => new Path(file.path).split());
 		let commonPath: string[] = [];
 		const shortestPathLength = Math.min(...paths.map(p => p.length));
 	
-		// Find the longest common prefix of directory segments
-		for (let i = 0; i < shortestPathLength - 1; i++) { // -1 to exclude filename
+		for (let i = 0; i < shortestPathLength; i++) {
 			const segment = paths[0][i];
 			if (paths.every(path => path[i] === segment)) {
 				commonPath.push(segment);
@@ -152,7 +156,18 @@ export class ChunkedWebsiteExporter {
 			}
 		}
 	
-		return commonPath.join('/');
+		// If the common path is just the root, return an empty string
+		if (commonPath.length <= 1) {
+			return '';
+		}
+	
+		// Remove the last segment if it's not a common parent for all files
+		const lastCommonSegment = commonPath[commonPath.length - 1];
+		if (!paths.every(path => path.length > commonPath.length || path[commonPath.length - 1] !== lastCommonSegment)) {
+			commonPath.pop();
+		}
+	
+		return new Path(commonPath.join('/')).path;
 	}
 
 	/**
@@ -224,6 +239,16 @@ export class ChunkedWebsiteExporter {
 			ExportLog.log(`🔧 Pre-setting export root for chunk ${chunkIndex + 1}: "${globalExportRoot}"`);
 			
 			await website.load(normalizedFiles);
+			
+			// === VERIFICATION: Ensure export root wasn't overridden ===
+			if (website.exportOptions.exportRoot !== globalExportRoot) {
+				ExportLog.error(`❌ CRITICAL: Export root was overridden! Expected: "${globalExportRoot}", Got: "${website.exportOptions.exportRoot}"`);
+				// Force restore the global export root
+				website.exportOptions.exportRoot = globalExportRoot;
+				ExportLog.log(`🔧 RESTORED export root to: "${globalExportRoot}"`);
+			} else {
+				ExportLog.log(`✅ Export root preserved correctly: "${globalExportRoot}"`);
+			}
 			
 			// === FLOW 3: Slugification Flow ===
 			// Ensure slugification consistency with the pre-set global export root
@@ -336,8 +361,11 @@ export class ChunkedWebsiteExporter {
 				const directory = targetPath.directory;
 				
 				// Log first few files for debugging
-				if (directoriesToCreate.size < 3) {
-					ExportLog.log(`   📄 File: ${file.path} -> Target: ${targetPath.absoluted().path}`);
+				if (directoriesToCreate.size < 5) {
+					ExportLog.log(`   📄 File: ${file.path}`);
+					ExportLog.log(`   🎯 Target: ${targetPath.absoluted().path}`);
+					ExportLog.log(`   📁 Directory: ${directory?.absoluted().path || 'N/A'}`);
+					ExportLog.log(`   ---`);
 				}
 				
 				if (directory && directory.path) {
@@ -400,16 +428,26 @@ export class ChunkedWebsiteExporter {
 			}
 			
 			// Sample a few files to verify their paths
-			const sampleFiles = files.slice(0, Math.min(3, files.length));
+			const sampleFiles = files.slice(0, Math.min(5, files.length));
 			for (const file of sampleFiles) {
 				const targetPath = website.getTargetPathForFile(file);
-				const expectedRoot = globalExportRoot ? globalExportRoot + "/" : "";
 				
-				if (globalExportRoot && !targetPath.path.includes(globalExportRoot)) {
-					ExportLog.warning(`⚠️ File path may not respect global root: ${file.path} -> ${targetPath.absoluted().path}`);
-				} else {
-					ExportLog.log(`✅ Path verified: ${file.path} -> ${targetPath.absoluted().path}`);
+				ExportLog.log(`🔍 Path verification for: ${file.path}`);
+				ExportLog.log(`   📁 Export root: "${globalExportRoot}"`);
+				ExportLog.log(`   🎯 Target path: "${targetPath.absoluted().path}"`);
+				ExportLog.log(`   📂 Working directory: "${targetPath.workingDirectory}"`);
+				
+				// Check if target path contains the export root
+				const targetAbsolute = targetPath.absoluted().path;
+				if (globalExportRoot && globalExportRoot !== '') {
+					if (targetAbsolute.includes(globalExportRoot)) {
+						ExportLog.log(`   ✅ Target path contains export root`);
+					} else {
+						ExportLog.warning(`   ⚠️ Target path does NOT contain export root`);
+					}
 				}
+				
+				ExportLog.log(`   ---`);
 			}
 			
 		} catch (error) {
