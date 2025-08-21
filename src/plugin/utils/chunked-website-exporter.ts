@@ -48,10 +48,27 @@ export class ChunkedWebsiteExporter {
 			
 			if (files.length > 1) {
 				const paths = files.map(file => new Path(file.path).split());
-				ExportLog.log(`🔍 Path segments comparison:`);
-				paths.slice(0, 3).forEach((pathSegments, index) => {
+				ExportLog.log(`🔍 Path segments comparison (first 5 files):`);
+				paths.slice(0, 5).forEach((pathSegments, index) => {
 					ExportLog.log(`   File ${index + 1}: [${pathSegments.join(' / ')}]`);
 				});
+				
+				// Test common path calculation step by step
+				const shortestLength = Math.min(...paths.map(p => p.length));
+				ExportLog.log(`🔍 Shortest path length: ${shortestLength}`);
+				
+				let commonSegments: string[] = [];
+				for (let i = 0; i < shortestLength; i++) {
+					const segment = paths[0][i];
+					const allMatch = paths.every(path => path[i] === segment);
+					ExportLog.log(`   Segment ${i}: "${segment}" - All match: ${allMatch}`);
+					if (allMatch) {
+						commonSegments.push(segment);
+					} else {
+						break;
+					}
+				}
+				ExportLog.log(`🔍 Common segments before processing: [${commonSegments.join(' / ')}]`);
 			}
 		}
 		
@@ -280,11 +297,23 @@ export class ChunkedWebsiteExporter {
 				
 				// Simulate what removeRootFromPath would do
 				if (website.exportOptions.exportRoot && website.exportOptions.exportRoot !== '') {
-					const rootWithSlash = website.exportOptions.exportRoot + "/";
-					if (testTargetPath.path.includes(website.exportOptions.exportRoot)) {
+					const rootPath = new Path(website.exportOptions.exportRoot);
+					const rootSlugified = rootPath.slugify(website.exportOptions.slugifyPaths);
+					const rootForComparison = rootSlugified.path + "/";
+					
+					ExportLog.log(`   🧪 Export root processing:`);
+					ExportLog.log(`     Original: "${website.exportOptions.exportRoot}"`);
+					ExportLog.log(`     Slugified: "${rootSlugified.path}"`);
+					ExportLog.log(`     With slash: "${rootForComparison}"`);
+					
+					if (testTargetPath.path.startsWith(rootForComparison.replace(/\/$/, ""))) {
 						ExportLog.log(`   ✅ Target path contains export root - will be stripped`);
+						const remainingPath = testTargetPath.path.substring(rootForComparison.length);
+						ExportLog.log(`   📍 After stripping: "${remainingPath}"`);
 					} else {
-						ExportLog.warning(`   ⚠️ Target path does NOT contain export root - will stay full path!`);
+						ExportLog.warning(`   ⚠️ Target path does NOT start with export root - will stay full path!`);
+						ExportLog.warning(`     Target: "${testTargetPath.path}"`);
+						ExportLog.warning(`     Root: "${rootForComparison}"`);
 					}
 				} else {
 					ExportLog.warning(`   ⚠️ Export root is empty - no stripping will occur!`);
