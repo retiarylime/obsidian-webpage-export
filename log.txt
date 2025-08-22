@@ -1,0 +1,1870 @@
+ ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/더울 때 사용해요_1404746306190.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/더울-때-사용해요_1404746306190.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/더울-때-사용해요_1404746306190.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/더울-때-사용해요_1404746306190.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/더울-때-사용해요_1404746306190.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/더울-때-사용해요_1404746306190.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/더울 때 사용해요_1404746306190.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/더울 때 사용해요_1404746306190.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Card Gallery.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Card Gallery.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "card-gallery.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "card-gallery.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "card-gallery.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "card-gallery.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "card-gallery.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Card Gallery.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Card Gallery.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/부족할-리가-없을-텐데요_1607669225255.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/부족할-리가-없을-텐데요_1607669225255.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/부족할-리가-없을-텐데요_1607669225255.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/부족할-리가-없을-텐데요_1607669225255.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/부족할-리가-없을-텐데요_1607669225255.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/큰-집_1382222776010.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/큰-집_1382222776010.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/큰-집_1382222776010.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/큰-집_1382222776010.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/큰-집_1382222776010.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/요즘-볼-만한-뮤지컬-있어요_1604223232643.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/요즘-볼-만한-뮤지컬-있어요_1604223232643.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/요즘-볼-만한-뮤지컬-있어요_1604223232643.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/요즘-볼-만한-뮤지컬-있어요_1604223232643.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/요즘-볼-만한-뮤지컬-있어요_1604223232643.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/꽃이-다-피어-가요_1512899111152.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/꽃이-다-피어-가요_1512899111152.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/꽃이-다-피어-가요_1512899111152.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/꽃이-다-피어-가요_1512899111152.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/꽃이-다-피어-가요_1512899111152.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/더-커요_1363768664060.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/더-커요_1363768664060.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/더-커요_1363768664060.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/더-커요_1363768664060.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/더-커요_1363768664060.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/얼마-전에_1382222776750.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/얼마-전에_1382222776750.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/얼마-전에_1382222776750.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/얼마-전에_1382222776750.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/얼마-전에_1382222776750.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/벌써-사랑이-식어-가나요_1512899822634.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/벌써-사랑이-식어-가나요_1512899822634.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/벌써-사랑이-식어-가나요_1512899822634.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/벌써-사랑이-식어-가나요_1512899822634.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/벌써-사랑이-식어-가나요_1512899822634.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/목이-좀-아픈-데다가-콧물도-나요_1592986453081.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/목이-좀-아픈-데다가-콧물도-나요_1592986453081.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/목이-좀-아픈-데다가-콧물도-나요_1592986453081.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/목이-좀-아픈-데다가-콧물도-나요_1592986453081.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/목이-좀-아픈-데다가-콧물도-나요_1592986453081.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/크리스마스-때-뭐-해요_1382222776900.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/크리스마스-때-뭐-해요_1382222776900.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/크리스마스-때-뭐-해요_1382222776900.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/크리스마스-때-뭐-해요_1382222776900.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/크리스마스-때-뭐-해요_1382222776900.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/이거-뭐야_1382222776990.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/이거-뭐야_1382222776990.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/이거-뭐야_1382222776990.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/이거-뭐야_1382222776990.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/이거-뭐야_1382222776990.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/오늘따라-왜-이렇게-길이-막히지요_1608749973532.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/오늘따라-왜-이렇게-길이-막히지요_1608749973532.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/오늘따라-왜-이렇게-길이-막히지요_1608749973532.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/오늘따라-왜-이렇게-길이-막히지요_1608749973532.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/오늘따라-왜-이렇게-길이-막히지요_1608749973532.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/그런가-봐요_1438595508380.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/그런가-봐요_1438595508380.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/그런가-봐요_1438595508380.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/그런가-봐요_1438595508380.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/그런가-봐요_1438595508380.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/양강-씨는-저를-너무-행복하게-해요_1596280671635.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/양강-씨는-저를-너무-행복하게-해요_1596280671635.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/양강-씨는-저를-너무-행복하게-해요_1596280671635.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/양강-씨는-저를-너무-행복하게-해요_1596280671635.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/양강-씨는-저를-너무-행복하게-해요_1596280671635.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/1시-전에_1382222775580.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/1시-전에_1382222775580.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/1시-전에_1382222775580.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/1시-전에_1382222775580.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/1시-전에_1382222775580.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/두-달마다-머리를-잘라요_1382222777270.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/두-달마다-머리를-잘라요_1382222777270.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/두-달마다-머리를-잘라요_1382222777270.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/두-달마다-머리를-잘라요_1382222777270.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/두-달마다-머리를-잘라요_1382222777270.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md"
+plugin:webpage-html-export:81633 File tree order for Home.md: 26
+plugin:webpage-html-export:81633 File tree order for Evita Metadata.md: 25
+plugin:webpage-html-export:81633 File tree order for Darakwon Metadata.md: 24
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/다 왔나요_1382222776800.md: 8
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/누가 안 왔어요_1363768664890.md: 7
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/더울 때 사용해요_1404746306190.md: 10
+plugin:webpage-html-export:81633 File tree order for Card Gallery.md: 23
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md: 14
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md: 22
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md: 18
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md: 6
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md: 9
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md: 16
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md: 4
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md: 13
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md: 20
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md: 12
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md: 21
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md: 19
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md: 3
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md: 17
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md: 5
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md: 15
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md: 2
+plugin:webpage-html-export:81633 File tree order for Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md: 11
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:74348 [INFO]   ✅ Chunk 1 export root after load: ""
+plugin:webpage-html-export:74348 [INFO]   🧪 Testing path behavior with first file:
+plugin:webpage-html-export:74348 [INFO]      Source: Home.md
+plugin:webpage-html-export:74348 [INFO]      Target: /home/rl/Desktop/export/home.md
+plugin:webpage-html-export:74348 [INFO]      Export root: ""
+plugin:webpage-html-export:74348 [INFO]      ✅ Empty export root - files will maintain full directory structure
+plugin:webpage-html-export:74348 [INFO]   Slugification enabled for chunk with root: 
+plugin:webpage-html-export:74348 [INFO]   📁 Calculating target paths for 25 files with export root: ""
+plugin:webpage-html-export:74348 [INFO]      📄 File: Home.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/home.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Evita Metadata.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/evita-metadata.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Darakwon Metadata.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/darakwon-metadata.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/다 왔나요_1382222776800.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/다-왔나요_1382222776800.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/누가 안 왔어요_1363768664890.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/누가-안-왔어요_1363768664890.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/더울 때 사용해요_1404746306190.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/더울-때-사용해요_1404746306190.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Card Gallery.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/card-gallery.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/부족할-리가-없을-텐데요_1607669225255.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/큰-집_1382222776010.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/요즘-볼-만한-뮤지컬-있어요_1604223232643.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/꽃이-다-피어-가요_1512899111152.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/더-커요_1363768664060.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/얼마-전에_1382222776750.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/공부하자_1382222777080.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/벌써-사랑이-식어-가나요_1512899822634.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/책상이야_1382222776980.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/목이-좀-아픈-데다가-콧물도-나요_1592986453081.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/크리스마스-때-뭐-해요_1382222776900.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/이거-뭐야_1382222776990.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/감사합니다_1363768661010.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/오늘따라-왜-이렇게-길이-막히지요_1608749973532.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/그런가-봐요_1438595508380.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/양강-씨는-저를-너무-행복하게-해요_1596280671635.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/1시-전에_1382222775580.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/두-달마다-머리를-잘라요_1382222777270.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]   Pre-created 1 directories for chunk
+plugin:webpage-html-export:81646 Creating website with files:
+Home.md
+Evita Metadata.md
+Darakwon Metadata.md
+Korean/Korean Grammar Sentences by Evita/다 왔나요_1382222776800.md
+Korean/Korean Grammar Sentences by Evita/누가 안 왔어요_1363768664890.md
+Korean/Korean Grammar Sentences by Evita/더울 때 사용해요_1404746306190.md
+Card Gallery.md
+Korean/Korean Grammar Sentences by Evita/부족할 리가 없을 텐데요_1607669225255.md
+Korean/Korean Grammar Sentences by Evita/큰 집_1382222776010.md
+Korean/Korean Grammar Sentences by Evita/요즘 볼 만한 뮤지컬 있어요_1604223232643.md
+Korean/Korean Grammar Sentences by Evita/꽃이 다 피어 가요_1512899111152.md
+Korean/Korean Grammar Sentences by Evita/더 커요_1363768664060.md
+Korean/Korean Grammar Sentences by Evita/얼마 전에_1382222776750.md
+Korean/Korean Grammar Sentences by Evita/공부하자_1382222777080.md
+Korean/Korean Grammar Sentences by Evita/벌써 사랑이 식어 가나요_1512899822634.md
+Korean/Korean Grammar Sentences by Evita/책상이야_1382222776980.md
+Korean/Korean Grammar Sentences by Evita/목이 좀 아픈 데다가 콧물도 나요_1592986453081.md
+Korean/Korean Grammar Sentences by Evita/크리스마스 때 뭐 해요_1382222776900.md
+Korean/Korean Grammar Sentences by Evita/이거 뭐야_1382222776990.md
+Korean/Korean Grammar Sentences by Evita/감사합니다_1363768661010.md
+Korean/Korean Grammar Sentences by Evita/오늘따라 왜 이렇게 길이 막히지요_1608749973532.md
+Korean/Korean Grammar Sentences by Evita/그런가 봐요_1438595508380.md
+Korean/Korean Grammar Sentences by Evita/양강 씨는 저를 너무 행복하게 해요_1596280671635.md
+Korean/Korean Grammar Sentences by Evita/1시 전에_1382222775580.md
+Korean/Korean Grammar Sentences by Evita/두 달마다 머리를 잘라요_1382222777270.md
+plugin:webpage-html-export:74361 [WARNING]   Creating an RSS feed requires a site url to be set in the export settings.
+warning @ plugin:webpage-html-export:74361
+plugin:webpage-html-export:74348 [INFO]   Processing 25 webpages with memory cleanup every 5 files
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/thank you.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/thank you.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/thank-you.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/thank-you.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/thank-you.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/thank-you.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/thank-you.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 200.3MB
+plugin:webpage-html-export:81381 Memory cleanup #1: 200.3MB -> 272.2MB (saved -71.9MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/ks2527.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/ks2527.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/ks2527.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/ks2527.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/ks2527.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/ks2527.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/ks2527.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 277.9MB
+plugin:webpage-html-export:81381 Memory cleanup #2: 277.9MB -> 349.7MB (saved -71.8MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks388.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks388.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks388.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks388.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks388.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks388.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks388.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 355.5MB
+plugin:webpage-html-export:81381 Memory cleanup #3: 355.5MB -> 427.2MB (saved -71.7MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup triggered at file 5/25 (432.6MB)
+plugin:webpage-html-export:81381 Memory cleanup #4: 432.6MB -> 504.7MB (saved -72.1MB)
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup completed: 432.6MB -> 504.7MB
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+141[Violation] Forced reflow while executing JavaScript took <N>ms
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 510.9MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #5: 510.9MB -> 233.7MB (saved 277.2MB)
+plugin:webpage-html-export:81381 Memory cleanup #6: 233.7MB -> 310.0MB (saved -76.3MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks568.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks568.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks568.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks568.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks568.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks568.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks568.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 317.1MB
+plugin:webpage-html-export:81381 Memory cleanup #7: 317.1MB -> 387.6MB (saved -70.5MB)
+7[Violation] 'requestAnimationFrame' handler took <N>ms
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/ks2558.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/ks2558.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/ks2558.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/ks2558.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/ks2558.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/ks2558.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/ks2558.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 394.3MB
+plugin:webpage-html-export:81381 Memory cleanup #8: 394.3MB -> 465.0MB (saved -70.7MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+app.js:1 [Violation] 'requestIdleCallback' handler took 54ms
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 472.0MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #9: 472.0MB -> 543.0MB (saved -71.0MB)
+plugin:webpage-html-export:81381 Memory cleanup #10: 543.1MB -> 619.3MB (saved -76.3MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks1098.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks1098.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks1098.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks1098.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks1098.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks1098.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks1098.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup triggered at file 10/25 (626.1MB)
+plugin:webpage-html-export:81381 Memory cleanup #11: 626.1MB -> 696.7MB (saved -70.6MB)
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup completed: 626.1MB -> 696.7MB
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/ks2318.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/ks2318.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/ks2318.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/ks2318.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/ks2318.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/ks2318.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/ks2318.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 703.2MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #12: 703.2MB -> 196.6MB (saved 506.6MB)
+plugin:webpage-html-export:81381 Memory cleanup #13: 196.6MB -> 272.9MB (saved -76.3MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 279.3MB
+plugin:webpage-html-export:81381 Memory cleanup #14: 279.3MB -> 350.3MB (saved -70.9MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 356.7MB
+plugin:webpage-html-export:81381 Memory cleanup #15: 356.7MB -> 427.8MB (saved -71.1MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 434.3MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #16: 434.3MB -> 505.0MB (saved -70.7MB)
+plugin:webpage-html-export:81381 Memory cleanup #17: 505.1MB -> 581.3MB (saved -76.2MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks049.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks049.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks049.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks049.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks049.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks049.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks049.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup triggered at file 15/25 (588.1MB)
+plugin:webpage-html-export:81381 Memory cleanup #18: 588.1MB -> 658.7MB (saved -70.6MB)
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup completed: 588.1MB -> 658.7MB
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks295.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks295.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks295.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks295.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks295.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks295.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks295.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 665.4MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #19: 665.4MB -> 736.0MB (saved -70.6MB)
+plugin:webpage-html-export:81381 Memory cleanup #20: 736.0MB -> 219.9MB (saved 516.1MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks582.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks582.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks582.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks582.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks582.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks582.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks582.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 226.7MB
+plugin:webpage-html-export:81381 Memory cleanup #21: 226.7MB -> 297.3MB (saved -70.6MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 303.7MB
+plugin:webpage-html-export:81381 Memory cleanup #22: 303.7MB -> 374.6MB (saved -70.9MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/ks2213.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/ks2213.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/ks2213.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/ks2213.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/ks2213.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/ks2213.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/ks2213.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81482 Auto cleanup triggered. Memory usage: 381.1MB
+plugin:webpage-html-export:81381 Memory cleanup #23: 381.1MB -> 451.9MB (saved -70.8MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 12 11
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/eks571.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/eks571.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/eks571.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/eks571.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/eks571.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/eks571.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/eks571.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup triggered at file 20/25 (459.1MB)
+plugin:webpage-html-export:81381 Memory cleanup #24: 459.1MB -> 529.3MB (saved -70.2MB)
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup completed: 459.1MB -> 529.3MB
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 9 8
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/assets/ks2477.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "Korean/Korean Grammar Sentences by Evita/assets/ks2477.mp3"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/assets/ks2477.mp3"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/assets/ks2477.mp3"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/assets/ks2477.mp3"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "korean/korean-grammar-sentences-by-evita/assets/ks2477.mp3"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "korean/korean-grammar-sentences-by-evita/assets/ks2477.mp3"
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 535.7MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #25: 535.7MB -> 606.6MB (saved -70.9MB)
+plugin:webpage-html-export:81381 Memory cleanup #26: 606.6MB -> 683.0MB (saved -76.4MB)
+plugin:webpage-html-export:73557 Rendered
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 5 4
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+app.js:1 [Violation] 'setTimeout' handler took 738ms
+plugin:webpage-html-export:73557 Rendered
+plugin:dataview:15194 [Violation] 'setTimeout' handler took 16682ms
+enhance.js:1 [Violation] 'animationstart' handler took 3166ms
+app.js:1 [Violation] 'requestIdleCallback' handler took 992ms
+plugin:obsidian42-brat:35 BRAT: Checking for beta theme updates STARTED
+plugin:obsidian42-brat:35 BRAT: Checking for beta theme updates COMPLETED
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 5 4
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 421.7MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #27: 421.7MB -> 496.5MB (saved -74.7MB)
+plugin:webpage-html-export:81381 Memory cleanup #28: 496.5MB -> 572.8MB (saved -76.3MB)
+app.js:1 [Violation] 'setTimeout' handler took 594ms
+plugin:webpage-html-export:73557 Rendered
+plugin:dataview:15194 [Violation] 'setTimeout' handler took 13016ms
+enhance.js:1 [Violation] 'animationstart' handler took 1589ms
+app.js:1 [Violation] 'requestIdleCallback' handler took 703ms
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 5 4
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:81479 Critical memory usage detected: 430.1MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81479
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81387 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81387
+autoCleanup @ plugin:webpage-html-export:81480
+build @ plugin:webpage-html-export:81693
+plugin:webpage-html-export:81381 Memory cleanup #29: 430.1MB -> 504.3MB (saved -74.2MB)
+plugin:webpage-html-export:81381 Memory cleanup #30: 504.3MB -> 580.6MB (saved -76.3MB)
+plugin:note-gallery:12 Note Gallery: Setting native search sort order byModifiedTime
+plugin:webpage-html-export:73557 Rendered
+plugin:note-gallery:12 Note Gallery: Setting native search sort order byModifiedTime
+plugin:webpage-html-export:74348 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73580 4 3
+plugin:webpage-html-export:74348 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74348 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:79361 undefined
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup triggered at file 25/25 (245.6MB)
+plugin:webpage-html-export:81381 Memory cleanup #31: 245.6MB -> 320.6MB (saved -75.0MB)
+plugin:webpage-html-export:74348 [INFO]   Memory cleanup completed: 245.6MB -> 320.6MB
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/rss.xml"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/rss.xml"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/rss.xml"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/rss.xml"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/rss.xml"
+plugin:webpage-html-export:81709 Website {sourceFiles: Array(25), exportOptions: {…}, destination: _Path, index: Index, webpageTemplate: _WebpageTemplate, …}
+plugin:webpage-html-export:74348 [INFO]   ✅ Relative path validation: source->target: ../target/file.md, vault->target: ../../../../../../home/rl/test/target/file.md
+plugin:webpage-html-export:74348 [INFO]   📂 Website export root: ""
+plugin:webpage-html-export:74348 [INFO]   ✅ Successfully processed chunk 1 with natural export root: ""
+plugin:webpage-html-export:74348 [INFO]   📄 Processed 25 files with all 5 Path.ts flows
+plugin:webpage-html-export:74348 [INFO]   ✅ Chunk 1 completed with export root: ""
+plugin:webpage-html-export:81381 Memory cleanup #32: 322.9MB -> 396.3MB (saved -73.4MB)
+plugin:webpage-html-export:74348 [INFO]   🏗️ Starting chunk 2/547 with 25 files using global export root: ""
+plugin:webpage-html-export:74348 [INFO]   📂 Chunk 2 files:
+plugin:webpage-html-export:74348 [INFO]      📄 Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md
+plugin:webpage-html-export:74348 [INFO]      📄 Korean/Korean Grammar Sentences by Evita/한국 노래 듣기를 좋아해요_1363768665510.md
+plugin:webpage-html-export:74348 [INFO]      📄 Korean/Korean Grammar Sentences by Evita/혼자 밥 먹기를 싫어해요_1363768665520.md
+plugin:webpage-html-export:74348 [INFO]      📄 Korean/Korean Grammar Sentences by Evita/미국 경제가 망해 간다_1512895193774.md
+plugin:webpage-html-export:74348 [INFO]      📄 Korean/Korean Grammar Sentences by Evita/사과가 요즘 얼마쯤 해요_1382222777490.md
+plugin:webpage-html-export:74348 [INFO]      ... and 20 more files
+plugin:webpage-html-export:74348 [INFO]   Processing chunk 2 with 25 files using global export root: ""
+plugin:webpage-html-export:74348 [INFO]   Destination /home/rl/Desktop/export doesn't include vault context, using as-is
+plugin:webpage-html-export:74348 [INFO]   🔧 Setting consistent export root for chunk 2: ""
+plugin:webpage-html-export:81572 [Website.load] Root path calculated: Korean/Korean Grammar Sentences by Evita
+plugin:webpage-html-export:75741 Theme styles already loaded. Baseline
+plugin:webpage-html-export:74348 [INFO]   Including stylesheet: css-settings-manager
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/94f2f163d4b698242fef.otf"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/94f2f163d4b698242fef.otf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/94f2f163d4b698242fef.otf"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/94f2f163d4b698242fef.otf"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/94f2f163d4b698242fef.otf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/72505e6a122c6acd5471.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/72505e6a122c6acd5471.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/72505e6a122c6acd5471.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/72505e6a122c6acd5471.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/72505e6a122c6acd5471.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/2d5198822ab091ce4305.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/2d5198822ab091ce4305.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/2d5198822ab091ce4305.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/2d5198822ab091ce4305.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/2d5198822ab091ce4305.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/c8ba52b05a9ef10f4758.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/c8ba52b05a9ef10f4758.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/c8ba52b05a9ef10f4758.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/c8ba52b05a9ef10f4758.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/c8ba52b05a9ef10f4758.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/cb10ffd7684cd9836a05.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/cb10ffd7684cd9836a05.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/cb10ffd7684cd9836a05.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/cb10ffd7684cd9836a05.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/cb10ffd7684cd9836a05.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/293fd13dbca5a3e450ef.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/293fd13dbca5a3e450ef.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/293fd13dbca5a3e450ef.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/293fd13dbca5a3e450ef.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/293fd13dbca5a3e450ef.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/085cb93e613ba3d40d2b.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/085cb93e613ba3d40d2b.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/085cb93e613ba3d40d2b.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/085cb93e613ba3d40d2b.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/085cb93e613ba3d40d2b.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/b5f0f109bc88052d4000.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/b5f0f109bc88052d4000.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/b5f0f109bc88052d4000.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/b5f0f109bc88052d4000.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/b5f0f109bc88052d4000.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/cbe0ae49c52c920fd563.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/cbe0ae49c52c920fd563.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/cbe0ae49c52c920fd563.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/cbe0ae49c52c920fd563.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/cbe0ae49c52c920fd563.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/535a6cf662596b3bd6a6.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/535a6cf662596b3bd6a6.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/535a6cf662596b3bd6a6.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/535a6cf662596b3bd6a6.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/535a6cf662596b3bd6a6.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/70cc7ff27245e82ad414.ttf"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/70cc7ff27245e82ad414.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/70cc7ff27245e82ad414.ttf"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/70cc7ff27245e82ad414.ttf"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/70cc7ff27245e82ad414.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/454577c22304619db035.ttf"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/454577c22304619db035.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/454577c22304619db035.ttf"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/454577c22304619db035.ttf"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/454577c22304619db035.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/52ac8f3034507f1d9e53.ttf"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/52ac8f3034507f1d9e53.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/52ac8f3034507f1d9e53.ttf"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/52ac8f3034507f1d9e53.ttf"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/52ac8f3034507f1d9e53.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/05b618077343fbbd92b7.ttf"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/05b618077343fbbd92b7.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/05b618077343fbbd92b7.ttf"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/05b618077343fbbd92b7.ttf"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/05b618077343fbbd92b7.ttf"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/fonts/4bb6ac751d1c5478ff3a.woff2"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/fonts/4bb6ac751d1c5478ff3a.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/fonts/4bb6ac751d1c5478ff3a.woff2"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/fonts/4bb6ac751d1c5478ff3a.woff2"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/fonts/4bb6ac751d1c5478ff3a.woff2"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/media/6155340132a851f6089e.svg"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/media/6155340132a851f6089e.svg"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/media/6155340132a851f6089e.svg"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/media/6155340132a851f6089e.svg"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/media/6155340132a851f6089e.svg"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/media/2308ab1944a6bfa5c5b8.svg"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/media/2308ab1944a6bfa5c5b8.svg"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/media/2308ab1944a6bfa5c5b8.svg"
+plugin:webpage-html-export:72349   Export root: ""
+plugin:webpage-html-export:72351   🔧 EMPTY EXPORT ROOT - Preserving full directory structure
+plugin:webpage-html-export:72352   ✅ PRESERVING: "site-lib/media/2308ab1944a6bfa5c5b8.svg"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/media/2308ab1944a6bfa5c5b8.svg"
+plugin:webpage-html-export:80901 No metadata found. Creating new metadata.
+plugin:webpage-html-export:74348 [INFO] No search-index.json exists. Creating new index.  Error: No index found
+    at Index.load (plugin:webpage-html-export:80951:15)
+    at async Website.load (plugin:webpage-html-export:81579:7)
+    at async _ChunkedWebsiteExporter.processChunk (plugin:webpage-html-export:82451:7)
+    at async _ChunkedWebsiteExporter.exportInChunks (plugin:webpage-html-export:82335:30)
+    at async HTMLExporter.exportFiles (plugin:webpage-html-export:82640:19)
+    at async HTMLExporter.export (plugin:webpage-html-export:82626:21)
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md" -> "하지 마세요_1382222774820.md"
+plugin:webpage-html-export:72365   Final path: "하지 마세요_1382222774820.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/하지-마세요_1382222774820.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/하지-마세요_1382222774820.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/하지-마세요_1382222774820.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/하지-마세요_1382222774820.md" -> "하지-마세요_1382222774820.md"
+plugin:webpage-html-export:72365   Final path: "하지-마세요_1382222774820.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "하지-마세요_1382222774820.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md" -> "하지 마세요_1382222774820.md"
+plugin:webpage-html-export:72365   Final path: "하지 마세요_1382222774820.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/한국 노래 듣기를 좋아해요_1363768665510.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/한국 노래 듣기를 좋아해요_1363768665510.md" -> "한국 노래 듣기를 좋아해요_1363768665510.md"
+plugin:webpage-html-export:72365   Final path: "한국 노래 듣기를 좋아해요_1363768665510.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/한국-노래-듣기를-좋아해요_1363768665510.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/한국-노래-듣기를-좋아해요_1363768665510.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/한국-노래-듣기를-좋아해요_1363768665510.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/한국-노래-듣기를-좋아해요_1363768665510.md" -> "한국-노래-듣기를-좋아해요_1363768665510.md"
+plugin:webpage-html-export:72365   Final path: "한국-노래-듣기를-좋아해요_1363768665510.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "한국-노래-듣기를-좋아해요_1363768665510.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/한국 노래 듣기를 좋아해요_1363768665510.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/한국 노래 듣기를 좋아해요_1363768665510.md" -> "한국 노래 듣기를 좋아해요_1363768665510.md"
+plugin:webpage-html-export:72365   Final path: "한국 노래 듣기를 좋아해요_1363768665510.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/혼자 밥 먹기를 싫어해요_1363768665520.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/혼자 밥 먹기를 싫어해요_1363768665520.md" -> "혼자 밥 먹기를 싫어해요_1363768665520.md"
+plugin:webpage-html-export:72365   Final path: "혼자 밥 먹기를 싫어해요_1363768665520.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/혼자-밥-먹기를-싫어해요_1363768665520.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/혼자-밥-먹기를-싫어해요_1363768665520.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/혼자-밥-먹기를-싫어해요_1363768665520.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/혼자-밥-먹기를-싫어해요_1363768665520.md" -> "혼자-밥-먹기를-싫어해요_1363768665520.md"
+plugin:webpage-html-export:72365   Final path: "혼자-밥-먹기를-싫어해요_1363768665520.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "혼자-밥-먹기를-싫어해요_1363768665520.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/혼자 밥 먹기를 싫어해요_1363768665520.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/혼자 밥 먹기를 싫어해요_1363768665520.md" -> "혼자 밥 먹기를 싫어해요_1363768665520.md"
+plugin:webpage-html-export:72365   Final path: "혼자 밥 먹기를 싫어해요_1363768665520.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/미국 경제가 망해 간다_1512895193774.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/미국 경제가 망해 간다_1512895193774.md" -> "미국 경제가 망해 간다_1512895193774.md"
+plugin:webpage-html-export:72365   Final path: "미국 경제가 망해 간다_1512895193774.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/미국-경제가-망해-간다_1512895193774.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/미국-경제가-망해-간다_1512895193774.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/미국-경제가-망해-간다_1512895193774.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/미국-경제가-망해-간다_1512895193774.md" -> "미국-경제가-망해-간다_1512895193774.md"
+plugin:webpage-html-export:72365   Final path: "미국-경제가-망해-간다_1512895193774.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "미국-경제가-망해-간다_1512895193774.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/미국 경제가 망해 간다_1512895193774.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/미국 경제가 망해 간다_1512895193774.md" -> "미국 경제가 망해 간다_1512895193774.md"
+plugin:webpage-html-export:72365   Final path: "미국 경제가 망해 간다_1512895193774.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/사과가 요즘 얼마쯤 해요_1382222777490.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/사과가 요즘 얼마쯤 해요_1382222777490.md" -> "사과가 요즘 얼마쯤 해요_1382222777490.md"
+plugin:webpage-html-export:72365   Final path: "사과가 요즘 얼마쯤 해요_1382222777490.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/사과가-요즘-얼마쯤-해요_1382222777490.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/사과가-요즘-얼마쯤-해요_1382222777490.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/사과가-요즘-얼마쯤-해요_1382222777490.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/사과가-요즘-얼마쯤-해요_1382222777490.md" -> "사과가-요즘-얼마쯤-해요_1382222777490.md"
+plugin:webpage-html-export:72365   Final path: "사과가-요즘-얼마쯤-해요_1382222777490.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "사과가-요즘-얼마쯤-해요_1382222777490.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/사과가 요즘 얼마쯤 해요_1382222777490.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/사과가 요즘 얼마쯤 해요_1382222777490.md" -> "사과가 요즘 얼마쯤 해요_1382222777490.md"
+plugin:webpage-html-export:72365   Final path: "사과가 요즘 얼마쯤 해요_1382222777490.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/어제였어_1363768665720.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/어제였어_1363768665720.md" -> "어제였어_1363768665720.md"
+plugin:webpage-html-export:72365   Final path: "어제였어_1363768665720.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/어제였어_1363768665720.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/어제였어_1363768665720.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/어제였어_1363768665720.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/어제였어_1363768665720.md" -> "어제였어_1363768665720.md"
+plugin:webpage-html-export:72365   Final path: "어제였어_1363768665720.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "어제였어_1363768665720.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/어제였어_1363768665720.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/어제였어_1363768665720.md" -> "어제였어_1363768665720.md"
+plugin:webpage-html-export:72365   Final path: "어제였어_1363768665720.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/이건 뭐예요_1404746307150.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/이건 뭐예요_1404746307150.md" -> "이건 뭐예요_1404746307150.md"
+plugin:webpage-html-export:72365   Final path: "이건 뭐예요_1404746307150.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/이건-뭐예요_1404746307150.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/이건-뭐예요_1404746307150.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/이건-뭐예요_1404746307150.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/이건-뭐예요_1404746307150.md" -> "이건-뭐예요_1404746307150.md"
+plugin:webpage-html-export:72365   Final path: "이건-뭐예요_1404746307150.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "이건-뭐예요_1404746307150.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/이건 뭐예요_1404746307150.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/이건 뭐예요_1404746307150.md" -> "이건 뭐예요_1404746307150.md"
+plugin:webpage-html-export:72365   Final path: "이건 뭐예요_1404746307150.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/안 보여요_1438595511600.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/안 보여요_1438595511600.md" -> "안 보여요_1438595511600.md"
+plugin:webpage-html-export:72365   Final path: "안 보여요_1438595511600.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/안-보여요_1438595511600.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/안-보여요_1438595511600.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/안-보여요_1438595511600.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/안-보여요_1438595511600.md" -> "안-보여요_1438595511600.md"
+plugin:webpage-html-export:72365   Final path: "안-보여요_1438595511600.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "안-보여요_1438595511600.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/안 보여요_1438595511600.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/안 보여요_1438595511600.md" -> "안 보여요_1438595511600.md"
+plugin:webpage-html-export:72365   Final path: "안 보여요_1438595511600.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/제일 좋은 것_1404746307250.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/제일 좋은 것_1404746307250.md" -> "제일 좋은 것_1404746307250.md"
+plugin:webpage-html-export:72365   Final path: "제일 좋은 것_1404746307250.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/제일-좋은-것_1404746307250.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/제일-좋은-것_1404746307250.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/제일-좋은-것_1404746307250.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/제일-좋은-것_1404746307250.md" -> "제일-좋은-것_1404746307250.md"
+plugin:webpage-html-export:72365   Final path: "제일-좋은-것_1404746307250.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "제일-좋은-것_1404746307250.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/제일 좋은 것_1404746307250.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/제일 좋은 것_1404746307250.md" -> "제일 좋은 것_1404746307250.md"
+plugin:webpage-html-export:72365   Final path: "제일 좋은 것_1404746307250.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/그런 것 같아요_1404746305830.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/그런 것 같아요_1404746305830.md" -> "그런 것 같아요_1404746305830.md"
+plugin:webpage-html-export:72365   Final path: "그런 것 같아요_1404746305830.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/그런-것-같아요_1404746305830.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/그런-것-같아요_1404746305830.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/그런-것-같아요_1404746305830.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/그런-것-같아요_1404746305830.md" -> "그런-것-같아요_1404746305830.md"
+plugin:webpage-html-export:72365   Final path: "그런-것-같아요_1404746305830.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "그런-것-같아요_1404746305830.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/그런 것 같아요_1404746305830.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/그런 것 같아요_1404746305830.md" -> "그런 것 같아요_1404746305830.md"
+plugin:webpage-html-export:72365   Final path: "그런 것 같아요_1404746305830.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/여기 있네요!_1404746306230.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/여기 있네요!_1404746306230.md" -> "여기 있네요!_1404746306230.md"
+plugin:webpage-html-export:72365   Final path: "여기 있네요!_1404746306230.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/여기-있네요!_1404746306230.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/여기-있네요!_1404746306230.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/여기-있네요!_1404746306230.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/여기-있네요!_1404746306230.md" -> "여기-있네요!_1404746306230.md"
+plugin:webpage-html-export:72365   Final path: "여기-있네요!_1404746306230.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "여기-있네요!_1404746306230.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/여기 있네요!_1404746306230.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/여기 있네요!_1404746306230.md" -> "여기 있네요!_1404746306230.md"
+plugin:webpage-html-export:72365   Final path: "여기 있네요!_1404746306230.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/하지 말자_1382222777090.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/하지 말자_1382222777090.md" -> "하지 말자_1382222777090.md"
+plugin:webpage-html-export:72365   Final path: "하지 말자_1382222777090.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/하지-말자_1382222777090.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/하지-말자_1382222777090.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/하지-말자_1382222777090.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/하지-말자_1382222777090.md" -> "하지-말자_1382222777090.md"
+plugin:webpage-html-export:72365   Final path: "하지-말자_1382222777090.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "하지-말자_1382222777090.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/하지 말자_1382222777090.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/하지 말자_1382222777090.md" -> "하지 말자_1382222777090.md"
+plugin:webpage-html-export:72365   Final path: "하지 말자_1382222777090.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/열어도 돼요_1404746306620.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/열어도 돼요_1404746306620.md" -> "열어도 돼요_1404746306620.md"
+plugin:webpage-html-export:72365   Final path: "열어도 돼요_1404746306620.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/열어도-돼요_1404746306620.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/열어도-돼요_1404746306620.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/열어도-돼요_1404746306620.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/열어도-돼요_1404746306620.md" -> "열어도-돼요_1404746306620.md"
+plugin:webpage-html-export:72365   Final path: "열어도-돼요_1404746306620.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "열어도-돼요_1404746306620.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/열어도 돼요_1404746306620.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/열어도 돼요_1404746306620.md" -> "열어도 돼요_1404746306620.md"
+plugin:webpage-html-export:72365   Final path: "열어도 돼요_1404746306620.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/이거 좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/이거 좋은데요!_1382222776620.md" -> "이거 좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72365   Final path: "이거 좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/이거-좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/이거-좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/이거-좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/이거-좋은데요!_1382222776620.md" -> "이거-좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72365   Final path: "이거-좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "이거-좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/이거 좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/이거 좋은데요!_1382222776620.md" -> "이거 좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72365   Final path: "이거 좋은데요!_1382222776620.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/저거 사자_1382222777110.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/저거 사자_1382222777110.md" -> "저거 사자_1382222777110.md"
+plugin:webpage-html-export:72365   Final path: "저거 사자_1382222777110.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/저거-사자_1382222777110.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/저거-사자_1382222777110.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/저거-사자_1382222777110.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/저거-사자_1382222777110.md" -> "저거-사자_1382222777110.md"
+plugin:webpage-html-export:72365   Final path: "저거-사자_1382222777110.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "저거-사자_1382222777110.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/저거 사자_1382222777110.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/저거 사자_1382222777110.md" -> "저거 사자_1382222777110.md"
+plugin:webpage-html-export:72365   Final path: "저거 사자_1382222777110.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/재미있지요_1404746306550.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/재미있지요_1404746306550.md" -> "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72365   Final path: "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/재미있지요_1404746306550.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/재미있지요_1404746306550.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/재미있지요_1404746306550.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/재미있지요_1404746306550.md" -> "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72365   Final path: "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/재미있지요_1404746306550.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/재미있지요_1404746306550.md" -> "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72365   Final path: "재미있지요_1404746306550.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/해 주세요_1382222774480.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/해 주세요_1382222774480.md" -> "해 주세요_1382222774480.md"
+plugin:webpage-html-export:72365   Final path: "해 주세요_1382222774480.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/해-주세요_1382222774480.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/해-주세요_1382222774480.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/해-주세요_1382222774480.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/해-주세요_1382222774480.md" -> "해-주세요_1382222774480.md"
+plugin:webpage-html-export:72365   Final path: "해-주세요_1382222774480.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "해-주세요_1382222774480.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/해 주세요_1382222774480.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/해 주세요_1382222774480.md" -> "해 주세요_1382222774480.md"
+plugin:webpage-html-export:72365   Final path: "해 주세요_1382222774480.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/열심히 공부해라_1438595509730.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/열심히 공부해라_1438595509730.md" -> "열심히 공부해라_1438595509730.md"
+plugin:webpage-html-export:72365   Final path: "열심히 공부해라_1438595509730.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/열심히-공부해라_1438595509730.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/열심히-공부해라_1438595509730.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/열심히-공부해라_1438595509730.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/열심히-공부해라_1438595509730.md" -> "열심히-공부해라_1438595509730.md"
+plugin:webpage-html-export:72365   Final path: "열심히-공부해라_1438595509730.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "열심히-공부해라_1438595509730.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/열심히 공부해라_1438595509730.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/열심히 공부해라_1438595509730.md" -> "열심히 공부해라_1438595509730.md"
+plugin:webpage-html-export:72365   Final path: "열심히 공부해라_1438595509730.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/집이 넓은가요_1404746306370.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/집이 넓은가요_1404746306370.md" -> "집이 넓은가요_1404746306370.md"
+plugin:webpage-html-export:72365   Final path: "집이 넓은가요_1404746306370.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/집이-넓은가요_1404746306370.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/집이-넓은가요_1404746306370.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/집이-넓은가요_1404746306370.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/집이-넓은가요_1404746306370.md" -> "집이-넓은가요_1404746306370.md"
+plugin:webpage-html-export:72365   Final path: "집이-넓은가요_1404746306370.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "집이-넓은가요_1404746306370.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/집이 넓은가요_1404746306370.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/집이 넓은가요_1404746306370.md" -> "집이 넓은가요_1404746306370.md"
+plugin:webpage-html-export:72365   Final path: "집이 넓은가요_1404746306370.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md" -> "콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md"
+plugin:webpage-html-export:72365   Final path: "콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md" -> "콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md"
+plugin:webpage-html-export:72365   Final path: "콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "콘서트가-7시에-시작하니까-늦지-말래요_1604297769807.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md" -> "콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md"
+plugin:webpage-html-export:72365   Final path: "콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md" -> "퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md"
+plugin:webpage-html-export:72365   Final path: "퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md" -> "퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md"
+plugin:webpage-html-export:72365   Final path: "퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "퇴근-후에-회사-앞-커피숍에서-만나재요_1604297562346.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md" -> "퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md"
+plugin:webpage-html-export:72365   Final path: "퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/9층이에요_1363768664420.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/9층이에요_1363768664420.md" -> "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72365   Final path: "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/9층이에요_1363768664420.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/9층이에요_1363768664420.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/9층이에요_1363768664420.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/9층이에요_1363768664420.md" -> "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72365   Final path: "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/9층이에요_1363768664420.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/9층이에요_1363768664420.md" -> "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72365   Final path: "9층이에요_1363768664420.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/25,000원이에요_1363768664450.md" -> "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72365   Final path: "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/25,000원이에요_1363768664450.md" -> "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72365   Final path: "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/25,000원이에요_1363768664450.md" -> "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72365   Final path: "25,000원이에요_1363768664450.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/나는 경은이야_1382222777170.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/나는 경은이야_1382222777170.md" -> "나는 경은이야_1382222777170.md"
+plugin:webpage-html-export:72365   Final path: "나는 경은이야_1382222777170.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/나는-경은이야_1382222777170.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/나는-경은이야_1382222777170.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/나는-경은이야_1382222777170.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/나는-경은이야_1382222777170.md" -> "나는-경은이야_1382222777170.md"
+plugin:webpage-html-export:72365   Final path: "나는-경은이야_1382222777170.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "나는-경은이야_1382222777170.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/나는 경은이야_1382222777170.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/나는 경은이야_1382222777170.md" -> "나는 경은이야_1382222777170.md"
+plugin:webpage-html-export:72365   Final path: "나는 경은이야_1382222777170.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/전화 온다_1438595507830.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/전화 온다_1438595507830.md" -> "전화 온다_1438595507830.md"
+plugin:webpage-html-export:72365   Final path: "전화 온다_1438595507830.md"
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "korean/korean-grammar-sentences-by-evita/전화-온다_1438595507830.md"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "korean/korean-grammar-sentences-by-evita/전화-온다_1438595507830.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "korean/korean-grammar-sentences-by-evita/전화-온다_1438595507830.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "korean/korean-grammar-sentences-by-evita/전화-온다_1438595507830.md" -> "전화-온다_1438595507830.md"
+plugin:webpage-html-export:72365   Final path: "전화-온다_1438595507830.md"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "전화-온다_1438595507830.md"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "Korean/Korean Grammar Sentences by Evita/전화 온다_1438595507830.md"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72361   ❌ STRIPPED: "Korean/Korean Grammar Sentences by Evita/전화 온다_1438595507830.md" -> "전화 온다_1438595507830.md"
+plugin:webpage-html-export:72365   Final path: "전화 온다_1438595507830.md"
+plugin:webpage-html-export:81633 File tree order for 하지 마세요_1382222774820.md: 20
+plugin:webpage-html-export:81633 File tree order for 한국 노래 듣기를 좋아해요_1363768665510.md: 22
+plugin:webpage-html-export:81633 File tree order for 혼자 밥 먹기를 싫어해요_1363768665520.md: 24
+plugin:webpage-html-export:81633 File tree order for 미국 경제가 망해 간다_1512895193774.md: 4
+plugin:webpage-html-export:81633 File tree order for 사과가 요즘 얼마쯤 해요_1382222777490.md: 5
+plugin:webpage-html-export:81633 File tree order for 어제였어_1363768665720.md: 7
+plugin:webpage-html-export:81633 File tree order for 이건 뭐예요_1404746307150.md: 12
+plugin:webpage-html-export:81633 File tree order for 안 보여요_1438595511600.md: 6
+plugin:webpage-html-export:81633 File tree order for 제일 좋은 것_1404746307250.md: 16
+plugin:webpage-html-export:81633 File tree order for 그런 것 같아요_1404746305830.md: 2
+plugin:webpage-html-export:81633 File tree order for 여기 있네요!_1404746306230.md: 8
+plugin:webpage-html-export:81633 File tree order for 하지 말자_1382222777090.md: 21
+plugin:webpage-html-export:81633 File tree order for 열어도 돼요_1404746306620.md: 10
+plugin:webpage-html-export:81633 File tree order for 이거 좋은데요!_1382222776620.md: 11
+plugin:webpage-html-export:81633 File tree order for 저거 사자_1382222777110.md: 14
+plugin:webpage-html-export:81633 File tree order for 재미있지요_1404746306550.md: 13
+plugin:webpage-html-export:81633 File tree order for 해 주세요_1382222774480.md: 23
+plugin:webpage-html-export:81633 File tree order for 열심히 공부해라_1438595509730.md: 9
+plugin:webpage-html-export:81633 File tree order for 집이 넓은가요_1404746306370.md: 17
+plugin:webpage-html-export:81633 File tree order for 콘서트가 7시에 시작하니까 늦지 말래요_1604297769807.md: 18
+plugin:webpage-html-export:81633 File tree order for 퇴근 후에 회사 앞 커피숍에서 만나재요_1604297562346.md: 19
+plugin:webpage-html-export:81633 File tree order for 9층이에요_1363768664420.md: 0
+plugin:webpage-html-export:81633 File tree order for 25,000원이에요_1363768664450.md: 1
+plugin:webpage-html-export:81633 File tree order for 나는 경은이야_1382222777170.md: 3
+plugin:webpage-html-export:81633 File tree order for 전화 온다_1438595507830.md: 15
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: ""
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "Korean/Korean Grammar Sentences by Evita/"
+plugin:webpage-html-export:72363   ✅ NO STRIPPING: path doesn't start with root
+plugin:webpage-html-export:72365   Final path: ""
+plugin:webpage-html-export:72329 [Downloadable] targetPath setter called with: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72331 [Downloadable] After slugify: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72347 [Downloadable] removeRootFromPath called:
+plugin:webpage-html-export:72348   Input path: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72349   Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:72356   Processed root: "korean/korean-grammar-sentences-by-evita/"
+plugin:webpage-html-export:72363   ✅ NO STRIPPING: path doesn't start with root
+plugin:webpage-html-export:72365   Final path: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:72333 [Downloadable] After removeRootFromPath: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:74348 [INFO]   ✅ Chunk 2 export root after load: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:74348 [INFO]   🧪 Testing path behavior with first file:
+plugin:webpage-html-export:74348 [INFO]      Source: Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md
+plugin:webpage-html-export:74348 [INFO]      Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/하지-마세요_1382222774820.md
+plugin:webpage-html-export:74348 [INFO]      Export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:74348 [INFO]      ✅ Export root set - files will be relative to: Korean/Korean Grammar Sentences by Evita
+plugin:webpage-html-export:74348 [INFO]   Slugification enabled for chunk with root: Korean/Korean Grammar Sentences by Evita
+plugin:webpage-html-export:74348 [INFO]   Export root slugification test: "Korean/Korean Grammar Sentences by Evita" -> "korean/korean-grammar-sentences-by-evita"
+plugin:webpage-html-export:74348 [INFO]   📁 Calculating target paths for 25 files with export root: "Korean/Korean Grammar Sentences by Evita"
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/하지 마세요_1382222774820.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/하지-마세요_1382222774820.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/한국 노래 듣기를 좋아해요_1363768665510.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/한국-노래-듣기를-좋아해요_1363768665510.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/혼자 밥 먹기를 싫어해요_1363768665520.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/혼자-밥-먹기를-싫어해요_1363768665520.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/미국 경제가 망해 간다_1512895193774.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/미국-경제가-망해-간다_1512895193774.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/사과가 요즘 얼마쯤 해요_1382222777490.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/사과가-요즘-얼마쯤-해요_1382222777490.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/어제였어_1363768665720.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/어제였어_1363768665720.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/이건 뭐예요_1404746307150.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/이건-뭐예요_1404746307150.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/안 보여요_1438595511600.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/안-보여요_1438595511600.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/제일 좋은 것_1404746307250.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/제일-좋은-것_1404746307250.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/그런 것 같아요_1404746305830.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/그런-것-같아요_1404746305830.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/여기 있네요!_1404746306230.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/여기-있네요!_1404746306230.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/하지 말자_1382222777090.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/하지-말자_1382222777090.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/열어도 돼요_1404746306620.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/열어도-돼요_1404746306620.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/이거 좋은데요!_1382222776620.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/이거-좋은데요!_1382222776620.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 [INFO]      ---
+plugin:webpage-html-export:74348 [INFO]      📄 File: Korean/Korean Grammar Sentences by Evita/저거 사자_1382222777110.md
+plugin:webpage-html-export:74348 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita/저거-사자_1382222777110.md
+plugin:webpage-html-export:74348 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/korean-grammar-sentences-by-evita
+plugin:webpage-html-export:74348 

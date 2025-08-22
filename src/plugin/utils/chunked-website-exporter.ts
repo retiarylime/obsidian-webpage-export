@@ -268,12 +268,24 @@ export class ChunkedWebsiteExporter {
 			
 			// ✅ CRITICAL: Set consistent global export root for ALL chunks  
 			website.exportOptions.exportRoot = globalExportRoot;
+			(website.exportOptions as any).__exportRootSetByChunkedExporter = true;
 			ExportLog.log(`🔧 Setting consistent export root for chunk ${chunkIndex + 1}: "${globalExportRoot}"`);
 			
 			await website.load(normalizedFiles);
 			
-			// Verify export root remains consistent
-			ExportLog.log(`✅ Chunk ${chunkIndex + 1} export root after load: "${website.exportOptions.exportRoot}"`);
+			// ✅ CRITICAL: Verify and enforce export root consistency after load
+			if (website.exportOptions.exportRoot !== globalExportRoot) {
+				ExportLog.error(`❌ CRITICAL: Export root was overridden during load!`);
+				ExportLog.error(`   Expected: "${globalExportRoot}"`);
+				ExportLog.error(`   Got: "${website.exportOptions.exportRoot}"`);
+				ExportLog.error(`   Re-enforcing consistent export root...`);
+				
+				// Force back to global export root
+				website.exportOptions.exportRoot = globalExportRoot;
+				(website.exportOptions as any).__exportRootSetByChunkedExporter = true;
+			}
+			
+			ExportLog.log(`✅ Chunk ${chunkIndex + 1} final export root: "${website.exportOptions.exportRoot}"`);
 			
 			// === DEBUG: Test path behavior ===
 			if (normalizedFiles.length > 0) {
