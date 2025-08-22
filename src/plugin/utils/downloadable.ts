@@ -38,8 +38,11 @@ export class Attachment
 	public get targetPath() { return this._targetPath; }
 	public set targetPath(target: Path)
 	{
+		console.log(`[Downloadable] targetPath setter called with: "${target.path}"`);
 		target.slugify(this.exportOptions.slugifyPaths);
+		console.log(`[Downloadable] After slugify: "${target.path}"`);
 		target = this.removeRootFromPath(target);
+		console.log(`[Downloadable] After removeRootFromPath: "${target.path}"`);
 		this._targetPath = target;
 	}
 
@@ -65,15 +68,35 @@ export class Attachment
 
 	private removeRootFromPath(path: Path, allowSlugify: boolean = true)
 	{
-		// remove the export root from the target path
+		// DEBUG: Log the removal process
+		console.log(`[Downloadable] removeRootFromPath called:`);
+		console.log(`  Input path: "${path.path}"`);
+		console.log(`  Export root: "${this.exportOptions.exportRoot ?? 'EMPTY'}"`);
+		
+		// ✅ FIX: When export root is empty, don't remove anything - preserve full directory structure
+		if (!this.exportOptions.exportRoot || this.exportOptions.exportRoot === '') {
+			console.log(`  🔧 EMPTY EXPORT ROOT - Preserving full directory structure`);
+			console.log(`  ✅ PRESERVING: "${path.path}"`);
+			return path;
+		}
+		
+		// remove the export root from the target path (original behavior when export root is set)
 		const root = new Path(this.exportOptions.exportRoot ?? "").slugify(allowSlugify && this.exportOptions.slugifyPaths).path + "/";
+		console.log(`  Processed root: "${root}"`);
 		
 		if (path.path.startsWith(root))
 		{
+			const originalPath = path.path;
 			const newPath = path.path.substring(root.length);
 			path.reparse(newPath);
+			console.log(`  ❌ STRIPPED: "${originalPath}" -> "${newPath}"`);
+		}
+		else
+		{
+			console.log(`  ✅ NO STRIPPING: path doesn't start with root`);
 		}
 		
+		console.log(`  Final path: "${path.path}"`);
 		return path;
 	}
 

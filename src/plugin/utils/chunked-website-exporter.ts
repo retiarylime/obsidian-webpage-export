@@ -29,7 +29,7 @@ export class ChunkedWebsiteExporter {
 		// Prevent individual chunks from resetting progress
 		ExportLog.setPreventProgressReset(true);
 		
-		// Analyze the vault structure to understand mixed content
+		// Analyze the vault structure to determine the correct approach
 		const uniqueDirs = new Set(files.map(f => {
 			const pathParts = f.path.split('/');
 			return pathParts.length > 1 ? pathParts[0] : 'ROOT_LEVEL';
@@ -40,15 +40,18 @@ export class ChunkedWebsiteExporter {
 		ExportLog.log(`   Directory prefixes: [${Array.from(uniqueDirs).join(', ')}]`);
 		ExportLog.log(`   Mixed content detected: ${hasMixedContent ? 'Yes' : 'No'}`);
 		
+		// Calculate consistent export root for ALL chunks
+		let globalExportRoot: string;
 		if (hasMixedContent) {
-			ExportLog.log(`ℹ️ Mixed content structure detected - chunks will calculate individual export roots:`);
+			// For mixed content, use empty export root to preserve directory structure 
+			globalExportRoot = '';
+			ExportLog.log(`ℹ️ Mixed content - using empty export root to preserve directory structure:`);
 			ExportLog.log(`   - Root level files → export root (no prefix)`);
-			ExportLog.log(`   - Subfolder files → maintain directory structure`);
-			ExportLog.log(`   - This preserves the original Obsidian vault directory tree`);
+			ExportLog.log(`   - Subfolder files → maintain full directory structure`);
 		} else {
-			// Calculate global root for uniform content
-			const globalRoot = this.findCommonRootPath(files);
-			ExportLog.log(`✅ Uniform content - global export root: "${globalRoot}"`);
+			// For uniform content, calculate common root
+			globalExportRoot = this.findCommonRootPath(files);
+			ExportLog.log(`✅ Uniform content - global export root: "${globalExportRoot}"`);
 		}
 		
 		// Sort files by complexity (simpler files first)
@@ -80,15 +83,15 @@ export class ChunkedWebsiteExporter {
 					return undefined;
 				}
 				
-				ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files`);
+				ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files using global export root: "${globalExportRoot}"`);
 				
-				// DEBUG: Show chunk file paths to understand chunk composition
+				// DEBUG: Show chunk file paths
 				ExportLog.log(`📂 Chunk ${i + 1} files:`);
 				chunk.slice(0, 5).forEach(file => ExportLog.log(`   📄 ${file.path}`));
 				if (chunk.length > 5) ExportLog.log(`   ... and ${chunk.length - 5} more files`);
 				
-				// Process the chunk - let it calculate its own natural export root
-				const chunkWebsite = await this.processChunk(chunk, destination, i);
+				// Process the chunk with consistent global export root
+				const chunkWebsite = await this.processChunk(chunk, destination, i, globalExportRoot);
 				
 				if (!chunkWebsite) {
 					ExportLog.error(`Chunk ${i + 1} failed`);
@@ -246,11 +249,11 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Process a single chunk of files following all 5 Path.ts flows
+	 * Process a single chunk of files following all 5 Path.ts flows with consistent export root
 	 */
-	private static async processChunk(files: TFile[], destination: Path, chunkIndex: number): Promise<Website | undefined> {
+	private static async processChunk(files: TFile[], destination: Path, chunkIndex: number, globalExportRoot: string): Promise<Website | undefined> {
 		try {
-			ExportLog.log(`Processing chunk ${chunkIndex + 1} with ${files.length} files`);
+			ExportLog.log(`Processing chunk ${chunkIndex + 1} with ${files.length} files using global export root: "${globalExportRoot}"`);
 			
 			// === FLOW 1: Vault Path Detection ===
 			// Ensure destination is properly set with vault context
@@ -260,31 +263,31 @@ export class ChunkedWebsiteExporter {
 			// Validate and normalize all file paths in this chunk
 			const normalizedFiles = this.validateAndNormalizeFilePaths(files);
 			
-			// Create website for this chunk - let it calculate its natural export root
+			// Create website for this chunk with consistent global export root
 			const website = new Website(vaultBasedDestination);
 			
-			ExportLog.log(`🔧 Loading chunk ${chunkIndex + 1} - will calculate natural export root`);
+			// ✅ CRITICAL: Set consistent global export root for ALL chunks  
+			website.exportOptions.exportRoot = globalExportRoot;
+			ExportLog.log(`🔧 Setting consistent export root for chunk ${chunkIndex + 1}: "${globalExportRoot}"`);
 			
 			await website.load(normalizedFiles);
 			
-			// Log the natural export root this chunk calculated
-			const chunkExportRoot = website.exportOptions.exportRoot;
-			ExportLog.log(`✅ Chunk ${chunkIndex + 1} natural export root: "${chunkExportRoot}"`);
+			// Verify export root remains consistent
+			ExportLog.log(`✅ Chunk ${chunkIndex + 1} export root after load: "${website.exportOptions.exportRoot}"`);
 			
-			// === ADDITIONAL DEBUG: Test path behavior with natural export root ===
+			// === DEBUG: Test path behavior ===
 			if (normalizedFiles.length > 0) {
 				const testFile = normalizedFiles[0];
 				const testTargetPath = website.getTargetPathForFile(testFile);
 				ExportLog.log(`🧪 Testing path behavior with first file:`);
 				ExportLog.log(`   Source: ${testFile.path}`);
 				ExportLog.log(`   Target: ${testTargetPath.absoluted().path}`);
-				ExportLog.log(`   Chunk export root: "${chunkExportRoot}"`);
+				ExportLog.log(`   Export root: "${website.exportOptions.exportRoot}"`);
 				
-				// Show how the path will be processed
-				if (chunkExportRoot && chunkExportRoot !== '') {
-					ExportLog.log(`   ✅ File will be placed in subdirectory: ${chunkExportRoot}`);
+				if (website.exportOptions.exportRoot === '') {
+					ExportLog.log(`   ✅ Empty export root - files will maintain full directory structure`);
 				} else {
-					ExportLog.log(`   ✅ File will be placed at export root (no prefix)`);
+					ExportLog.log(`   ✅ Export root set - files will be relative to: ${website.exportOptions.exportRoot}`);
 				}
 			}
 			
