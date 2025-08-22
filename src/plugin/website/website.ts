@@ -195,7 +195,56 @@ export class Website
 			// create file tree asset
 			if (this.exportOptions.fileNavigationOptions.enabled)
 			{
-				const paths = this.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+				// ✅ FIX: Only include content webpages in file tree, exclude raw attachments and HTML wrappers
+				const attachmentsInTree = this.index.attachmentsShownInTree || [];
+				const webpagesInTree = this.index.webpages.filter(wp => wp.showInTree) || [];
+				
+				// Filter out webpages that are HTML wrappers for media files
+				const filteredWebpages = webpagesInTree.filter(webpage => {
+					// Get the original source file extension
+					const sourcePath = webpage.source?.path || webpage.sourcePath || "";
+					const sourceExtension = sourcePath.split('.').pop()?.toLowerCase() || "";
+					
+					// Exclude if it's an HTML wrapper for a media file
+					const isMediaWrapper = MarkdownRendererAPI.viewableMediaExtensions.includes(sourceExtension) && sourceExtension !== "md";
+					return !isMediaWrapper;
+				});
+				
+				// Filter out raw attachment files (only keep actual webpage content)
+				const contentOnlyAttachments = attachmentsInTree.filter(attachment => {
+					// Exclude if it's a raw attachment file - we only want content pages in the tree
+					return attachment instanceof Webpage;
+				});
+				
+				// Create a set to avoid duplicates based on sourcePathRootRelative
+				const filePathsSet = new Set<string>();
+				const allFilesForTree: (Attachment | Webpage)[] = [];
+				
+				// Add only content webpage attachments (not raw media files)
+				for (const file of contentOnlyAttachments) {
+					const key = file.sourcePathRootRelative || file.targetPath.path;
+					if (!filePathsSet.has(key)) {
+						filePathsSet.add(key);
+						allFilesForTree.push(file);
+					}
+				}
+				
+				// Add only non-media-wrapper webpages (regular content pages from .md files)
+				for (const webpage of filteredWebpages) {
+					const key = webpage.sourcePathRootRelative || webpage.targetPath.path;
+					if (!filePathsSet.has(key)) {
+						filePathsSet.add(key);
+						allFilesForTree.push(webpage);
+					}
+				}
+				
+				const paths = allFilesForTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+				
+				ExportLog.log(`🌳 Building file tree from ${allFilesForTree.length} content pages only:`);
+				ExportLog.log(`   - ${contentOnlyAttachments.length} content attachments (excluding ${attachmentsInTree.length - contentOnlyAttachments.length} raw files)`);
+				ExportLog.log(`   - ${filteredWebpages.length} content webpages (excluding ${webpagesInTree.length - filteredWebpages.length} media HTML wrappers)`);
+				ExportLog.log(`   - Raw attachment files hidden from navigation but available for embedding`);
+				
 				this.fileTree = new FileTree(paths, false, true);
 				this.fileTree.makeLinksWebStyle = this.exportOptions.slugifyPaths ?? true;
 				this.fileTree.showNestingIndicator = true;
@@ -208,13 +257,13 @@ export class Website
 				await this.fileTree.generate(tempContainer);
 				const data = tempContainer.innerHTML;
 				
-				// extract file order and apply to attachments
-				this.index.attachmentsShownInTree.forEach((file) => 
+				// extract file order and apply to ALL files that are in the tree
+				allFilesForTree.forEach((file) => 
 				{
 					if (!file.sourcePathRootRelative) return;
 					const fileTreeItem = this.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
 					file.treeOrder = fileTreeItem?.treeOrder ?? 0;
-					console.log("File tree order for " + file.sourcePathRootRelative + ": " + file.treeOrder);
+					ExportLog.log("File tree order for " + file.sourcePathRootRelative + ": " + file.treeOrder);
 				});
 
 				tempContainer.remove();

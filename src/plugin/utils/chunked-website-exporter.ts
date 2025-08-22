@@ -479,7 +479,7 @@ export class ChunkedWebsiteExporter {
 				finalWebsite.index.newFiles.push(...chunkWebsite.index.newFiles);
 				finalWebsite.index.updatedFiles.push(...chunkWebsite.index.updatedFiles);
 				
-				// Merge attachments
+				// Merge attachments shown in tree
 				const chunkAttachments = chunkWebsite.index.attachmentsShownInTree || [];
 				const finalAttachments = finalWebsite.index.attachmentsShownInTree || [];
 				finalWebsite.index.attachmentsShownInTree = [...finalAttachments, ...chunkAttachments];
@@ -489,7 +489,25 @@ export class ChunkedWebsiteExporter {
 				const finalWebpages = finalWebsite.index.webpages || [];
 				finalWebsite.index.webpages = [...finalWebpages, ...chunkWebpages];
 				
+				// ✅ FIX: Only include content webpages in attachmentsShownInTree (exclude media HTML wrappers)
+				// This handles any edge cases where webpages might not be properly added to attachmentsShownInTree
+				for (const webpage of chunkWebpages) {
+					if (webpage.showInTree && !finalWebsite.index.attachmentsShownInTree.includes(webpage)) {
+						// Check if this webpage is a media wrapper by looking at source extension
+						const sourcePath = webpage.source?.path || webpage.sourcePath || "";
+						const sourceExtension = sourcePath.split('.').pop()?.toLowerCase() || "";
+						const isMediaWrapper = MarkdownRendererAPI.viewableMediaExtensions.includes(sourceExtension) && sourceExtension !== "md";
+						
+						// Only add to tree if it's NOT a media wrapper (i.e., it's a regular content page)
+						if (!isMediaWrapper) {
+							finalWebsite.index.attachmentsShownInTree.push(webpage);
+						}
+					}
+				}
+				
 				ExportLog.log(`📝 Merged chunk: +${chunkWebsite.index.newFiles.length} new files, +${chunkWebpages.length} webpages`);
+				ExportLog.log(`   Total items in attachmentsShownInTree: ${finalWebsite.index.attachmentsShownInTree.length}`);
+				ExportLog.log(`   Note: Raw attachment files will be filtered out from file tree during tree generation`);
 				ExportLog.log(`   Files will maintain their natural directory structure`);
 			}
 			

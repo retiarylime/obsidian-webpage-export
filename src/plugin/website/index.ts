@@ -4,7 +4,7 @@ import { Webpage } from "./webpage";
 import { Notice, TFile } from "obsidian";
 import { ExportPipelineOptions } from "src/plugin/website/pipeline-options.js";
 import { AssetHandler } from "src/plugin/asset-loaders/asset-handler";
-import { ExportLog } from "src/plugin/render-api/render-api";
+import { ExportLog, MarkdownRendererAPI } from "src/plugin/render-api/render-api";
 import Minisearch from 'minisearch';
 import { Path } from "src/plugin/utils/path";
 import HTMLExportPlugin from "src/plugin/main";
@@ -302,8 +302,25 @@ export class Index
 		}
 
 		// add the file to the list of files shown in the tree
-		if (file.showInTree && !this.attachmentsShownInTree.includes(file))
-			this.attachmentsShownInTree.push(file);
+		if (file.showInTree && !this.attachmentsShownInTree.includes(file)) {
+			// Check if this is a media wrapper webpage that should be excluded from tree
+			if (file instanceof Webpage) {
+				const sourcePath = file.source?.path || file.sourcePath || "";
+				const sourceExtension = sourcePath.split('.').pop()?.toLowerCase() || "";
+				const isMediaWrapper = MarkdownRendererAPI.viewableMediaExtensions.includes(sourceExtension) && sourceExtension !== "md";
+				
+				if (isMediaWrapper) {
+					ExportLog.log(`📄 Media wrapper excluded from tree: ${file.sourcePathRootRelative || file.targetPath.path} (${sourceExtension} -> html)`);
+				} else {
+					this.attachmentsShownInTree.push(file);
+					ExportLog.log(`📁 Added content page to tree: ${file.sourcePathRootRelative || file.targetPath.path} (webpage from ${sourceExtension})`);
+				}
+			} else {
+				// This is a raw attachment file - add it but mark that it will be filtered out later
+				this.attachmentsShownInTree.push(file);
+				ExportLog.log(`� Raw attachment added (will be hidden from tree): ${file.sourcePathRootRelative || file.targetPath.path} (${file.extensionName} file)`);
+			}
+		}
 
 		if (file instanceof Webpage && file.sourcePath && !this.sourceToWebpage.has(file.sourcePath))
 		{
