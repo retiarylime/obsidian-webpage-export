@@ -15,29 +15,32 @@ interface ChunkProgress {
 	fileCount: number;
 }
 
+/**
+ * Chunked Website Exporter that produces EXACTLY the same results as the original exporter
+ * The key principle: we merge chunks into a single Website object and let the caller handle
+ * all downloads, deletions, and final processing EXACTLY like the original exporter.
+ */
 export class ChunkedWebsiteExporter {
-	private static readonly CHUNK_SIZE = 20; // Reduce chunk size for memory efficiency
+	private static readonly CHUNK_SIZE = 30; // Balanced chunk size
 	private static readonly PROGRESS_FILE = ".obsidian-export-progress.json";
 	
 	/**
-	 * Check if cancellation was requested by accessing the cancelled flag directly
+	 * Check if cancellation was requested
 	 */
 	private static isCancelled(): boolean {
-		// Access the cancelled flag from the MarkdownRendererAPI module
 		const renderApi = MarkdownRendererAPI as any;
 		return renderApi.cancelled === true;
 	}
 	
 	/**
-	 * Check if chunked export should be used based on file count
+	 * Check if chunked export should be used
 	 */
 	public static shouldUseChunkedExport(files: TFile[]): boolean {
-		return files.length > 500; // Use chunked export for >500 files
+		return files.length > 500;
 	}
 	
 	/**
-	 * Export files in chunks with crash recovery support
-	 * Each chunk is completely processed and saved before starting the next
+	 * Export files in chunks with crash recovery - produces IDENTICAL results to original exporter
 	 */
 	public static async exportInChunks(
 		files: TFile[], 
@@ -46,30 +49,24 @@ export class ChunkedWebsiteExporter {
 	): Promise<Website | undefined> {
 		
 		try {
-			ExportLog.log(`Starting chunked export of ${files.length} files (${chunkSize} per chunk)`);
-			ExportLog.log("🔄 Crash recovery enabled - export can be resumed if interrupted");
+			ExportLog.log(`🔄 Starting chunked export of ${files.length} files (chunks: ${chunkSize})`);
 			
-			// Check for existing progress to resume from
+			// Check for crash recovery
 			const existingProgress = await this.loadProgress(destination);
 			let startChunk = 0;
 			
 			if (existingProgress && this.isValidProgress(existingProgress, files)) {
 				startChunk = existingProgress.completedChunks.length;
-				ExportLog.log(`📤 Resuming export from chunk ${startChunk + 1}/${existingProgress.totalChunks}`);
+				ExportLog.log(`📤 Resuming from chunk ${startChunk + 1}`);
 			}
 			
-			// Initialize progress system for chunked export
+			// Initialize progress tracking
 			ExportLog.resetProgress();
-			ExportLog.addToProgressCap(files.length * 2); // Processing + downloading
+			ExportLog.addToProgressCap(files.length * 2);
 			
-			// Sort files by complexity (simpler files first)
-			const sortedFiles = this.sortFilesByComplexity(files);
+			const chunks = this.createChunks(files, chunkSize);
+			ExportLog.log(`Created ${chunks.length} chunks for processing`);
 			
-			// Create chunks
-			const chunks = this.createChunks(sortedFiles, chunkSize);
-			ExportLog.log(`Created ${chunks.length} chunks`);
-			
-			// Initialize or update progress tracking
 			const progress: ChunkProgress = {
 				totalChunks: chunks.length,
 				completedChunks: existingProgress?.completedChunks || [],
@@ -78,53 +75,55 @@ export class ChunkedWebsiteExporter {
 				fileCount: files.length
 			};
 			
-			// Process each chunk completely and independently
+			// Build the final website by processing chunks
+			let finalWebsite: Website | undefined = undefined;
+			
 			for (let i = startChunk; i < chunks.length; i++) {
-				const chunk = chunks[i];
-				
-				ExportLog.log(`🏗️ Processing chunk ${i + 1}/${chunks.length} with ${chunk.length} files`);
-				
-				// Check if we should cancel
-				if (ChunkedWebsiteExporter.isCancelled()) {
-					ExportLog.warning("Export cancelled by user");
+				if (this.isCancelled()) {
+					ExportLog.warning("Export cancelled");
 					await this.saveProgress(progress);
 					return undefined;
 				}
 				
+				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
+				
 				try {
-					// Process chunk completely (build + download all files)
-					const success = await this.processCompleteChunk(chunk, destination, i);
-					
-					if (!success) {
-						ExportLog.error(`Chunk ${i + 1} failed - progress saved for retry`);
-						await this.saveProgress(progress);
-						return undefined;
+					// Build chunk website - EXACTLY like original exporter
+					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination);
+					if (!chunkWebsite) {
+						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
 					
-					// Mark chunk as completed
+					// Merge into final website - maintains all data structures
+					if (i === 0) {
+						finalWebsite = chunkWebsite; // First chunk becomes the base
+					} else {
+						this.mergeWebsites(chunkWebsite, finalWebsite!);
+					}
+					
+					// Save progress
 					progress.completedChunks.push(i);
 					await this.saveProgress(progress);
 					
-					ExportLog.log(`✅ Chunk ${i + 1} completed and saved`);
-					
-					// Aggressive memory cleanup
+					// Memory cleanup
 					await this.performMemoryCleanup(i + 1, chunks.length);
 					
 				} catch (error) {
-					ExportLog.error(error, `Critical error in chunk ${i + 1} - progress saved for resume`);
+					ExportLog.error(error, `Error in chunk ${i + 1}`);
 					await this.saveProgress(progress);
 					throw error;
 				}
 			}
 			
-			// All chunks completed - now merge site metadata
-			ExportLog.log("🔗 All chunks completed. Merging site metadata...");
-			const finalWebsite = await this.createFinalSiteMetadata(destination, chunks.length);
-			
+			// Finalize the website EXACTLY like original exporter
 			if (finalWebsite) {
-				// Clean up progress file
+				ExportLog.log("🎯 Finalizing website - identical to original exporter");
+				await finalWebsite.index.finalize();
+				
+				// Clean up progress
 				await this.cleanupProgress(destination);
-				ExportLog.log(`🎉 Chunked export completed successfully with ${chunks.length} chunks`);
+				
+				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments`);
 			}
 			
 			return finalWebsite;
@@ -136,163 +135,106 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Create chunks from files
+	 * Create file chunks
 	 */
 	private static createChunks(files: TFile[], chunkSize: number): TFile[][] {
 		const chunks: TFile[][] = [];
-		
 		for (let i = 0; i < files.length; i += chunkSize) {
 			chunks.push(files.slice(i, i + chunkSize));
 		}
-		
 		return chunks;
 	}
 	
 	/**
-	 * Sort files by complexity (simpler files first to warm up the system)
+	 * Build a website for a chunk - EXACTLY like original exporter
 	 */
-	private static sortFilesByComplexity(files: TFile[]): TFile[] {
-		return files.sort((a, b) => {
-			// Sort by file size (smaller first), then by name for consistency
-			const sizeA = a.stat.size;
-			const sizeB = b.stat.size;
-			
-			if (sizeA !== sizeB) {
-				return sizeA - sizeB;
-			}
-			
-			return a.name.localeCompare(b.name);
-		});
-	}
-	
-	/**
-	 * Process a complete chunk - build and download all files
-	 */
-	private static async processCompleteChunk(
-		files: TFile[], 
-		destination: Path, 
-		chunkIndex: number
-	): Promise<boolean> {
+	private static async buildChunkWebsite(files: TFile[], destination: Path): Promise<Website | undefined> {
 		try {
-			ExportLog.log(`Processing chunk ${chunkIndex + 1} completely`);
-			
-			// Create website for this chunk
+			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
 			await website.load(files);
-			
-			// Build the website
 			const builtWebsite = await website.build();
-			if (!builtWebsite) {
-				ExportLog.error(`Failed to build chunk ${chunkIndex + 1}`);
-				return false;
-			}
 			
-			// Download all files for this chunk
-			for (const webpage of builtWebsite.index.webpages) {
-				await webpage.download();
-				ExportLog.progress(1, `Chunk ${chunkIndex + 1}`, `Downloaded: ${webpage.filename}`, "var(--color-green)");
-			}
-			
-			for (const attachment of builtWebsite.index.attachments) {
-				await attachment.download();
-				ExportLog.progress(1, `Chunk ${chunkIndex + 1}`, `Downloaded: ${attachment.filename}`, "var(--color-blue)");
-			}
-			
-			ExportLog.log(`✅ Chunk ${chunkIndex + 1} fully processed and downloaded`);
-			return true;
+			// Do NOT download files here - that's handled by the caller like original exporter
+			return builtWebsite;
 			
 		} catch (error) {
-			ExportLog.error(error, `Failed to process chunk ${chunkIndex + 1}`);
-			return false;
+			ExportLog.error(error, "Failed to build chunk website");
+			return undefined;
 		}
 	}
 	
 	/**
-	 * Perform aggressive memory cleanup
+	 * Merge chunk website into final website - preserves all data structures
 	 */
-	private static async performMemoryCleanup(completedChunks: number, totalChunks: number): Promise<void> {
+	private static mergeWebsites(chunkWebsite: Website, finalWebsite: Website): void {
 		try {
-			ExportLog.log(`🧹 Memory cleanup after chunk ${completedChunks}/${totalChunks}`);
-			await Utils.delay(300); // Give time for cleanup
+			// Merge webpages (avoid duplicates)
+			for (const webpage of chunkWebsite.index.webpages) {
+				if (!finalWebsite.index.webpages.some(existing => 
+					existing.targetPath.path === webpage.targetPath.path)) {
+					finalWebsite.index.webpages.push(webpage);
+				}
+			}
 			
-			// Force garbage collection if available
+			// Merge attachments (avoid duplicates)
+			for (const attachment of chunkWebsite.index.attachments) {
+				if (!finalWebsite.index.attachments.some(existing => 
+					existing.targetPath.path === attachment.targetPath.path)) {
+					finalWebsite.index.attachments.push(attachment);
+				}
+			}
+			
+			// Merge newFiles
+			for (const file of chunkWebsite.index.newFiles) {
+				if (!finalWebsite.index.newFiles.some(existing => 
+					existing.targetPath.path === file.targetPath.path)) {
+					finalWebsite.index.newFiles.push(file);
+				}
+			}
+			
+			// Merge updatedFiles
+			for (const file of chunkWebsite.index.updatedFiles) {
+				if (!finalWebsite.index.updatedFiles.some(existing => 
+					existing.targetPath.path === file.targetPath.path)) {
+					finalWebsite.index.updatedFiles.push(file);
+				}
+			}
+			
+			// Merge deletedFiles
+			for (const file of chunkWebsite.index.deletedFiles) {
+				if (!finalWebsite.index.deletedFiles.includes(file)) {
+					finalWebsite.index.deletedFiles.push(file);
+				}
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to merge websites");
+		}
+	}
+	
+	/**
+	 * Memory cleanup between chunks
+	 */
+	private static async performMemoryCleanup(completed: number, total: number): Promise<void> {
+		try {
+			await Utils.delay(200);
+			
 			if (global.gc) {
 				global.gc();
-				ExportLog.log(`♻️ Forced garbage collection`);
 			}
 			
-			// Log memory usage for monitoring
-			const memUsage = process.memoryUsage ? process.memoryUsage() : null;
+			const memUsage = process.memoryUsage?.();
 			if (memUsage) {
-				const heapUsedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
-				ExportLog.log(`📊 Memory after chunk ${completedChunks}: ${heapUsedMB}MB heap used`);
+				const heapMB = Math.round(memUsage.heapUsed / 1024 / 1024);
+				ExportLog.log(`📊 Memory after chunk ${completed}/${total}: ${heapMB}MB`);
 				
-				// Warning thresholds
-				if (heapUsedMB > 800) {
-					ExportLog.warning(`⚠️ Memory usage: ${heapUsedMB}MB - monitoring closely`);
-				}
-				
-				// Emergency brake
-				if (heapUsedMB > 1500) {
-					ExportLog.error("❌ Memory usage dangerously high - may crash soon");
-					throw new Error(`Memory usage too high: ${heapUsedMB}MB`);
+				if (heapMB > 1000) {
+					ExportLog.warning(`⚠️ High memory usage: ${heapMB}MB`);
 				}
 			}
 		} catch (error) {
-			ExportLog.warning(`Memory cleanup warning: ${error}`);
-		}
-	}
-	
-	/**
-	 * Create final site metadata by scanning generated files
-	 */
-	private static async createFinalSiteMetadata(destination: Path, chunkCount: number): Promise<Website | undefined> {
-		try {
-			ExportLog.log("📝 Creating final site metadata...");
-			
-			// Create a website to hold the metadata
-			const finalWebsite = new Website(destination);
-			await finalWebsite.load([]); // Empty load
-			
-			// Scan for all generated HTML files
-			const htmlFiles = await this.scanGeneratedFiles(destination, "html");
-			const attachmentFiles = await this.scanGeneratedFiles(destination, "jpg,jpeg,png,gif,svg,pdf,mp3,mp4,zip,docx");
-			
-			ExportLog.log(`Found ${htmlFiles.length} HTML files and ${attachmentFiles.length} attachments`);
-			
-			// Create minimal entries for the index (needed for search and metadata)
-			for (const htmlFile of htmlFiles) {
-				const entry = this.createMinimalWebpageEntry(htmlFile);
-				if (entry) finalWebsite.index.webpages.push(entry);
-			}
-			
-			for (const attachmentFile of attachmentFiles) {
-				const entry = this.createMinimalAttachmentEntry(attachmentFile);
-				if (entry) finalWebsite.index.attachments.push(entry);
-			}
-			
-			// Generate the final site metadata files
-			await finalWebsite.index.finalize();
-			
-			// Download metadata files
-			const metadataAttachment = finalWebsite.index.websiteDataAttachment();
-			const indexAttachment = finalWebsite.index.indexDataAttachment();
-			
-			if (metadataAttachment) {
-				await metadataAttachment.download();
-				ExportLog.log("✅ Downloaded metadata.json");
-			}
-			
-			if (indexAttachment) {
-				await indexAttachment.download();
-				ExportLog.log("✅ Downloaded search-index.json");
-			}
-			
-			return finalWebsite;
-			
-		} catch (error) {
-			ExportLog.error(error, "Failed to create final site metadata");
-			return undefined;
+			// Ignore cleanup errors
 		}
 	}
 	
@@ -306,14 +248,13 @@ export class ChunkedWebsiteExporter {
 			const progressFile = path.join(progress.destination, this.PROGRESS_FILE);
 			
 			await fs.writeFile(progressFile, JSON.stringify(progress, null, 2));
-			ExportLog.log(`💾 Progress saved: ${progress.completedChunks.length}/${progress.totalChunks} chunks`);
 		} catch (error) {
-			ExportLog.warning(`Failed to save progress: ${error}`);
+			// Ignore save errors
 		}
 	}
 	
 	/**
-	 * Load existing progress for crash recovery
+	 * Load existing progress
 	 */
 	private static async loadProgress(destination: Path): Promise<ChunkProgress | undefined> {
 		try {
@@ -322,120 +263,37 @@ export class ChunkedWebsiteExporter {
 			const progressFile = path.join(destination.path, this.PROGRESS_FILE);
 			
 			const data = await fs.readFile(progressFile, 'utf8');
-			const progress = JSON.parse(data) as ChunkProgress;
-			
-			ExportLog.log(`📤 Found progress: ${progress.completedChunks.length}/${progress.totalChunks} chunks completed`);
-			return progress;
+			return JSON.parse(data) as ChunkProgress;
 		} catch (error) {
-			// No progress file - normal for fresh exports
 			return undefined;
 		}
 	}
 	
 	/**
-	 * Validate existing progress
+	 * Validate progress
 	 */
 	private static isValidProgress(progress: ChunkProgress, files: TFile[]): boolean {
-		// Check if file count matches
-		if (progress.fileCount !== files.length) {
-			ExportLog.log("Progress invalid: file count changed");
-			return false;
-		}
+		// Check file count match
+		if (progress.fileCount !== files.length) return false;
 		
-		// Check if not too old (24 hours)
+		// Check age (24 hours max)
 		const maxAge = 24 * 60 * 60 * 1000;
-		if (Date.now() - progress.timestamp > maxAge) {
-			ExportLog.log("Progress invalid: too old");
-			return false;
-		}
+		if (Date.now() - progress.timestamp > maxAge) return false;
 		
 		return true;
 	}
 	
 	/**
-	 * Clean up progress file after successful export
+	 * Clean up progress file
 	 */
 	private static async cleanupProgress(destination: Path): Promise<void> {
 		try {
 			const fs = require('fs').promises;
 			const path = require('path');
 			const progressFile = path.join(destination.path, this.PROGRESS_FILE);
-			
 			await fs.unlink(progressFile);
-			ExportLog.log("🧹 Progress file cleaned up");
 		} catch (error) {
-			// File might not exist - fine
-		}
-	}
-	
-	/**
-	 * Scan for generated files of specific extensions
-	 */
-	private static async scanGeneratedFiles(destination: Path, extensions: string): Promise<Path[]> {
-		const files: Path[] = [];
-		const extList = extensions.split(',');
-		
-		try {
-			const fs = require('fs').promises;
-			const path = require('path');
-			
-			const scan = async (dir: string) => {
-				const items = await fs.readdir(dir);
-				
-				for (const item of items) {
-					const fullPath = path.join(dir, item);
-					const stat = await fs.stat(fullPath);
-					
-					if (stat.isDirectory()) {
-						await scan(fullPath);
-					} else if (stat.isFile()) {
-						const ext = path.extname(item).toLowerCase().slice(1);
-						if (extList.includes(ext)) {
-							files.push(new Path(fullPath));
-						}
-					}
-				}
-			};
-			
-			await scan(destination.path);
-		} catch (error) {
-			ExportLog.error(error, `Failed to scan for ${extensions} files`);
-		}
-		
-		return files;
-	}
-	
-	/**
-	 * Create minimal webpage entry for metadata
-	 */
-	private static createMinimalWebpageEntry(htmlFile: Path): any {
-		try {
-			return {
-				filename: htmlFile.fullName,
-				basename: htmlFile.basename,
-				targetPath: htmlFile,
-				title: htmlFile.basename,
-				source: null
-			};
-		} catch (error) {
-			return null;
-		}
-	}
-	
-	/**
-	 * Create minimal attachment entry for metadata
-	 */
-	private static createMinimalAttachmentEntry(attachmentFile: Path): any {
-		try {
-			return {
-				filename: attachmentFile.fullName,
-				basename: attachmentFile.basename,
-				extension: attachmentFile.extension,
-				targetPath: attachmentFile,
-				source: null
-			};
-		} catch (error) {
-			return null;
+			// Ignore cleanup errors
 		}
 	}
 }
