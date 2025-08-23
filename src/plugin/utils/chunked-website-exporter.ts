@@ -123,6 +123,14 @@ export class ChunkedWebsiteExporter {
 			if (finalWebsite) {
 				ExportLog.log("Finalizing website...");
 				await finalWebsite.index.finalize();
+				
+				// Log final search index statistics
+				const totalWebpages = finalWebsite.index.webpages.length;
+				const searchIndexDocCount = finalWebsite.index.minisearch?.documentCount ?? 0;
+				ExportLog.log(`✅ Search index complete: ${searchIndexDocCount} documents indexed from ${totalWebpages} total webpages`);
+				if (searchIndexDocCount !== totalWebpages) {
+					ExportLog.warning(`⚠️ Search index document count (${searchIndexDocCount}) doesn't match webpage count (${totalWebpages})`);
+				}
 			}
 			
 			return finalWebsite;
@@ -503,6 +511,45 @@ export class ChunkedWebsiteExporter {
 							finalWebsite.index.attachmentsShownInTree.push(webpage);
 						}
 					}
+				}
+
+				// ✅ CRITICAL FIX: Merge search index from chunk into final website
+				// Each chunk builds its own search index - we need to merge all of them
+				if (chunkWebsite.index.minisearch && finalWebsite.index.minisearch) {
+					// Get all documents from the chunk's search index and add to final search index
+					const chunkDocuments: any[] = [];
+					
+					// Extract all documents from chunk's minisearch
+					// We need to iterate through the chunk's webpages to get search data since we can't easily extract from minisearch
+					for (const webpage of chunkWebpages) {
+						try {
+							const webpagePath = webpage.targetPath.path;
+							
+							// Check if this document is already in final search index
+							if (!finalWebsite.index.minisearch.has(webpagePath)) {
+								const headersInfo = await webpage.outputData.renderedHeadings;
+								if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) headersInfo.shift();
+								const headers = headersInfo.map((header) => header.heading);
+
+								const searchDoc = {
+									title: webpage.title,
+									aliases: webpage.outputData.aliases,
+									headers: headers,
+									tags: webpage.outputData.allTags,
+									path: webpagePath,
+									content: webpage.outputData.description + " " + webpage.outputData.searchContent,
+								};
+								
+								// Add to final website's search index
+								finalWebsite.index.minisearch.add(searchDoc);
+								chunkDocuments.push(searchDoc);
+							}
+						} catch (error) {
+							ExportLog.warning(`Failed to merge search index for webpage: ${webpage.targetPath.path}`);
+						}
+					}
+					
+					ExportLog.log(`🔍 Merged search index: +${chunkDocuments.length} documents from chunk`);
 				}
 				
 				ExportLog.log(`📝 Merged chunk: +${chunkWebsite.index.newFiles.length} new files, +${chunkWebpages.length} webpages`);
