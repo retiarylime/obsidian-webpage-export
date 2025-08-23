@@ -6,6 +6,7 @@ import { Website } from "src/plugin/website/website";
 import { ExportLog, MarkdownRendererAPI } from "src/plugin/render-api/render-api";
 import { ExportInfo, ExportModal } from "src/plugin/settings/export-modal";
 import { Webpage } from "./website/webpage";
+import { ChunkedWebsiteExporter } from "./utils/chunked-website-exporter";
 
 export class HTMLExporter
 {
@@ -49,6 +50,64 @@ export class HTMLExporter
 
 	public static async exportFiles(files: TFile[], destination: Path, saveFiles: boolean, deleteOld: boolean) : Promise<Website | undefined>
 	{
+		// Check if we should use chunked export for large file sets
+		if (ChunkedWebsiteExporter.shouldUseChunkedExport(files))
+		{
+			ExportLog.log(`📦 Large vault detected (${files.length} files) - using chunked export`);
+			const website = await ChunkedWebsiteExporter.exportInChunks(files, destination);
+			
+			if (!website) {
+				new Notice("❌ Export Cancelled", 5000);
+				return;
+			}
+
+			// Handle post-export operations for chunked export
+			if (deleteOld)
+			{
+				let i = 0;
+				ExportLog.addToProgressCap(website.index.deletedFiles.length / 2);
+				for (const dFile of website.index.deletedFiles)
+				{
+					const path = new Path(dFile, destination.path);
+					
+					// don't delete font files
+					if (path.extension == "woff" || path.extension == "woff2" || path.extension == "ttf" || path.extension == "otf")
+					{
+						ExportLog.progress(0.5, "Deleting Old Files", "Skipping: " + path.path, "var(--color-yellow)");
+						continue;
+					}
+
+					await path.delete();
+					ExportLog.progress(0.5, "Deleting Old Files", "Deleting: " + path.path, "var(--color-red)");
+					i++;
+				};
+
+				await Path.removeEmptyDirectories(destination.path);
+			}
+			
+			if (saveFiles) 
+			{
+				if (Settings.exportOptions.combineAsSingleFile)
+				{
+					await website.saveAsCombinedHTML();
+				}
+				else
+				{
+					await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
+					await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
+
+					if (Settings.exportPreset != ExportPreset.RawDocuments)
+					{
+						await Utils.downloadAttachments([website.index.websiteDataAttachment()]);
+						await Utils.downloadAttachments([website.index.indexDataAttachment()]);
+					}
+				}
+			}
+
+			return website;
+		}
+
+		// Regular export for smaller vaults
 		MarkdownRendererAPI.beginBatch();
 		let website = undefined;
 		try
