@@ -27,19 +27,23 @@ console.log("");
 
 console.log("🔄 CHUNKED EXPORTER (files > 500):");
 console.log("  1. MarkdownRendererAPI.beginBatch()");
-console.log("  2. For each chunk:");
+console.log("  2. Calculate common root path from ALL files (identical to original)");
+console.log("  3. For each chunk:");
 console.log("     - chunkWebsite = new Website(destination).load(chunkFiles).build()");
+console.log("     - Override exportOptions.exportRoot = commonRootPath (ensures identical paths)");
 console.log("     - Merge chunkWebsite into finalWebsite");
-console.log("  3. finalWebsite.index.finalize()");
-console.log("  4. Return finalWebsite to caller");
-console.log("  5. Caller handles deleteOld logic (IDENTICAL to original)");
-console.log("  6. Caller handles saveFiles logic (IDENTICAL to original)");
-console.log("  7. MarkdownRendererAPI.endBatch()");
+console.log("  4. finalWebsite.index.finalize()");
+console.log("  5. Return finalWebsite to caller");
+console.log("  6. Caller handles deleteOld logic (IDENTICAL to original)");
+console.log("  7. Caller handles saveFiles logic (IDENTICAL to original)");
+console.log("  8. MarkdownRendererAPI.endBatch()");
 console.log("");
 
 console.log("✅ KEY EQUIVALENCES:");
 console.log("--------------------");
 console.log("✅ Both use identical MarkdownRendererAPI.beginBatch() + endBatch()");
+console.log("✅ Both calculate identical common root path from ALL files");
+console.log("✅ Both use identical exportOptions.exportRoot for path generation");
 console.log("✅ Both return Website object with same structure to caller");
 console.log("✅ Both let caller handle deleteOld with identical logic");
 console.log("✅ Both let caller handle saveFiles with identical Utils.downloadAttachments()");
@@ -49,6 +53,7 @@ console.log("✅ Both respect combineAsSingleFile setting identically");
 console.log("✅ Both use identical error handling and user notifications");
 console.log("✅ Both skip font files during deletion with same logic");
 console.log("✅ Both use same progress tracking during deletion");
+console.log("✅ Both produce IDENTICAL file path structures and target paths");
 console.log("");
 
 console.log("🛡️ CHUNKED EXPORT SAFETY ADDITIONS (NO EFFECT ON OUTPUT):");

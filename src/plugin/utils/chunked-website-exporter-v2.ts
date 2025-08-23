@@ -51,11 +51,6 @@ export class ChunkedWebsiteExporter {
 		try {
 			ExportLog.log(`🔄 Starting chunked export of ${files.length} files (chunks: ${chunkSize})`);
 			
-			// CRITICAL: Calculate root path from ALL files first (like original exporter)
-			// This ensures identical path structure regardless of chunking
-			const commonRootPath = this.findCommonRootPath(files);
-			ExportLog.log(`📂 Common root path for all files: "${commonRootPath}"`);
-			
 			// Check for crash recovery
 			const existingProgress = await this.loadProgress(destination);
 			let startChunk = 0;
@@ -93,8 +88,8 @@ export class ChunkedWebsiteExporter {
 				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
 				
 				try {
-					// Build chunk website with SAME root path as original exporter
-					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, commonRootPath);
+					// Build chunk website - EXACTLY like original exporter
+					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
@@ -151,58 +146,13 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Find common root path from ALL files - EXACTLY like Website.findCommonRootPath
+	 * Build a website for a chunk - EXACTLY like original exporter
 	 */
-	private static findCommonRootPath(files: TFile[]): string {
-		if (!files || files.length === 0) {
-			return '';
-		}
-	
-		if (files.length === 1) {
-			return new Path(files[0].path).parent?.path ?? '';
-		}
-	
-		const paths = files.map(file => new Path(file.path).split());
-		let commonPath: string[] = [];
-		const shortestPathLength = Math.min(...paths.map(p => p.length));
-	
-		for (let i = 0; i < shortestPathLength; i++) {
-			const segment = paths[0][i];
-			if (paths.every(path => path[i] === segment)) {
-				commonPath.push(segment);
-			} else {
-				break;
-			}
-		}
-	
-		// If the common path is just the root, return an empty string
-		if (commonPath.length <= 1) {
-			return '';
-		}
-	
-		// Remove the last segment if it's not a common parent for all files
-		const lastCommonSegment = commonPath[commonPath.length - 1];
-		if (!paths.every(path => path.length > commonPath.length || path[commonPath.length - 1] !== lastCommonSegment)) {
-			commonPath.pop();
-		}
-	
-		return commonPath.length > 0 ? new Path(commonPath.join("/")).path : '';
-	}
-	
-	/**
-	 * Build a website for a chunk with specified root path - ensures IDENTICAL path structure
-	 */
-	private static async buildChunkWebsite(files: TFile[], destination: Path, rootPath: string): Promise<Website | undefined> {
+	private static async buildChunkWebsite(files: TFile[], destination: Path): Promise<Website | undefined> {
 		try {
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
 			await website.load(files);
-			
-			// Override the root path to match what original exporter would calculate
-			// This ensures identical path structure regardless of chunk content
-			website.exportOptions.exportRoot = rootPath;
-			ExportLog.log(`🔧 Set chunk root path to: "${rootPath}" (matches original exporter)`);
-			
 			const builtWebsite = await website.build();
 			
 			// Do NOT download files here - that's handled by the caller like original exporter
