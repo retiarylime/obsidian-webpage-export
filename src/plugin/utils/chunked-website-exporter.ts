@@ -27,7 +27,19 @@ export class ChunkedWebsiteExporter {
 		}
 		
 		try {
-			ExportLog.log(`Starting chunked export of ${files.length} files (${chunkSize} per chunk)`);
+			// Check initial memory usage and adjust chunk size if needed
+			const initialMemory = MemoryManager.getMemoryUsageMB();
+			let adjustedChunkSize = chunkSize;
+			
+			if (initialMemory > 500 || files.length > 10000) {
+				adjustedChunkSize = Math.min(chunkSize, 10);
+				ExportLog.log(`⚠️ Large vault (${files.length} files) or high memory (${initialMemory.toFixed(1)}MB) - reducing chunk size to ${adjustedChunkSize}`);
+			} else if (initialMemory > 200 || files.length > 5000) {
+				adjustedChunkSize = Math.min(chunkSize, 15);
+				ExportLog.log(`⚠️ Medium-large vault (${files.length} files) or elevated memory (${initialMemory.toFixed(1)}MB) - reducing chunk size to ${adjustedChunkSize}`);
+			}
+			
+			ExportLog.log(`Starting chunked export of ${files.length} files (${adjustedChunkSize} per chunk)`);
 			ExportLog.log(`🔄 Large vault export will follow all 5 Path.ts flows for consistent directory structure`);
 			
 			// Initialize progress system for chunked export
@@ -68,8 +80,8 @@ export class ChunkedWebsiteExporter {
 			// Sort files by complexity (simpler files first)
 			const sortedFiles = this.sortFilesByComplexity(files);
 			
-			// Create chunks
-			const chunks = this.createChunks(sortedFiles, chunkSize);
+			// Create chunks with adjusted size
+			const chunks = this.createChunks(sortedFiles, adjustedChunkSize);
 			ExportLog.log(`Created ${chunks.length} chunks`);
 			
 			let finalWebsite: Website | undefined = undefined;
@@ -119,11 +131,47 @@ export class ChunkedWebsiteExporter {
 				} else {
 					// Merge subsequent chunks into the final website
 					await this.mergeChunkIntoWebsite(chunkWebsite, finalWebsite);
+					
+					// Explicitly clear chunk website references to help GC
+					if (chunkWebsite && chunkWebsite !== finalWebsite) {
+						try {
+							// Clear large objects that might hold memory
+							if (chunkWebsite.index) {
+								chunkWebsite.index.webpages.length = 0;
+								chunkWebsite.index.newFiles.length = 0;
+								chunkWebsite.index.updatedFiles.length = 0;
+								chunkWebsite.index.deletedFiles.length = 0;
+								chunkWebsite.index.attachmentsShownInTree.length = 0;
+								// Clear minisearch index
+								if (chunkWebsite.index.minisearch) {
+									try {
+										chunkWebsite.index.minisearch.removeAll();
+									} catch (e) { /* ignore */ }
+								}
+							}
+						} catch (e) {
+							// Ignore cleanup errors
+						}
+					}
 				}
 				
-				// Cleanup periodically
-				if (i % ChunkedWebsiteExporter.CLEANUP_INTERVAL === 0) {
-					await MemoryManager.cleanup();
+				// Aggressive memory management - cleanup after EVERY chunk for large vaults
+				if (files.length > 10000 || i % 1 === 0) {
+					// Use autoCleanup which includes critical cleanup when needed
+					await MemoryManager.autoCleanup();
+					
+					// Additional explicit GC attempt after every chunk
+					if (typeof global !== 'undefined' && global.gc) {
+						try {
+							global.gc();
+							// Double GC for stubborn memory
+							await Utils.delay(50);
+							global.gc();
+						} catch (e) { /* ignore */ }
+					}
+				} else if (i % ChunkedWebsiteExporter.CLEANUP_INTERVAL === 0) {
+					// Regular cleanup for smaller vaults
+					await MemoryManager.autoCleanup();
 				}
 				
 				// Small delay to prevent overwhelming the system
@@ -604,6 +652,8 @@ export class ChunkedWebsiteExporter {
 		if (fileCount < 1000) return 40;
 		if (fileCount < 3000) return 30;
 		if (fileCount < 5000) return 25;
-		return 20; // For very large vaults
+		if (fileCount < 10000) return 15; // More conservative for large vaults
+		if (fileCount < 20000) return 10; // Very small chunks for huge vaults
+		return 5; // Extremely small chunks for massive vaults
 	}
 }
