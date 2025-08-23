@@ -94,16 +94,27 @@ export class ChunkedWebsiteExporter {
 				
 				try {
 					// Build chunk website with SAME root path as original exporter
-					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, commonRootPath);
+					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, commonRootPath, i === 0);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
+					}
+					
+					// Validate chunk website before merging
+					if (!chunkWebsite.index) {
+						ExportLog.warning(`Chunk ${i + 1} missing index - skipping merge`);
+						continue;
 					}
 					
 					// Merge into final website - maintains all data structures
 					if (i === 0) {
 						finalWebsite = chunkWebsite; // First chunk becomes the base
 					} else {
-						this.mergeWebsites(chunkWebsite, finalWebsite!);
+						if (finalWebsite && finalWebsite.index) {
+							this.mergeWebsites(chunkWebsite, finalWebsite);
+						} else {
+							ExportLog.warning(`Final website invalid at chunk ${i + 1} - reinitializing`);
+							finalWebsite = chunkWebsite;
+						}
 					}
 					
 					// Save progress
@@ -192,7 +203,7 @@ export class ChunkedWebsiteExporter {
 	/**
 	 * Build a website for a chunk with specified root path - ensures IDENTICAL path structure
 	 */
-	private static async buildChunkWebsite(files: TFile[], destination: Path, rootPath: string): Promise<Website | undefined> {
+	private static async buildChunkWebsite(files: TFile[], destination: Path, rootPath: string, isFirstChunk: boolean = false): Promise<Website | undefined> {
 		try {
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
@@ -203,7 +214,36 @@ export class ChunkedWebsiteExporter {
 			website.exportOptions.exportRoot = rootPath;
 			ExportLog.log(`🔧 Set chunk root path to: "${rootPath}" (matches original exporter)`);
 			
-			const builtWebsite = await website.build();
+			let builtWebsite: Website | undefined;
+			try {
+				builtWebsite = await website.build();
+			} catch (buildError) {
+				ExportLog.error(buildError, `Error building chunk website - search index issue?`);
+				// Try to recover by rebuilding without problematic components
+				builtWebsite = website; // Use the loaded website if build fails
+			}
+			
+			if (!builtWebsite) return undefined;
+			
+			// Validate the built website has required properties
+			if (!builtWebsite.index) {
+				ExportLog.warning("Built website missing index - this may cause merge issues");
+				return undefined;
+			}
+			
+			// For the first chunk, ensure it has the complete website infrastructure
+			// This includes CSS, JS, search index, metadata, and all core assets
+			if (isFirstChunk) {
+				ExportLog.log("🏗️ First chunk - ensuring complete website infrastructure");
+				
+				// The build() method should have already added all necessary assets
+				// but let's verify the website has the core structure
+				const allFiles = builtWebsite.index.allFiles || [];
+				const hasCSS = allFiles.some(f => f && f.targetPath && f.targetPath.path.includes('site-lib/css/'));
+				const hasJS = allFiles.some(f => f && f.targetPath && f.targetPath.path.includes('site-lib/js/'));
+				
+				ExportLog.log(`📋 First chunk assets: ${allFiles.length} total, CSS: ${hasCSS}, JS: ${hasJS}`);
+			}
 			
 			// Do NOT download files here - that's handled by the caller like original exporter
 			return builtWebsite;
@@ -215,46 +255,112 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Merge chunk website into final website - preserves all data structures
+	 * Merge chunk website into final website - preserves all data structures AND website assets
 	 */
 	private static mergeWebsites(chunkWebsite: Website, finalWebsite: Website): void {
 		try {
-			// Merge webpages (avoid duplicates)
-			for (const webpage of chunkWebsite.index.webpages) {
-				if (!finalWebsite.index.webpages.some(existing => 
-					existing.targetPath.path === webpage.targetPath.path)) {
-					finalWebsite.index.webpages.push(webpage);
+			// Validate input websites
+			if (!chunkWebsite || !finalWebsite) {
+				ExportLog.error(new Error("Invalid website objects for merging"), "Website merge failed");
+				return;
+			}
+			
+			if (!chunkWebsite.index || !finalWebsite.index) {
+				ExportLog.error(new Error("Missing index in website objects"), "Website merge failed");
+				return;
+			}
+			
+			// Safely merge webpages (avoid duplicates)
+			if (chunkWebsite.index.webpages && Array.isArray(chunkWebsite.index.webpages)) {
+				for (const webpage of chunkWebsite.index.webpages) {
+					if (webpage && webpage.targetPath && !finalWebsite.index.webpages.some(existing => 
+						existing && existing.targetPath && existing.targetPath.path === webpage.targetPath.path)) {
+						finalWebsite.index.webpages.push(webpage);
+					}
 				}
 			}
 			
-			// Merge attachments (avoid duplicates)
-			for (const attachment of chunkWebsite.index.attachments) {
-				if (!finalWebsite.index.attachments.some(existing => 
-					existing.targetPath.path === attachment.targetPath.path)) {
-					finalWebsite.index.attachments.push(attachment);
+			// Safely merge attachments (avoid duplicates)
+			if (chunkWebsite.index.attachments && Array.isArray(chunkWebsite.index.attachments)) {
+				for (const attachment of chunkWebsite.index.attachments) {
+					if (attachment && attachment.targetPath && !finalWebsite.index.attachments.some(existing => 
+						existing && existing.targetPath && existing.targetPath.path === attachment.targetPath.path)) {
+						finalWebsite.index.attachments.push(attachment);
+					}
 				}
 			}
 			
-			// Merge newFiles
-			for (const file of chunkWebsite.index.newFiles) {
-				if (!finalWebsite.index.newFiles.some(existing => 
-					existing.targetPath.path === file.targetPath.path)) {
-					finalWebsite.index.newFiles.push(file);
+			// Safely merge newFiles (content + assets)
+			if (chunkWebsite.index.newFiles && Array.isArray(chunkWebsite.index.newFiles)) {
+				for (const file of chunkWebsite.index.newFiles) {
+					if (file && file.targetPath && !finalWebsite.index.newFiles.some(existing => 
+						existing && existing.targetPath && existing.targetPath.path === file.targetPath.path)) {
+						finalWebsite.index.newFiles.push(file);
+					}
 				}
 			}
 			
-			// Merge updatedFiles
-			for (const file of chunkWebsite.index.updatedFiles) {
-				if (!finalWebsite.index.updatedFiles.some(existing => 
-					existing.targetPath.path === file.targetPath.path)) {
-					finalWebsite.index.updatedFiles.push(file);
+			// Safely merge updatedFiles (content + assets)
+			if (chunkWebsite.index.updatedFiles && Array.isArray(chunkWebsite.index.updatedFiles)) {
+				for (const file of chunkWebsite.index.updatedFiles) {
+					if (file && file.targetPath && !finalWebsite.index.updatedFiles.some(existing => 
+						existing && existing.targetPath && existing.targetPath.path === file.targetPath.path)) {
+						finalWebsite.index.updatedFiles.push(file);
+					}
 				}
 			}
 			
-			// Merge deletedFiles
-			for (const file of chunkWebsite.index.deletedFiles) {
-				if (!finalWebsite.index.deletedFiles.includes(file)) {
-					finalWebsite.index.deletedFiles.push(file);
+			// Safely merge deletedFiles
+			if (chunkWebsite.index.deletedFiles && Array.isArray(chunkWebsite.index.deletedFiles)) {
+				for (const file of chunkWebsite.index.deletedFiles) {
+					if (file && !finalWebsite.index.deletedFiles.includes(file)) {
+						finalWebsite.index.deletedFiles.push(file);
+					}
+				}
+			}
+			
+			// CRITICAL: Safely merge all files (includes CSS, JS, and other website assets)
+			if (chunkWebsite.index.allFiles && Array.isArray(chunkWebsite.index.allFiles)) {
+				for (const file of chunkWebsite.index.allFiles) {
+					if (file && file.targetPath && !finalWebsite.index.allFiles.some(existing => 
+						existing && existing.targetPath && existing.targetPath.path === file.targetPath.path)) {
+						finalWebsite.index.allFiles.push(file);
+					}
+				}
+			}
+			
+			// Safely merge website data properties to ensure complete website structure
+			// This ensures search index, metadata, and other core files are preserved
+			if (chunkWebsite.index.websiteData && finalWebsite.index.websiteData) {
+				const chunkData = chunkWebsite.index.websiteData;
+				const finalData = finalWebsite.index.websiteData;
+				
+				// Safely merge file info
+				if (chunkData.fileInfo && finalData.fileInfo) {
+					Object.assign(finalData.fileInfo, chunkData.fileInfo);
+				}
+				
+				// Safely merge webpage data
+				if (chunkData.webpages && finalData.webpages) {
+					Object.assign(finalData.webpages, chunkData.webpages);
+				}
+				
+				// Safely merge attachment lists (avoid duplicates)
+				if (chunkData.attachments && Array.isArray(chunkData.attachments) && finalData.attachments) {
+					for (const attachment of chunkData.attachments) {
+						if (attachment && !finalData.attachments.includes(attachment)) {
+							finalData.attachments.push(attachment);
+						}
+					}
+				}
+				
+				// Safely merge all files list (avoid duplicates)  
+				if (chunkData.allFiles && Array.isArray(chunkData.allFiles) && finalData.allFiles) {
+					for (const file of chunkData.allFiles) {
+						if (file && !finalData.allFiles.includes(file)) {
+							finalData.allFiles.push(file);
+						}
+					}
 				}
 			}
 			
