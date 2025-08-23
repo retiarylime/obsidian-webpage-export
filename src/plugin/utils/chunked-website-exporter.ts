@@ -18,85 +18,94 @@ export class ChunkedWebsiteExporter {
 		chunkSize: number = ChunkedWebsiteExporter.CHUNK_SIZE
 	): Promise<Website | undefined> {
 		
-		ExportLog.log(`Starting chunked export of ${files.length} files (${chunkSize} per chunk)`);
-		ExportLog.log(`🔄 Large vault export will follow all 5 Path.ts flows for consistent directory structure`);
+		// Check if we need to start our own batch (frontend UI)
+		const needsOwnBatch = !MarkdownRendererAPI.isBatchStarted();
 		
-		// Initialize progress system for chunked export
-		ExportLog.resetProgress();
-		ExportLog.addToProgressCap(files.length * 0.1); // File initialization
-		ExportLog.addToProgressCap(files.length); // File processing
-		
-		// Prevent individual chunks from resetting progress
-		ExportLog.setPreventProgressReset(true);
-		
-		// Analyze the vault structure to determine the correct approach
-		const uniqueDirs = new Set(files.map(f => {
-			const pathParts = f.path.split('/');
-			return pathParts.length > 1 ? pathParts[0] : 'ROOT_LEVEL';
-		}));
-		
-		const hasMixedContent = uniqueDirs.has('ROOT_LEVEL') && uniqueDirs.size > 1;
-		ExportLog.log(`📂 Vault structure analysis:`);
-		ExportLog.log(`   Directory prefixes: [${Array.from(uniqueDirs).join(', ')}]`);
-		ExportLog.log(`   Mixed content detected: ${hasMixedContent ? 'Yes' : 'No'}`);
-		
-		// Calculate consistent export root for ALL chunks
-		let globalExportRoot: string;
-		if (hasMixedContent) {
-			// For mixed content, use empty export root to preserve directory structure 
-			globalExportRoot = '';
-			ExportLog.log(`ℹ️ Mixed content - using empty export root to preserve directory structure:`);
-			ExportLog.log(`   - Root level files → export root (no prefix)`);
-			ExportLog.log(`   - Subfolder files → maintain full directory structure`);
-		} else {
-			// For uniform content, calculate common root
-			globalExportRoot = this.findCommonRootPath(files);
-			ExportLog.log(`✅ Uniform content - global export root: "${globalExportRoot}"`);
+		if (needsOwnBatch) {
+			ExportLog.log("Starting batch for chunked export with frontend UI");
+			await MarkdownRendererAPI.beginBatch();
 		}
 		
-		// Sort files by complexity (simpler files first)
-		const sortedFiles = this.sortFilesByComplexity(files);
-		
-		// Create chunks
-		const chunks = this.createChunks(sortedFiles, chunkSize);
-		ExportLog.log(`Created ${chunks.length} chunks`);
-		
-		let finalWebsite: Website | undefined = undefined;
-		let allAttachments: any[] = [];
-		let allWebpages: any[] = [];
-		
 		try {
-			// Process each chunk
-			for (let i = 0; i < chunks.length; i++) {
-				const chunk = chunks[i];
-				
-				ExportLog.setProgress(
-					(i + 1) / chunks.length, 
-					`Processing Chunk ${i + 1}/${chunks.length}`,
-					`Files: ${chunk.map(f => f.name).join(', ').substring(0, 100)}...`,
-					"var(--interactive-accent)"
-				);
-				
-				// Check if we should cancel
-				if (MarkdownRendererAPI.checkCancelled()) {
-					ExportLog.warning("Export cancelled by user");
-					return undefined;
-				}
-				
-				ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files using global export root: "${globalExportRoot}"`);
-				
-				// DEBUG: Show chunk file paths
-				ExportLog.log(`📂 Chunk ${i + 1} files:`);
-				chunk.slice(0, 5).forEach(file => ExportLog.log(`   📄 ${file.path}`));
-				if (chunk.length > 5) ExportLog.log(`   ... and ${chunk.length - 5} more files`);
-				
-				// Process the chunk with consistent global export root
-				const chunkWebsite = await this.processChunk(chunk, destination, i, globalExportRoot);
-				
-				if (!chunkWebsite) {
-					ExportLog.error(`Chunk ${i + 1} failed`);
-					continue;
-				}
+			ExportLog.log(`Starting chunked export of ${files.length} files (${chunkSize} per chunk)`);
+			ExportLog.log(`🔄 Large vault export will follow all 5 Path.ts flows for consistent directory structure`);
+			
+			// Initialize progress system for chunked export
+			ExportLog.resetProgress();
+			ExportLog.addToProgressCap(files.length * 0.1); // File initialization
+			ExportLog.addToProgressCap(files.length); // File processing
+			
+			// Prevent individual chunks from resetting progress
+			ExportLog.setPreventProgressReset(true);
+			
+			// Analyze the vault structure to determine the correct approach
+			const uniqueDirs = new Set(files.map(f => {
+				const pathParts = f.path.split('/');
+				return pathParts.length > 1 ? pathParts[0] : 'ROOT_LEVEL';
+			}));
+			
+			const hasMixedContent = uniqueDirs.has('ROOT_LEVEL') && uniqueDirs.size > 1;
+			ExportLog.log(`📂 Vault structure analysis:`);
+			ExportLog.log(`   Directory prefixes: [${Array.from(uniqueDirs).join(', ')}]`);
+			ExportLog.log(`   Mixed content detected: ${hasMixedContent ? 'Yes' : 'No'}`);
+			
+			// Calculate consistent export root for ALL chunks
+			let globalExportRoot: string;
+			if (hasMixedContent) {
+				// For mixed content, use empty export root to preserve directory structure 
+				globalExportRoot = '';
+				ExportLog.log(`ℹ️ Mixed content - using empty export root to preserve directory structure:`);
+				ExportLog.log(`   - Root level files → export root (no prefix)`);
+				ExportLog.log(`   - Subfolder files → maintain full directory structure`);
+			} else {
+				// For uniform content, calculate common root
+				globalExportRoot = this.findCommonRootPath(files);
+				ExportLog.log(`✅ Uniform content - global export root: "${globalExportRoot}"`);
+			}
+			
+			// Sort files by complexity (simpler files first)
+			const sortedFiles = this.sortFilesByComplexity(files);
+			
+			// Create chunks
+			const chunks = this.createChunks(sortedFiles, chunkSize);
+			ExportLog.log(`Created ${chunks.length} chunks`);
+			
+			let finalWebsite: Website | undefined = undefined;
+			let allAttachments: any[] = [];
+			let allWebpages: any[] = [];
+			
+			try {
+				// Process each chunk
+				for (let i = 0; i < chunks.length; i++) {
+					const chunk = chunks[i];
+					
+					ExportLog.setProgress(
+						(i + 1) / chunks.length, 
+						`Processing Chunk ${i + 1}/${chunks.length}`,
+						`Files: ${chunk.map(f => f.name).join(', ').substring(0, 100)}...`,
+						"var(--interactive-accent)"
+					);
+					
+					// Check if we should cancel
+					if (MarkdownRendererAPI.checkCancelled()) {
+						ExportLog.warning("Export cancelled by user");
+						return undefined;
+					}
+					
+					ExportLog.log(`🏗️ Starting chunk ${i + 1}/${chunks.length} with ${chunk.length} files using global export root: "${globalExportRoot}"`);
+					
+					// DEBUG: Show chunk file paths
+					ExportLog.log(`📂 Chunk ${i + 1} files:`);
+					chunk.slice(0, 5).forEach(file => ExportLog.log(`   📄 ${file.path}`));
+					if (chunk.length > 5) ExportLog.log(`   ... and ${chunk.length - 5} more files`);
+					
+					// Process the chunk with consistent global export root
+					const chunkWebsite = await this.processChunk(chunk, destination, i, globalExportRoot);
+					
+					if (!chunkWebsite) {
+						ExportLog.error(`Chunk ${i + 1} failed`);
+						continue;
+					}
 				
 				// Verify chunk processed correctly before merging
 				ExportLog.log(`✅ Chunk ${i + 1} completed with export root: "${chunkWebsite.exportOptions.exportRoot}"`);
@@ -133,31 +142,46 @@ export class ChunkedWebsiteExporter {
 				}
 			}
 			
-			return finalWebsite;
-			
-		} catch (error) {
-			ExportLog.error(error, "Chunked export failed");
-			return undefined;
-		} finally {
-			// Re-enable progress resets after chunked export
-			ExportLog.setPreventProgressReset(false);
-			// Final cleanup
-			await MemoryManager.cleanup();
-			
-			// Log successful completion of all 5 Path.ts flows
-			if (finalWebsite) {
-				ExportLog.log(`🎉 Chunked export completed successfully with all 5 Path.ts flows:`);
-				ExportLog.log(`   ✅ Flow 1: Vault Path Detection - Used for all chunks`);
-				ExportLog.log(`   ✅ Flow 2: Path Normalization - Validated ${files.length} file paths`);
-				ExportLog.log(`   ✅ Flow 3: Slugification - Applied web-safe transformations`);
-				ExportLog.log(`   ✅ Flow 4: Directory Creation - Pre-created folder structures`);
-				ExportLog.log(`   ✅ Flow 5: Relative Path Calc - Ensured link consistency`);
-				ExportLog.log(`📂 Directory structure preserved identically to Obsidian vault`);
+					return finalWebsite;
+					
+				} catch (error) {
+					ExportLog.error(error, "Chunked export failed");
+					return undefined;
+				} finally {
+					// Re-enable progress resets after chunked export
+					ExportLog.setPreventProgressReset(false);
+					// Final cleanup
+					await MemoryManager.cleanup();
+					
+					// End batch if we started it
+					if (needsOwnBatch) {
+						ExportLog.log("Ending batch for chunked export");
+						MarkdownRendererAPI.endBatch();
+					}
+					
+					// Log successful completion of all 5 Path.ts flows
+					if (finalWebsite) {
+						ExportLog.log(`🎉 Chunked export completed successfully with all 5 Path.ts flows:`);
+						ExportLog.log(`   ✅ Flow 1: Vault Path Detection - Used for all chunks`);
+						ExportLog.log(`   ✅ Flow 2: Path Normalization - Validated ${files.length} file paths`);
+						ExportLog.log(`   ✅ Flow 3: Slugification - Applied web-safe transformations`);
+						ExportLog.log(`   ✅ Flow 4: Directory Creation - Pre-created folder structures`);
+						ExportLog.log(`   ✅ Flow 5: Relative Path Calc - Ensured link consistency`);
+						ExportLog.log(`📂 Directory structure preserved identically to Obsidian vault`);
+					}
+				}
+				
+			} catch (outerError) {
+				ExportLog.error(outerError, "Chunked export initialization failed");
+				return undefined;
+			} finally {
+				// Ensure batch is ended if we started it, even on error
+				if (needsOwnBatch && MarkdownRendererAPI.isBatchStarted()) {
+					ExportLog.log("Force ending batch due to error");
+					MarkdownRendererAPI.endBatch();
+				}
 			}
-		}
-	}
-	
-	/**
+		}	/**
 	 * Find the common root path for all files to ensure consistent directory structure
 	 * (Uses the same algorithm as Website.findCommonRootPath for consistency)
 	 */

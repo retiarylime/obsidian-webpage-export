@@ -86,6 +86,10 @@ export namespace MarkdownRendererAPI {
 		return _MarkdownRendererInternal.checkCancelled();
 	}
 
+	export function isBatchStarted(): boolean {
+		return _MarkdownRendererInternal.batchStarted;
+	}
+
 	export async function beginBatch(options?: MarkdownRendererOptions) {
 		options = Object.assign(new MarkdownRendererOptions(), options);
 		await _MarkdownRendererInternal.beginBatch(options);
