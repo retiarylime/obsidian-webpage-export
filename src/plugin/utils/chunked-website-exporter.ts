@@ -31,7 +31,9 @@ export class ChunkedWebsiteExporter {
 			ExportLog.log(`🔄 Large vault export will follow all 5 Path.ts flows for consistent directory structure`);
 			
 			// Initialize progress system for chunked export
-			ExportLog.resetProgress();
+			if (needsOwnBatch) {
+				ExportLog.resetProgress();
+			}
 			ExportLog.addToProgressCap(files.length * 0.1); // File initialization
 			ExportLog.addToProgressCap(files.length); // File processing
 			
