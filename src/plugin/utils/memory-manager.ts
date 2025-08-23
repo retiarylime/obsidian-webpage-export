@@ -179,21 +179,28 @@ export class MemoryManager {
 				return;
 			}
 			
-			// Try window.gc (some browsers)
-			if (typeof window !== 'undefined' && (window as any).gc) {
-				(window as any).gc();
-				return;
-			}
-			
-			// Fallback: create memory pressure to encourage GC
-			// This is a hack but can sometimes help
-			const arrays: any[] = [];
-			for (let i = 0; i < 10; i++) {
-				arrays.push(new Array(1000000).fill(0));
-			}
-			arrays.length = 0; // Clear references
-			
-		} catch (e) {
+		// Try window.gc (some browsers)
+		if (typeof window !== 'undefined' && (window as any).gc) {
+			(window as any).gc();
+			return;
+		}
+		
+		// Fallback: gentle memory cleanup without memory pressure
+		// Clear any existing weak references and encourage cleanup
+		if (typeof setTimeout !== 'undefined') {
+			// Use setTimeout to allow event loop to process
+			setTimeout(() => {
+				// Try a gentle cleanup approach
+				try {
+					// Clear any cached DOM references
+					if (typeof document !== 'undefined') {
+						document.dispatchEvent(new Event('memoryCleanup'));
+					}
+				} catch (e) {
+					// Ignore cleanup errors
+				}
+			}, 0);
+		}		} catch (e) {
 			// GC not available or failed
 		}
 	}
