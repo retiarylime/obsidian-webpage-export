@@ -5,7 +5,7 @@ import { ExportLog, MarkdownRendererAPI } from "../render-api/render-api";
 import { Utils } from "./utils";
 
 export class ChunkedWebsiteExporter {
-	private static readonly CHUNK_SIZE = 40; // Process 40 files at a time
+	private static readonly CHUNK_SIZE = 20; // Reduce chunk size from 40 to 20 to prevent memory issues
 	
 	/**
 	 * Check if cancellation was requested by accessing the cancelled flag directly
@@ -86,9 +86,35 @@ export class ChunkedWebsiteExporter {
 				// Clean up chunk website to free memory
 				this.cleanupWebsite(chunkWebsite);
 				
-				// Force garbage collection periodically
-				if ((i + 1) % 5 === 0) {
-					await Utils.delay(100); // Give time for cleanup
+				// More aggressive memory management
+				if ((i + 1) % 3 === 0) {
+					ExportLog.log(`🧹 Memory cleanup at chunk ${i + 1}/${chunks.length}`);
+					await Utils.delay(200); // Give more time for cleanup
+					
+					// Force garbage collection if available
+					if (global.gc) {
+						global.gc();
+					}
+				}
+				
+				// Log memory usage for monitoring and safety check
+				if ((i + 1) % 10 === 0) {
+					const memUsage = process.memoryUsage ? process.memoryUsage() : null;
+					if (memUsage) {
+						const heapUsedMB = Math.round(memUsage.heapUsed / 1024 / 1024);
+						ExportLog.log(`📊 Memory: ${heapUsedMB}MB heap used`);
+						
+						// Safety check: if memory usage is getting too high, warn user
+						if (heapUsedMB > 1500) { // 1.5GB threshold
+							ExportLog.warning(`⚠️ High memory usage: ${heapUsedMB}MB - consider reducing vault size`);
+						}
+						
+						// Emergency brake: if memory usage is extremely high, stop export
+						if (heapUsedMB > 2500) { // 2.5GB threshold
+							ExportLog.error("❌ Memory usage too high, stopping export to prevent crash");
+							return undefined;
+						}
+					}
 				}
 			}
 			
@@ -278,15 +304,40 @@ export class ChunkedWebsiteExporter {
 	 */
 	private static cleanupWebsite(website: Website): void {
 		try {
-			// Clear webpage references
+			// Clear webpage references and dispose them
 			if (website.index.webpages) {
+				for (const webpage of website.index.webpages) {
+					if (webpage.dispose) {
+						webpage.dispose();
+					}
+				}
 				website.index.webpages.length = 0;
 			}
+			
+			// Clear attachment arrays
+			if (website.index.attachments) website.index.attachments.length = 0;
+			if (website.index.attachmentsShownInTree) website.index.attachmentsShownInTree.length = 0;
+			if (website.index.allFiles) website.index.allFiles.length = 0;
 			
 			// Clear file arrays
 			if (website.index.newFiles) website.index.newFiles.length = 0;
 			if (website.index.updatedFiles) website.index.updatedFiles.length = 0;
 			if (website.index.deletedFiles) website.index.deletedFiles.length = 0;
+			
+			// Clear website data references
+			if (website.index.websiteData) {
+				(website.index as any).websiteData = undefined;
+			}
+			
+			// Clear search index
+			if (website.index.minisearch) {
+				website.index.minisearch = undefined;
+			}
+			
+			// Clear template references
+			if (website.webpageTemplate) {
+				(website as any).webpageTemplate = undefined;
+			}
 			
 		} catch (error) {
 			ExportLog.warning("Error during website cleanup: " + error);
