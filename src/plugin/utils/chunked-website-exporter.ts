@@ -8,6 +8,15 @@ export class ChunkedWebsiteExporter {
 	private static readonly CHUNK_SIZE = 40; // Process 40 files at a time
 	
 	/**
+	 * Check if cancellation was requested by accessing the cancelled flag directly
+	 */
+	private static isCancelled(): boolean {
+		// Access the cancelled flag from the MarkdownRendererAPI module
+		const renderApi = MarkdownRendererAPI as any;
+		return renderApi.cancelled === true;
+	}
+	
+	/**
 	 * Check if chunked export should be used based on file count
 	 */
 	public static shouldUseChunkedExport(files: TFile[]): boolean {
@@ -45,8 +54,8 @@ export class ChunkedWebsiteExporter {
 				
 				ExportLog.log(`🏗️ Processing chunk ${i + 1}/${chunks.length} with ${chunk.length} files`);
 				
-				// Check if we should cancel
-				if (ExportLog.isCancelled()) {
+				// Check if we should cancel using the more reliable cancelled flag
+				if (ChunkedWebsiteExporter.isCancelled()) {
 					ExportLog.warning("Export cancelled by user");
 					return undefined;
 				}
@@ -63,17 +72,19 @@ export class ChunkedWebsiteExporter {
 				
 				// Merge results
 				if (i === 0) {
-					// First chunk becomes the base website
-					finalWebsite = chunkWebsite;
+					// First chunk - create the final website with correct destination
+					finalWebsite = new Website(destination);
+					await finalWebsite.load([]); // Initialize empty website
+					
+					// Copy all data from first chunk to final website
+					await this.copyChunkToFinalWebsite(chunkWebsite, finalWebsite);
 				} else {
 					// Merge subsequent chunks into the final website
 					await this.mergeChunkIntoWebsite(chunkWebsite, finalWebsite);
 				}
 				
 				// Clean up chunk website to free memory
-				if (i > 0) {
-					this.cleanupWebsite(chunkWebsite);
-				}
+				this.cleanupWebsite(chunkWebsite);
 				
 				// Force garbage collection periodically
 				if ((i + 1) % 5 === 0) {
@@ -94,7 +105,7 @@ export class ChunkedWebsiteExporter {
 				// Finalize the website - this generates metadata.json and search-index.json for site-lib
 				await finalWebsite.index.finalize();
 				
-				ExportLog.log(`🎉 Chunked export completed successfully with site-lib files`);
+				ExportLog.log(`🎉 Chunked export completed successfully`);
 				ExportLog.log(`📊 Final stats: ${finalWebsite.index.webpages.length} webpages, ${finalWebsite.index.attachments.length} attachments`);
 			}
 			
@@ -113,14 +124,27 @@ export class ChunkedWebsiteExporter {
 		try {
 			ExportLog.log(`Processing chunk ${chunkIndex + 1} with ${files.length} files`);
 			
-			// Create website for this chunk
+			// Create website for this chunk with the final destination (not temporary)
+			// This ensures all paths are correct from the start
 			const website = new Website(destination);
+			
+			// CRITICAL: Temporarily set combineAsSingleFile to true for chunk processing
+			// This prevents webpage.download() from being called in Website.build()
+			// because when combineAsSingleFile is false, Website.build() calls webpage.download()
+			// for each webpage, which would write files with wrong paths during chunk processing
+			const originalCombineAsSingleFile = website.exportOptions.combineAsSingleFile;
+			website.exportOptions.combineAsSingleFile = true;
 			
 			// Load files into the website
 			await website.load(files);
 			
-			// Build the website
+			// Build the website (no file downloads will occur due to combineAsSingleFile = true)
 			const builtWebsite = await website.build();
+			
+			// Restore the original setting
+			if (builtWebsite) {
+				builtWebsite.exportOptions.combineAsSingleFile = originalCombineAsSingleFile;
+			}
 			
 			if (!builtWebsite) {
 				ExportLog.error(`Failed to build chunk ${chunkIndex + 1}`);
@@ -144,6 +168,9 @@ export class ChunkedWebsiteExporter {
 		
 		try {
 			ExportLog.log(`🔄 Merging chunk data into final website...`);
+			
+			// Paths are already correct since chunks use the same destination
+			// No need to update paths anymore
 			
 			// Merge webpages
 			for (const webpage of chunkWebsite.index.webpages) {
@@ -419,6 +446,116 @@ export class ChunkedWebsiteExporter {
 			
 		} catch (error) {
 			ExportLog.error(error, "Error regenerating file tree");
+		}
+	}
+	
+	/**
+	 * Copy all data from a chunk website to the final website (for the first chunk)
+	 */
+	private static async copyChunkToFinalWebsite(chunkWebsite: Website, finalWebsite: Website): Promise<void> {
+		try {
+			ExportLog.log("📋 Copying first chunk data to final website");
+			
+			// Copy all index data
+			finalWebsite.index.webpages = [...chunkWebsite.index.webpages];
+			finalWebsite.index.attachments = [...chunkWebsite.index.attachments];
+			finalWebsite.index.attachmentsShownInTree = [...chunkWebsite.index.attachmentsShownInTree];
+			
+			// Copy website data
+			finalWebsite.index.websiteData = { ...chunkWebsite.index.websiteData };
+			
+			// Copy files arrays  
+			finalWebsite.index.newFiles = [...chunkWebsite.index.newFiles];
+			finalWebsite.index.updatedFiles = [...chunkWebsite.index.updatedFiles];
+			finalWebsite.index.deletedFiles = [...chunkWebsite.index.deletedFiles];
+			
+			// Copy file tree if it exists
+			if (chunkWebsite.fileTree) {
+				finalWebsite.fileTree = chunkWebsite.fileTree;
+			}
+			if (chunkWebsite.fileTreeAsset) {
+				finalWebsite.fileTreeAsset = chunkWebsite.fileTreeAsset;
+			}
+			
+			// Paths are already correct since chunks use the same destination
+			// No need to update paths anymore
+			
+			ExportLog.log(`✅ Copied ${chunkWebsite.index.webpages.length} webpages and ${chunkWebsite.index.attachments.length} attachments from first chunk`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to copy chunk data to final website");
+		}
+	}
+	
+	/**
+	 * Update all paths from chunk temporary directory to final destination
+	 */
+	private static async updatePathsToFinalDestination(chunkWebsite: Website, finalWebsite: Website): Promise<void> {
+		try {
+			const chunkDestPath = chunkWebsite.destination.path;
+			const finalDestPath = finalWebsite.destination.path;
+			
+			ExportLog.log(`🔄 Updating paths from ${chunkDestPath} to ${finalDestPath}`);
+			
+			// Update webpage paths
+			for (const webpage of chunkWebsite.index.webpages) {
+				const oldPath = webpage.targetPath.path;
+				if (oldPath.includes(chunkDestPath)) {
+					const newPath = oldPath.replace(chunkDestPath, finalDestPath);
+					webpage.targetPath.reparse(newPath);
+					webpage.targetPath.setWorkingDirectory(finalDestPath);
+					ExportLog.log(`📄 Updated webpage path: ${oldPath} → ${newPath}`);
+				}
+			}
+			
+			// Update attachment paths - this is critical for proper asset handling
+			for (const attachment of chunkWebsite.index.attachments) {
+				const oldPath = attachment.targetPath.path;
+				if (oldPath.includes(chunkDestPath)) {
+					const newPath = oldPath.replace(chunkDestPath, finalDestPath);
+					attachment.targetPath.reparse(newPath);
+					attachment.targetPath.setWorkingDirectory(finalDestPath);
+					ExportLog.log(`📎 Updated attachment path: ${oldPath} → ${newPath}`);
+				}
+			}
+			
+			// Update attachments shown in tree
+			for (const attachment of chunkWebsite.index.attachmentsShownInTree) {
+				const oldPath = attachment.targetPath.path;
+				if (oldPath.includes(chunkDestPath)) {
+					const newPath = oldPath.replace(chunkDestPath, finalDestPath);
+					attachment.targetPath.reparse(newPath);
+					attachment.targetPath.setWorkingDirectory(finalDestPath);
+				}
+			}
+			
+			// Update new files array
+			for (const file of chunkWebsite.index.newFiles) {
+				const oldPath = file.targetPath.path;
+				if (oldPath.includes(chunkDestPath)) {
+					const newPath = oldPath.replace(chunkDestPath, finalDestPath);
+					file.targetPath.reparse(newPath);
+					file.targetPath.setWorkingDirectory(finalDestPath);
+				}
+			}
+			
+			// Update updated files array  
+			for (const file of chunkWebsite.index.updatedFiles) {
+				const oldPath = file.targetPath.path;
+				if (oldPath.includes(chunkDestPath)) {
+					const newPath = oldPath.replace(chunkDestPath, finalDestPath);
+					file.targetPath.reparse(newPath);
+					file.targetPath.setWorkingDirectory(finalDestPath);
+				}
+			}
+			
+			// Instead of copying files here, let the normal download process handle it
+			// The attachments now have the correct paths and will be downloaded properly
+			
+			ExportLog.log(`✅ Updated all paths from chunk to final destination`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to update paths to final destination");
 		}
 	}
 }
