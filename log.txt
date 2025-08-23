@@ -1,0 +1,609 @@
+Critical memory usage detected: 2495.9MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8503: 2495.9MB -> 2495.9MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8504: 2495.9MB -> 2496.0MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2497.4MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8505: 2497.4MB -> 2497.4MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8506: 2497.4MB -> 2497.5MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 44 43
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2498.2MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8507: 2498.2MB -> 2498.2MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8508: 2498.2MB -> 2498.2MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 46 45
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:74338 [INFO]   Memory cleanup triggered at file 10/10 (2498.8MB)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81386 Memory cleanup #8509: 2498.8MB -> 2498.8MB (saved -0.0MB)
+plugin:webpage-html-export:74338 [INFO]   Memory cleanup completed: 2498.8MB -> 2498.8MB
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81751 Website {sourceFiles: Array(10), exportOptions: {…}, destination: _Path, index: Index, webpageTemplate: _WebpageTemplate, …}
+plugin:webpage-html-export:74338 [INFO]   ✅ Relative path validation: source->target: ../target/file.md, vault->target: ../../../../../../home/rl/test/target/file.md
+plugin:webpage-html-export:74338 [INFO]   📂 Website export root: ""
+plugin:webpage-html-export:74338 [INFO]   ✅ Successfully processed chunk 432 with natural export root: ""
+plugin:webpage-html-export:74338 [INFO]   📄 Processed 10 files with all 5 Path.ts flows
+4plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   ✅ Chunk 432 completed with export root: ""
+plugin:webpage-html-export:74338 [INFO]   🔄 Merging chunk with export root: ""
+plugin:webpage-html-export:74338 [INFO]      Final website export root: ""
+3plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   🔍 Merged search index: +10 documents from chunk
+plugin:webpage-html-export:74338 [INFO]   📝 Merged chunk: +40 new files, +10 webpages
+plugin:webpage-html-export:74338 [INFO]      Total items in attachmentsShownInTree: 4320
+plugin:webpage-html-export:74338 [INFO]      Note: Raw attachment files will be filtered out from file tree during tree generation
+plugin:webpage-html-export:74338 [INFO]      Files will maintain their natural directory structure
+5plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81489 Critical memory usage detected: 2500.1MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+exportInChunks @ plugin:webpage-html-export:82425
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+exportInChunks @ plugin:webpage-html-export:82425
+plugin:webpage-html-export:81386 Memory cleanup #8510: 2500.1MB -> 2500.4MB (saved -0.3MB)
+plugin:webpage-html-export:81386 Memory cleanup #8511: 2500.4MB -> 2500.4MB (saved -0.0MB)
+plugin:webpage-html-export:74338 [INFO]   🏗️ Starting chunk 433/1366 with 10 files using global export root: ""
+plugin:webpage-html-export:74338 [INFO]   📂 Chunk 433 files:
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/냉면.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/시합.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/성적.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/취직.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/표시.md
+plugin:webpage-html-export:74338 [INFO]      ... and 5 more files
+plugin:webpage-html-export:74338 [INFO]   Processing chunk 433 with 10 files using global export root: ""
+plugin:webpage-html-export:74338 [INFO]   Destination /home/rl/Desktop/export doesn't include vault context, using as-is
+plugin:webpage-html-export:74338 [INFO]   🔧 Setting consistent export root for chunk 433: ""
+plugin:webpage-html-export:81584 [Website.load] Root path pre-set (chunked export): 
+plugin:webpage-html-export:74338 [INFO]   Including stylesheet: css-settings-manager
+12plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:75737 Theme styles loaded Default
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/냉면.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/시합.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/성적.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/취직.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/표시.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/단백질.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/오염.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/맡기다.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/상담.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/응원.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   🌳 Building file tree from 10 content pages only:
+plugin:webpage-html-export:74338 [INFO]      - 10 content attachments (excluding 0 raw files)
+plugin:webpage-html-export:74338 [INFO]      - 10 content webpages (excluding 0 media HTML wrappers)
+plugin:webpage-html-export:74338 [INFO]      - Raw attachment files hidden from navigation but available for embedding
+4plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/냉면.md: 2
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/시합.md: 7
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/성적.md: 6
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/취직.md: 10
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/표시.md: 11
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/단백질.md: 3
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/오염.md: 8
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/맡기다.md: 4
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/상담.md: 5
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/응원.md: 9
+10plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   ✅ Chunk 433 final export root: ""
+plugin:webpage-html-export:74338 [INFO]   🧪 Testing path behavior with first file:
+plugin:webpage-html-export:74338 [INFO]      Source: Korean/2000 Essential Korean Words - Beginner & Intermediate/냉면.md
+plugin:webpage-html-export:74338 [INFO]      Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/냉면.md
+plugin:webpage-html-export:74338 [INFO]      Export root: ""
+plugin:webpage-html-export:74338 [INFO]      ✅ Empty export root - files will maintain full directory structure
+plugin:webpage-html-export:74338 [INFO]   Slugification enabled for chunk with root: 
+plugin:webpage-html-export:74338 [INFO]   📁 Calculating target paths for 10 files with export root: ""
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/냉면.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/냉면.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/시합.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/시합.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/성적.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/성적.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/취직.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/취직.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/표시.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/표시.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/단백질.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/단백질.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/오염.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/오염.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/맡기다.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/맡기다.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/상담.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/상담.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/응원.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/응원.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+48plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Pre-created 1 directories for chunk
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81688 Creating website with files:
+Korean/2000 Essential Korean Words - Beginner & Intermediate/냉면.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/시합.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/성적.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/취직.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/표시.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/단백질.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/오염.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/맡기다.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/상담.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/응원.md
+plugin:webpage-html-export:74351 [WARNING]   Creating an RSS feed requires a site url to be set in the export settings.
+warning @ plugin:webpage-html-export:74351
+validateSettings @ plugin:webpage-html-export:81794
+build @ plugin:webpage-html-export:81691
+await in build (async)
+processChunk @ plugin:webpage-html-export:82584
+await in processChunk (async)
+exportInChunks @ plugin:webpage-html-export:82395
+plugin:webpage-html-export:74338 [INFO]   Processing 10 webpages with memory cleanup every 5 files
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 36 35
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2540.0MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8512: 2540.0MB -> 2540.0MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8513: 2540.0MB -> 2540.1MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 46 45
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2541.4MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8514: 2541.4MB -> 2541.4MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8515: 2541.4MB -> 2541.5MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2542.4MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8516: 2542.4MB -> 2542.4MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8517: 2542.4MB -> 2542.5MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 44 43
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2543.1MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8518: 2543.1MB -> 2543.1MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8519: 2543.1MB -> 2543.2MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 46 45
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:74338 [INFO]   Memory cleanup triggered at file 5/10 (2543.2MB)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81386 Memory cleanup #8520: 2543.2MB -> 2543.2MB (saved -0.0MB)
+plugin:webpage-html-export:74338 [INFO]   Memory cleanup completed: 2543.2MB -> 2543.2MB
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2544.0MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8521: 2544.0MB -> 2544.0MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8522: 2544.0MB -> 2544.0MB (saved -0.0MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 44 43
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2543.8MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8523: 2543.8MB -> 2543.8MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8524: 2543.8MB -> 2543.9MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2544.9MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8525: 2544.9MB -> 2544.9MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8526: 2545.0MB -> 2545.0MB (saved -0.0MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 47 46
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2545.6MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8527: 2545.6MB -> 2545.6MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8528: 2545.6MB -> 2545.7MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:74338 [INFO]   Memory cleanup triggered at file 10/10 (2546.9MB)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81386 Memory cleanup #8529: 2546.9MB -> 2546.9MB (saved -0.0MB)
+plugin:webpage-html-export:74338 [INFO]   Memory cleanup completed: 2546.9MB -> 2546.9MB
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81751 Website {sourceFiles: Array(10), exportOptions: {…}, destination: _Path, index: Index, webpageTemplate: _WebpageTemplate, …}
+plugin:webpage-html-export:74338 [INFO]   ✅ Relative path validation: source->target: ../target/file.md, vault->target: ../../../../../../home/rl/test/target/file.md
+plugin:webpage-html-export:74338 [INFO]   📂 Website export root: ""
+plugin:webpage-html-export:74338 [INFO]   ✅ Successfully processed chunk 433 with natural export root: ""
+plugin:webpage-html-export:74338 [INFO]   📄 Processed 10 files with all 5 Path.ts flows
+4plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   ✅ Chunk 433 completed with export root: ""
+plugin:webpage-html-export:74338 [INFO]   🔄 Merging chunk with export root: ""
+plugin:webpage-html-export:74338 [INFO]      Final website export root: ""
+3plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   🔍 Merged search index: +10 documents from chunk
+plugin:webpage-html-export:74338 [INFO]   📝 Merged chunk: +40 new files, +10 webpages
+plugin:webpage-html-export:74338 [INFO]      Total items in attachmentsShownInTree: 4330
+plugin:webpage-html-export:74338 [INFO]      Note: Raw attachment files will be filtered out from file tree during tree generation
+plugin:webpage-html-export:74338 [INFO]      Files will maintain their natural directory structure
+5plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81489 Critical memory usage detected: 2548.2MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+exportInChunks @ plugin:webpage-html-export:82425
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+exportInChunks @ plugin:webpage-html-export:82425
+plugin:webpage-html-export:81386 Memory cleanup #8530: 2548.2MB -> 2548.4MB (saved -0.3MB)
+plugin:webpage-html-export:81386 Memory cleanup #8531: 2548.4MB -> 2548.4MB (saved -0.0MB)
+plugin:webpage-html-export:74338 [INFO]   🏗️ Starting chunk 434/1366 with 10 files using global export root: ""
+plugin:webpage-html-export:74338 [INFO]   📂 Chunk 434 files:
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/결승.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/선착순.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/한자.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/분실.md
+plugin:webpage-html-export:74338 [INFO]      📄 Korean/2000 Essential Korean Words - Beginner & Intermediate/추가.md
+plugin:webpage-html-export:74338 [INFO]      ... and 5 more files
+plugin:webpage-html-export:74338 [INFO]   Processing chunk 434 with 10 files using global export root: ""
+plugin:webpage-html-export:74338 [INFO]   Destination /home/rl/Desktop/export doesn't include vault context, using as-is
+plugin:webpage-html-export:74338 [INFO]   🔧 Setting consistent export root for chunk 434: ""
+plugin:webpage-html-export:81584 [Website.load] Root path pre-set (chunked export): 
+plugin:webpage-html-export:74338 [INFO]   Including stylesheet: css-settings-manager
+12plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:75737 Theme styles loaded Default
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/결승.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/선착순.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/한자.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/분실.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/추가.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/중고.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/신고.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/강의.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   📁 Added content page to tree: Korean/2000 Essential Korean Words - Beginner & Intermediate/기획.md (webpage from md)
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   🌳 Building file tree from 10 content pages only:
+plugin:webpage-html-export:74338 [INFO]      - 10 content attachments (excluding 0 raw files)
+plugin:webpage-html-export:74338 [INFO]      - 10 content webpages (excluding 0 media HTML wrappers)
+plugin:webpage-html-export:74338 [INFO]      - Raw attachment files hidden from navigation but available for embedding
+4plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/결승.md: 4
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/선착순.md: 7
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/한자.md: 11
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/분실.md: 6
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/추가.md: 10
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/중고.md: 9
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/신고.md: 8
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md: 2
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/강의.md: 3
+plugin:webpage-html-export:74338 [INFO]   File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/기획.md: 5
+10plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   ✅ Chunk 434 final export root: ""
+plugin:webpage-html-export:74338 [INFO]   🧪 Testing path behavior with first file:
+plugin:webpage-html-export:74338 [INFO]      Source: Korean/2000 Essential Korean Words - Beginner & Intermediate/결승.md
+plugin:webpage-html-export:74338 [INFO]      Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/결승.md
+plugin:webpage-html-export:74338 [INFO]      Export root: ""
+plugin:webpage-html-export:74338 [INFO]      ✅ Empty export root - files will maintain full directory structure
+plugin:webpage-html-export:74338 [INFO]   Slugification enabled for chunk with root: 
+plugin:webpage-html-export:74338 [INFO]   📁 Calculating target paths for 10 files with export root: ""
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/결승.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/결승.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/선착순.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/선착순.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/한자.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/한자.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/분실.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/분실.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/추가.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/추가.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/중고.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/중고.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/신고.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/신고.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/가격.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/강의.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/강의.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+plugin:webpage-html-export:74338 [INFO]      📄 File: Korean/2000 Essential Korean Words - Beginner & Intermediate/기획.md
+plugin:webpage-html-export:74338 [INFO]      🎯 Target: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate/기획.md
+plugin:webpage-html-export:74338 [INFO]      📁 Directory: /home/rl/Desktop/export/korean/2000-essential-korean-words-beginner-&-intermediate
+plugin:webpage-html-export:74338 [INFO]      ---
+48plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Pre-created 1 directories for chunk
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:81688 Creating website with files:
+Korean/2000 Essential Korean Words - Beginner & Intermediate/결승.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/선착순.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/한자.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/분실.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/추가.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/중고.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/신고.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/강의.md
+Korean/2000 Essential Korean Words - Beginner & Intermediate/기획.md
+plugin:webpage-html-export:74351 [WARNING]   Creating an RSS feed requires a site url to be set in the export settings.
+warning @ plugin:webpage-html-export:74351
+validateSettings @ plugin:webpage-html-export:81794
+build @ plugin:webpage-html-export:81691
+await in build (async)
+processChunk @ plugin:webpage-html-export:82584
+await in processChunk (async)
+exportInChunks @ plugin:webpage-html-export:82395
+plugin:webpage-html-export:74338 [INFO]   Processing 10 webpages with memory cleanup every 5 files
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 46 45
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2587.9MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8532: 2587.9MB -> 2587.9MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8533: 2587.9MB -> 2588.0MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2589.4MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8534: 2589.4MB -> 2589.4MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8535: 2589.4MB -> 2589.5MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 45 44
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2590.6MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8536: 2590.6MB -> 2590.6MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8537: 2590.7MB -> 2590.7MB (saved -0.0MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 46 45
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:79351 undefined
+plugin:webpage-html-export:81489 Critical memory usage detected: 2592.4MB - performing critical cleanup
+autoCleanup @ plugin:webpage-html-export:81489
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81392 Critical memory cleanup triggered!
+criticalCleanup @ plugin:webpage-html-export:81392
+autoCleanup @ plugin:webpage-html-export:81490
+build @ plugin:webpage-html-export:81735
+plugin:webpage-html-export:81386 Memory cleanup #8538: 2592.4MB -> 2592.4MB (saved -0.0MB)
+plugin:webpage-html-export:81386 Memory cleanup #8539: 2592.4MB -> 2592.5MB (saved -0.1MB)
+plugin:webpage-html-export:73547 Rendered
+plugin:webpage-html-export:74338 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:73570 49 48
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append
+plugin:webpage-html-export:74338 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:74203 Log container or render leaf not available - skipping log append

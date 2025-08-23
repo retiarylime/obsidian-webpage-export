@@ -185,21 +185,35 @@ export class MemoryManager {
 			return;
 		}
 		
-		// Fallback: gentle memory cleanup without memory pressure
-		// Clear any existing weak references and encourage cleanup
-		if (typeof setTimeout !== 'undefined') {
-			// Use setTimeout to allow event loop to process
-			setTimeout(() => {
-				// Try a gentle cleanup approach
-				try {
-					// Clear any cached DOM references
-					if (typeof document !== 'undefined') {
-						document.dispatchEvent(new Event('memoryCleanup'));
-					}
-				} catch (e) {
-					// Ignore cleanup errors
+		// Fallback: Effective memory pressure techniques to trigger GC
+		try {
+			// Strategy 1: Multiple small memory pressure cycles
+			for (let cycle = 0; cycle < 3; cycle++) {
+				const tempArrays: any[] = [];
+				// Create smaller arrays to avoid debugger detection
+				for (let i = 0; i < 10; i++) {
+					tempArrays.push(new Array(50000).fill(0));
 				}
-			}, 0);
+				// Immediately clear
+				tempArrays.length = 0;
+				
+				// Small delay between cycles
+				if (cycle < 2) {
+					const start = Date.now();
+					while (Date.now() - start < 10) { /* busy wait */ }
+				}
+			}
+			
+			// Strategy 2: Force DOM cleanup if available
+			if (typeof document !== 'undefined') {
+				const cleanup = document.createElement('div');
+				cleanup.innerHTML = '<p>'.repeat(10000) + '</p>'.repeat(10000);
+				document.body.appendChild(cleanup);
+				document.body.removeChild(cleanup);
+			}
+			
+		} catch (e) {
+			// Ignore memory pressure errors - at least we tried
 		}		} catch (e) {
 			// GC not available or failed
 		}

@@ -157,6 +157,59 @@ export class ChunkedWebsiteExporter {
 				
 				// Aggressive memory management - cleanup after EVERY chunk for large vaults
 				if (files.length > 10000 || i % 1 === 0) {
+					// Check for critical memory condition BEFORE cleanup
+					const currentMemory = MemoryManager.getMemoryUsageMB();
+					if (currentMemory > 800) {
+						// Save progress information for resuming
+						const processedFiles = [];
+						const remainingFiles = [];
+						
+						// Calculate exactly which files were processed
+						for (let chunkIdx = 0; chunkIdx <= i; chunkIdx++) {
+							if (chunks[chunkIdx]) {
+								processedFiles.push(...chunks[chunkIdx].map(f => f.path));
+							}
+						}
+						
+						// Calculate remaining files
+						for (let chunkIdx = i + 1; chunkIdx < chunks.length; chunkIdx++) {
+							if (chunks[chunkIdx]) {
+								remainingFiles.push(...chunks[chunkIdx].map(f => f.path));
+							}
+						}
+						
+						// Save resume information to a file
+						const resumeData = {
+							totalFiles: files.length,
+							processedFiles: processedFiles,
+							remainingFiles: remainingFiles,
+							processedChunks: i + 1,
+							totalChunks: chunks.length,
+							completionPercentage: Math.round(((i + 1) / chunks.length) * 100),
+							emergencyStopMemory: currentMemory,
+							timestamp: new Date().toISOString(),
+							destination: destination.path
+						};
+						
+						try {
+							// Save resume data to export destination  
+							const resumeFilePath = destination.joinString('export-resume.json');
+							const fs = require('fs');
+							fs.writeFileSync(resumeFilePath.path, JSON.stringify(resumeData, null, 2));
+							ExportLog.log(`💾 Resume data saved to: ${resumeFilePath.path}`);
+						} catch (e) {
+							ExportLog.warning(`Could not save resume data: ${e}`);
+						}
+						
+						ExportLog.error(`🚨 CRITICAL MEMORY: ${currentMemory.toFixed(1)}MB - Emergency stop to prevent crash`);
+						ExportLog.error(`❌ Export incomplete - processed ${i + 1}/${chunks.length} chunks (${Math.round(((i + 1) / chunks.length) * 100)}%)`);
+						ExportLog.error(`✅ Successfully exported ${processedFiles.length}/${files.length} files`);
+						ExportLog.error(`⏳ Remaining: ${remainingFiles.length} files in ${chunks.length - (i + 1)} chunks`);
+						ExportLog.error(`💡 Resume data saved - you can continue the export later`);
+						ExportLog.error(`📁 Check export folder for 'export-resume.json' with continuation instructions`);
+						return finalWebsite; // Return partial results to prevent total loss
+					}
+					
 					// Use autoCleanup which includes critical cleanup when needed
 					await MemoryManager.autoCleanup();
 					
@@ -642,6 +695,57 @@ export class ChunkedWebsiteExporter {
 	 */
 	public static shouldUseChunkedExport(files: TFile[]): boolean {
 		return files.length > 200; // Use chunked export for >200 files
+	}
+	
+	/**
+	 * Resume export from partial results using saved resume data
+	 */
+	public static async resumeExportFromPartial(
+		destination: Path,
+		chunkSize: number = ChunkedWebsiteExporter.CHUNK_SIZE
+	): Promise<Website | undefined> {
+		try {
+			// Load resume data
+			const resumeFilePath = destination.joinString('export-resume.json');
+			const fs = require('fs');
+			
+			if (!fs.existsSync(resumeFilePath.path)) {
+				ExportLog.error(`❌ No resume data found at: ${resumeFilePath.path}`);
+				ExportLog.error(`💡 Resume data is created when export stops due to memory limits`);
+				return undefined;
+			}
+			
+			const resumeData = JSON.parse(fs.readFileSync(resumeFilePath.path, 'utf8'));
+			ExportLog.log(`📋 Resume data loaded from: ${resumeFilePath.path}`);
+			ExportLog.log(`⏳ Previous export: ${resumeData.processedFiles.length}/${resumeData.totalFiles} files (${resumeData.completionPercentage}%)`);
+			ExportLog.log(`🔄 Remaining: ${resumeData.remainingFiles.length} files to process`);
+			
+			// Get remaining files as TFile objects
+			const vault = (window as any).app.vault;
+			const remainingFiles: TFile[] = [];
+			
+			for (const filePath of resumeData.remainingFiles) {
+				const file = vault.getAbstractFileByPath(filePath);
+				if (file && file instanceof TFile) {
+					remainingFiles.push(file);
+				}
+			}
+			
+			if (remainingFiles.length === 0) {
+				ExportLog.log(`✅ All files already processed! Export is complete.`);
+				return undefined;
+			}
+			
+			ExportLog.log(`🚀 Resuming export with ${remainingFiles.length} remaining files`);
+			
+			// Continue export with remaining files using smaller chunks to be safe
+			const resumeChunkSize = Math.min(chunkSize, 5); // Use smaller chunks for safety
+			return await this.exportInChunks(remainingFiles, destination, resumeChunkSize);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to resume export from partial results");
+			return undefined;
+		}
 	}
 	
 	/**
