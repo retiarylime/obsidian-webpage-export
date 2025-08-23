@@ -54,56 +54,71 @@ export class HTMLExporter
 		if (ChunkedWebsiteExporter.shouldUseChunkedExport(files))
 		{
 			ExportLog.log(`📦 Large vault detected (${files.length} files) - using chunked export`);
-			const website = await ChunkedWebsiteExporter.exportInChunks(files, destination);
 			
-			if (!website) {
-				new Notice("❌ Export Cancelled", 5000);
-				return;
-			}
-
-			// Handle post-export operations for chunked export
-			if (deleteOld)
+			// Begin batch processing exactly like the original exporter for identical behavior
+			MarkdownRendererAPI.beginBatch();
+			let website = undefined;
+			try
 			{
-				let i = 0;
-				ExportLog.addToProgressCap(website.index.deletedFiles.length / 2);
-				for (const dFile of website.index.deletedFiles)
+				website = await ChunkedWebsiteExporter.exportInChunks(files, destination);
+				
+				if (!website) {
+					new Notice("❌ Export Cancelled", 5000);
+					return;
+				}
+
+				// Handle post-export operations for chunked export (identical to original)
+				if (deleteOld)
 				{
-					const path = new Path(dFile, destination.path);
-					
-					// don't delete font files
-					if (path.extension == "woff" || path.extension == "woff2" || path.extension == "ttf" || path.extension == "otf")
+					let i = 0;
+					ExportLog.addToProgressCap(website.index.deletedFiles.length / 2);
+					for (const dFile of website.index.deletedFiles)
 					{
-						ExportLog.progress(0.5, "Deleting Old Files", "Skipping: " + path.path, "var(--color-yellow)");
-						continue;
+						const path = new Path(dFile, destination.path);
+						
+						// don't delete font files
+						if (path.extension == "woff" || path.extension == "woff2" || path.extension == "ttf" || path.extension == "otf")
+						{
+							ExportLog.progress(0.5, "Deleting Old Files", "Skipping: " + path.path, "var(--color-yellow)");
+							continue;
+						}
+
+						await path.delete();
+						ExportLog.progress(0.5, "Deleting Old Files", "Deleting: " + path.path, "var(--color-red)");
+						i++;
+					};
+
+					await Path.removeEmptyDirectories(destination.path);
+				}
+				
+				if (saveFiles) 
+				{
+					if (Settings.exportOptions.combineAsSingleFile)
+					{
+						await website.saveAsCombinedHTML();
 					}
+					else
+					{
+						await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
+						await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
 
-					await path.delete();
-					ExportLog.progress(0.5, "Deleting Old Files", "Deleting: " + path.path, "var(--color-red)");
-					i++;
-				};
-
-				await Path.removeEmptyDirectories(destination.path);
+						if (Settings.exportPreset != ExportPreset.RawDocuments)
+						{
+							await Utils.downloadAttachments([website.index.websiteDataAttachment()]);
+							await Utils.downloadAttachments([website.index.indexDataAttachment()]);
+						}
+					}
+				}
 			}
+			catch (e)
+			{
+				new Notice("❌ Export Failed: " + e, 5000);
+				ExportLog.error(e, "Export Failed", true);
+			}
+
+			// End batch processing exactly like the original exporter
+			MarkdownRendererAPI.endBatch();
 			
-			if (saveFiles) 
-			{
-				if (Settings.exportOptions.combineAsSingleFile)
-				{
-					await website.saveAsCombinedHTML();
-				}
-				else
-				{
-					await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
-					await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
-
-					if (Settings.exportPreset != ExportPreset.RawDocuments)
-					{
-						await Utils.downloadAttachments([website.index.websiteDataAttachment()]);
-						await Utils.downloadAttachments([website.index.indexDataAttachment()]);
-					}
-				}
-			}
-
 			return website;
 		}
 
