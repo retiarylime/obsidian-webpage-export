@@ -384,7 +384,7 @@ export class ChunkedWebsiteExporter {
 	/**
 	 * Merge search indices from chunk website into final website
 	 */
-	private static mergeSearchIndices(chunkWebsite: Website, finalWebsite: Website): void {
+	private static async mergeSearchIndices(chunkWebsite: Website, finalWebsite: Website): Promise<void> {
 		try {
 			if (!chunkWebsite.index.minisearch || !finalWebsite.index.minisearch) {
 				ExportLog.warning("Missing search index in chunk or final website - skipping search index merge");
