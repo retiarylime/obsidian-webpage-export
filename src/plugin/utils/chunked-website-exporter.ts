@@ -67,6 +67,10 @@ export class ChunkedWebsiteExporter {
 			const chunks = this.createChunks(files, chunkSize);
 			ExportLog.log(`Created ${chunks.length} chunks for processing`);
 			
+			// CRITICAL: Calculate global exportRoot from ALL files to preserve directory structure
+			const globalExportRoot = this.findCommonRootPath(files);
+			ExportLog.log(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
+			
 			const progress: ChunkProgress = {
 				totalChunks: chunks.length,
 				completedChunks: existingProgress?.completedChunks || [],
@@ -88,8 +92,8 @@ export class ChunkedWebsiteExporter {
 				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
 				
 				try {
-					// Build chunk website with natural path preservation
-					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, i === 0);
+					// Build chunk website with global export root for consistent directory structure
+					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
@@ -200,18 +204,19 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Build a website for a chunk - preserves natural path structure
+	 * Build a website for a chunk - uses global export root for consistent directory structure
 	 */
-	private static async buildChunkWebsite(files: TFile[], destination: Path, isFirstChunk: boolean = false): Promise<Website | undefined> {
+	private static async buildChunkWebsite(files: TFile[], destination: Path, globalExportRoot: string, isFirstChunk: boolean = false): Promise<Website | undefined> {
 		try {
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
 			await website.load(files);
 			
-			// DO NOT override exportRoot - let each chunk maintain its natural path structure
-			// The original exporter calculates the root from all files, but for chunks we want
-			// to preserve the directory hierarchy by letting each chunk use its natural paths
-			ExportLog.log(`🔧 Chunk preserving natural paths - no root override`);
+			// CRITICAL: Override the chunk-calculated exportRoot with global root to preserve directory structure
+			// Each chunk would calculate a different root based on its subset of files, flattening the structure
+			// By using the global root calculated from ALL files, we maintain the original directory hierarchy
+			website.exportOptions.exportRoot = globalExportRoot;
+			ExportLog.log(`🔧 Chunk using global export root: "${globalExportRoot}" (overrode chunk-calculated root)`);
 			
 			let builtWebsite: Website | undefined;
 			try {
