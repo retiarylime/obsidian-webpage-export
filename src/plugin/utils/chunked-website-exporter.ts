@@ -51,11 +51,6 @@ export class ChunkedWebsiteExporter {
 		try {
 			ExportLog.log(`🔄 Starting chunked export of ${files.length} files (chunks: ${chunkSize})`);
 			
-			// CRITICAL: Calculate root path from ALL files first (like original exporter)
-			// This ensures identical path structure regardless of chunking
-			const commonRootPath = this.findCommonRootPath(files);
-			ExportLog.log(`📂 Common root path for all files: "${commonRootPath}"`);
-			
 			// Check for crash recovery
 			const existingProgress = await this.loadProgress(destination);
 			let startChunk = 0;
@@ -93,8 +88,8 @@ export class ChunkedWebsiteExporter {
 				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
 				
 				try {
-					// Build chunk website with SAME root path as original exporter
-					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, commonRootPath, i === 0);
+					// Build chunk website with natural path preservation
+					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, i === 0);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
@@ -110,7 +105,7 @@ export class ChunkedWebsiteExporter {
 						finalWebsite = chunkWebsite; // First chunk becomes the base
 					} else {
 						if (finalWebsite && finalWebsite.index) {
-							this.mergeWebsites(chunkWebsite, finalWebsite);
+							await this.mergeWebsites(chunkWebsite, finalWebsite);
 						} else {
 							ExportLog.warning(`Final website invalid at chunk ${i + 1} - reinitializing`);
 							finalWebsite = chunkWebsite;
@@ -134,12 +129,16 @@ export class ChunkedWebsiteExporter {
 			// Finalize the website EXACTLY like original exporter
 			if (finalWebsite) {
 				ExportLog.log("🎯 Finalizing website - identical to original exporter");
+				
+				// CRITICAL: Regenerate file tree with ALL merged files
+				await this.regenerateFileTree(finalWebsite);
+				
 				await finalWebsite.index.finalize();
 				
 				// Clean up progress
 				await this.cleanupProgress(destination);
 				
-				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments`);
+				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
 			}
 			
 			return finalWebsite;
@@ -201,18 +200,18 @@ export class ChunkedWebsiteExporter {
 	}
 	
 	/**
-	 * Build a website for a chunk with specified root path - ensures IDENTICAL path structure
+	 * Build a website for a chunk - preserves natural path structure
 	 */
-	private static async buildChunkWebsite(files: TFile[], destination: Path, rootPath: string, isFirstChunk: boolean = false): Promise<Website | undefined> {
+	private static async buildChunkWebsite(files: TFile[], destination: Path, isFirstChunk: boolean = false): Promise<Website | undefined> {
 		try {
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
 			await website.load(files);
 			
-			// Override the root path to match what original exporter would calculate
-			// This ensures identical path structure regardless of chunk content
-			website.exportOptions.exportRoot = rootPath;
-			ExportLog.log(`🔧 Set chunk root path to: "${rootPath}" (matches original exporter)`);
+			// DO NOT override exportRoot - let each chunk maintain its natural path structure
+			// The original exporter calculates the root from all files, but for chunks we want
+			// to preserve the directory hierarchy by letting each chunk use its natural paths
+			ExportLog.log(`🔧 Chunk preserving natural paths - no root override`);
 			
 			let builtWebsite: Website | undefined;
 			try {
@@ -257,7 +256,7 @@ export class ChunkedWebsiteExporter {
 	/**
 	 * Merge chunk website into final website - preserves all data structures AND website assets
 	 */
-	private static mergeWebsites(chunkWebsite: Website, finalWebsite: Website): void {
+	private static async mergeWebsites(chunkWebsite: Website, finalWebsite: Website): Promise<void> {
 		try {
 			// Validate input websites
 			if (!chunkWebsite || !finalWebsite) {
@@ -286,6 +285,16 @@ export class ChunkedWebsiteExporter {
 					if (attachment && attachment.targetPath && !finalWebsite.index.attachments.some(existing => 
 						existing && existing.targetPath && existing.targetPath.path === attachment.targetPath.path)) {
 						finalWebsite.index.attachments.push(attachment);
+					}
+				}
+			}
+			
+			// CRITICAL: Safely merge attachmentsShownInTree for file navigation (avoid duplicates)
+			if (chunkWebsite.index.attachmentsShownInTree && Array.isArray(chunkWebsite.index.attachmentsShownInTree)) {
+				for (const attachment of chunkWebsite.index.attachmentsShownInTree) {
+					if (attachment && attachment.targetPath && !finalWebsite.index.attachmentsShownInTree.some(existing => 
+						existing && existing.targetPath && existing.targetPath.path === attachment.targetPath.path)) {
+						finalWebsite.index.attachmentsShownInTree.push(attachment);
 					}
 				}
 			}
@@ -329,6 +338,9 @@ export class ChunkedWebsiteExporter {
 				}
 			}
 			
+			// CRITICAL: Merge search index data from chunk to final website
+			await this.mergeSearchIndices(chunkWebsite, finalWebsite);
+			
 			// Safely merge website data properties to ensure complete website structure
 			// This ensures search index, metadata, and other core files are preserved
 			if (chunkWebsite.index.websiteData && finalWebsite.index.websiteData) {
@@ -366,6 +378,97 @@ export class ChunkedWebsiteExporter {
 			
 		} catch (error) {
 			ExportLog.error(error, "Failed to merge websites");
+		}
+	}
+	
+	/**
+	 * Merge search indices from chunk website into final website
+	 */
+	private static mergeSearchIndices(chunkWebsite: Website, finalWebsite: Website): void {
+		try {
+			if (!chunkWebsite.index.minisearch || !finalWebsite.index.minisearch) {
+				ExportLog.warning("Missing search index in chunk or final website - skipping search index merge");
+				return;
+			}
+			
+			// Get the JSON representation of the chunk search index
+			const chunkJson = chunkWebsite.index.minisearch.toJSON();
+			const chunkJsonString = JSON.stringify(chunkJson);
+			
+			// Simple approach: Re-add all webpages from chunk to final search index
+			// This leverages existing search index functionality without accessing private properties
+			let mergedCount = 0;
+			for (const webpage of chunkWebsite.index.webpages) {
+				if (webpage && webpage.targetPath) {
+					const webpagePath = webpage.targetPath.path;
+					// Check if the webpage is already in the final index to avoid duplicates
+					if (!finalWebsite.index.minisearch.has(webpagePath)) {
+						// Manually create search document with public properties
+						const searchDoc = {
+							path: webpagePath,
+							title: webpage.title || '',
+							aliases: [],
+							headers: [],
+							tags: [],
+							content: '' // Content will be minimal but functional
+						};
+						finalWebsite.index.minisearch.add(searchDoc);
+						mergedCount++;
+					}
+				}
+			}
+			
+			ExportLog.log(`🔍 Merged ${mergedCount} search documents from chunk`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to merge search indices");
+		}
+	}
+	
+	/**
+	 * Regenerate file tree for the final merged website with ALL files
+	 */
+	private static async regenerateFileTree(finalWebsite: Website): Promise<void> {
+		try {
+			if (!finalWebsite.exportOptions.fileNavigationOptions.enabled) {
+				return; // File tree not enabled, skip
+			}
+			
+			ExportLog.log(`🌲 Regenerating file tree with ${finalWebsite.index.attachmentsShownInTree.length} files`);
+			
+			// Recreate file tree with all merged attachments
+			const paths = finalWebsite.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+			const { FileTree } = await import("../features/file-tree");
+			const { AssetLoader } = await import("../asset-loaders/base-asset");
+			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+			
+			finalWebsite.fileTree = new FileTree(paths, false, true);
+			finalWebsite.fileTree.makeLinksWebStyle = finalWebsite.exportOptions.slugifyPaths ?? true;
+			finalWebsite.fileTree.showNestingIndicator = true;
+			finalWebsite.fileTree.generateWithItemsClosed = true;
+			finalWebsite.fileTree.showFileExtentionTags = true;
+			finalWebsite.fileTree.hideFileExtentionTags = ["md"];
+			finalWebsite.fileTree.title = finalWebsite.exportOptions.siteName ?? app.vault.getName();
+			finalWebsite.fileTree.id = "file-explorer";
+			
+			const tempContainer = document.createElement("div");
+			await finalWebsite.fileTree.generate(tempContainer);
+			const data = tempContainer.innerHTML;
+			
+			// Update tree order for all attachments
+			finalWebsite.index.attachmentsShownInTree.forEach((file) => {
+				if (!file.sourcePathRootRelative) return;
+				const fileTreeItem = finalWebsite.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
+				file.treeOrder = fileTreeItem?.treeOrder ?? 0;
+			});
+			
+			tempContainer.remove();
+			finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+			
+			ExportLog.log(`✅ File tree regenerated successfully`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to regenerate file tree for merged website");
 		}
 	}
 	
