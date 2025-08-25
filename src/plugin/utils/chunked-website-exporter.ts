@@ -3,6 +3,7 @@ import { Website } from "../website/website";
 import { Path } from "./path";
 import { ExportLog, MarkdownRendererAPI } from "../render-api/render-api";
 import { Utils } from "./utils";
+import { Settings } from "../settings/settings";
 
 /**
  * Progress tracking for crash recovery
@@ -36,7 +37,7 @@ export class ChunkedWebsiteExporter {
 	 * Check if chunked export should be used
 	 */
 	public static shouldUseChunkedExport(files: TFile[]): boolean {
-		return files.length > 500;
+		return files.length > 10; // Temporarily lowered for testing
 	}
 	
 	/**
@@ -67,27 +68,27 @@ export class ChunkedWebsiteExporter {
 			const chunks = this.createChunks(files, chunkSize);
 			ExportLog.log(`Created ${chunks.length} chunks for processing`);
 			
-			// CRITICAL: Calculate global exportRoot from ALL files to preserve directory structure
-			const globalExportRoot = this.findCommonRootPath(files);
-			ExportLog.log(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
-			console.log("Global root path: " + globalExportRoot); // Match original Website logging
-			
-			// Debug: log sample file paths to understand structure
-			const sampleFiles = files.slice(0, 5);
-			ExportLog.log(`🔧 Sample file paths:`);
-			for (const file of sampleFiles) {
-				ExportLog.log(`   - "${file.path}"`);
-			}
-			
-			const progress: ChunkProgress = {
-				totalChunks: chunks.length,
-				completedChunks: existingProgress?.completedChunks || [],
-				destination: destination.path,
-				timestamp: Date.now(),
-				fileCount: files.length
-			};
-			
-			// Build the final website by processing chunks
+		// CRITICAL: Calculate global exportRoot from ALL files using exact same logic as regular exporter
+		const globalExportRoot = this.findCommonRootPath(files);
+		ExportLog.log(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
+		console.log("Global root path: " + globalExportRoot); // Match original Website logging
+		
+		// Debug: log sample file paths to understand structure
+		const sampleFiles = files.slice(0, 5);
+		ExportLog.log(`🔧 Sample file paths:`);
+		for (const file of sampleFiles) {
+			ExportLog.log(`   - "${file.path}"`);
+		}
+
+		ExportLog.log(`🔧 Using calculated globalExportRoot to match regular exporter behavior exactly`);
+		
+		const progress: ChunkProgress = {
+			totalChunks: chunks.length,
+			completedChunks: existingProgress?.completedChunks || [],
+			destination: destination.path,
+			timestamp: Date.now(),
+			fileCount: files.length
+		};			// Build the final website by processing chunks
 			let finalWebsite: Website | undefined = undefined;
 			
 			for (let i = startChunk; i < chunks.length; i++) {
@@ -100,7 +101,7 @@ export class ChunkedWebsiteExporter {
 				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
 				
 				try {
-					// Build chunk website with global export root for consistent directory structure
+					// Build chunk website with calculated globalExportRoot to match regular exporter exactly
 					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
@@ -216,49 +217,42 @@ export class ChunkedWebsiteExporter {
 		try {
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
+			
+			// CRITICAL: Set Settings overrides BEFORE loading to ensure Webpage constructors get correct values
+			const originalSettings = Settings.exportOptions.exportRoot;
+			const originalFlattenPaths = Settings.exportOptions.flattenExportPaths;
+			Settings.exportOptions.exportRoot = globalExportRoot;
+			Settings.exportOptions.flattenExportPaths = false;
+			ExportLog.log(`🔧 Pre-load Settings override - exportRoot: "${globalExportRoot}", flattenExportPaths: false`);
+			
 			await website.load(files);
 			
 			// Log what the chunk calculated as its root before override
 			const chunkCalculatedRoot = website.exportOptions.exportRoot;
 			ExportLog.log(`🔧 Chunk calculated root: "${chunkCalculatedRoot}" from ${files.length} files`);
 			
-			// CRITICAL: Override the chunk-calculated exportRoot with global root to preserve directory structure
-			// Each chunk would calculate a different root based on its subset of files, flattening the structure
-			// By using the global root calculated from ALL files, we maintain the original directory hierarchy
+			// CRITICAL: Also override website.exportOptions to ensure consistency
+			website.exportOptions.exportRoot = globalExportRoot;
+			website.exportOptions.flattenExportPaths = false;
+			ExportLog.log(`🔧 Website exportOptions override - exportRoot: "${globalExportRoot}"`);
 			
-			// SPECIAL HANDLING: If globalExportRoot is empty (mixed vault), preserve full directory paths
-			if (globalExportRoot === "") {
-				// For mixed vaults, don't strip any root path - this preserves the full relative path structure
-				website.exportOptions.exportRoot = "";
-				ExportLog.log(`🔧 Mixed vault detected - preserving full directory structure (empty exportRoot)`);
-				
-			// CRITICAL FIX: Override the Website's path processing to preserve directory structure
-			// Since we detected a mixed vault (globalExportRoot is empty), we need to override
-			// path processing to preserve full directory structure
-			const originalMethod = website.getTargetPathForFile;
-			website.getTargetPathForFile = function(file: TFile, filename?: string): Path {
-				ExportLog.log(`🔧 Mixed vault path processing for: ${file.path}`);
-				
-				// Use the normal Website method first
-				const targetPath = originalMethod.call(this, file, filename);
-				
-				// But ensure it uses the full path instead of removing exportRoot
-				// This simulates what our Downloadable.removeRootFromPath override does
-				const fullPath = new Path(file.path);
-				if (filename) fullPath.fullName = filename;
-				fullPath.setWorkingDirectory(destination.path);
-				fullPath.slugify(website.exportOptions.slugifyPaths);
-				
-				ExportLog.log(`🔧 Final mixed vault path: ${fullPath.path}`);
-				return fullPath;
-			}.bind(website);				ExportLog.log(`🔧 Path processing overridden for mixed vault`);
-			} else {
-				website.exportOptions.exportRoot = globalExportRoot;
-				ExportLog.log(`🔧 Chunk using global export root: "${globalExportRoot}" (overrode chunk-calculated root)`);
-			}
-			console.log(`Chunk ${isFirstChunk ? '1' : '?'}: "${chunkCalculatedRoot}" -> "${globalExportRoot || 'empty (preserve full paths)'}"`);
+			// Store the original values to restore later if needed
+			(website as any)._originalExportRoot = originalSettings;
+			(website as any)._originalFlattenPaths = originalFlattenPaths;
 			
-			let builtWebsite: Website | undefined;
+			ExportLog.log(`🔧 ✅ Chunk configured to match regular exporter exactly`);
+			console.log(`Chunk ${isFirstChunk ? '1' : '?'}: calculated="${chunkCalculatedRoot}" -> using="${globalExportRoot}" (matches regular exporter)`);
+			
+			// Additional debugging: let's see what happens to sample files
+			console.log(`🔧 DEBUG: Sample file processing with exportRoot="${globalExportRoot}"`);
+			const sampleFiles = files.slice(0, 3);
+			for (const file of sampleFiles) {
+				console.log(`   Input: ${file.path}`);
+				// This is what Downloadable.removeRootFromPath would do
+				const targetPath = file.path.replace('.md', '.html').toLowerCase().replace(/\s+/g, '-').replace(/&/g, '&');
+				const finalPath = globalExportRoot ? (targetPath.startsWith(globalExportRoot + '/') ? targetPath.substring((globalExportRoot + '/').length) : targetPath) : targetPath;
+				console.log(`   Output: ${finalPath}`);
+			}			let builtWebsite: Website | undefined;
 			try {
 				builtWebsite = await website.build();
 			} catch (buildError) {

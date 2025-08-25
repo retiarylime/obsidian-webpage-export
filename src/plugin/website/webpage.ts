@@ -70,14 +70,33 @@ export class Webpage extends Attachment
 		const targetPath = website.getTargetPathForFile(file, filename);
 		options = Object.assign(Settings.exportOptions, options);
 
+		// DEBUG: Log what's happening in Webpage constructor for mixed vaults
+		if (options.exportRoot === "" || options.exportRoot === undefined) {
+			console.log(`🔧 Webpage constructor - file: ${file.path}, filename: ${filename}`);
+			console.log(`🔧 Webpage constructor - targetPath before: ${targetPath.path}`);
+			console.log(`🔧 Webpage constructor - exportRoot: "${options.exportRoot}", flattenExportPaths: ${options.flattenExportPaths}`);
+		}
+
 		super("", targetPath, file, options);
 		this.targetPath.setExtension("html");
 		this.exportOptions = options;
 		this.source = file;
 		this.website = website;
 
-		if (this.exportOptions.flattenExportPaths) 
+		// DEBUG: Log path after parent constructor
+		if (options.exportRoot === "" || options.exportRoot === undefined) {
+			console.log(`🔧 Webpage constructor - targetPath after parent: ${this.targetPath.path}`);
+		}
+
+		if (this.exportOptions.flattenExportPaths) {
+			console.log(`🔧 FLATTENING PATH: ${this.targetPath.path} -> flattened`);
 			this.targetPath.parent = Path.emptyPath;
+		}
+
+		// DEBUG: Final path
+		if (options.exportRoot === "" || options.exportRoot === undefined) {
+			console.log(`🔧 Webpage constructor - FINAL targetPath: ${this.targetPath.path}`);
+		}
 	}
 
 	public outputData: WebpageOutputData = new WebpageOutputData();
