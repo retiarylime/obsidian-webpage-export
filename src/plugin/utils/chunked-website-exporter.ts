@@ -71,6 +71,13 @@ export class ChunkedWebsiteExporter {
 			const globalExportRoot = this.findCommonRootPath(files);
 			ExportLog.log(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
 			
+			// Debug: log sample file paths to understand structure
+			const sampleFiles = files.slice(0, 5);
+			ExportLog.log(`🔧 Sample file paths:`);
+			for (const file of sampleFiles) {
+				ExportLog.log(`   - "${file.path}"`);
+			}
+			
 			const progress: ChunkProgress = {
 				totalChunks: chunks.length,
 				completedChunks: existingProgress?.completedChunks || [],
@@ -171,15 +178,15 @@ export class ChunkedWebsiteExporter {
 		if (!files || files.length === 0) {
 			return '';
 		}
-	
+
 		if (files.length === 1) {
 			return new Path(files[0].path).parent?.path ?? '';
 		}
-	
+
 		const paths = files.map(file => new Path(file.path).split());
 		let commonPath: string[] = [];
 		const shortestPathLength = Math.min(...paths.map(p => p.length));
-	
+
 		for (let i = 0; i < shortestPathLength; i++) {
 			const segment = paths[0][i];
 			if (paths.every(path => path[i] === segment)) {
@@ -188,22 +195,20 @@ export class ChunkedWebsiteExporter {
 				break;
 			}
 		}
-	
+
 		// If the common path is just the root, return an empty string
 		if (commonPath.length <= 1) {
 			return '';
 		}
-	
+
 		// Remove the last segment if it's not a common parent for all files
 		const lastCommonSegment = commonPath[commonPath.length - 1];
 		if (!paths.every(path => path.length > commonPath.length || path[commonPath.length - 1] !== lastCommonSegment)) {
 			commonPath.pop();
 		}
-	
+
 		return commonPath.length > 0 ? new Path(commonPath.join("/")).path : '';
-	}
-	
-	/**
+	}	/**
 	 * Build a website for a chunk - uses global export root for consistent directory structure
 	 */
 	private static async buildChunkWebsite(files: TFile[], destination: Path, globalExportRoot: string, isFirstChunk: boolean = false): Promise<Website | undefined> {
