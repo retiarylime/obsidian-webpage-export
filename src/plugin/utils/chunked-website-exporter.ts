@@ -232,19 +232,26 @@ export class ChunkedWebsiteExporter {
 				website.exportOptions.exportRoot = "";
 				ExportLog.log(`🔧 Mixed vault detected - preserving full directory structure (empty exportRoot)`);
 				
-				// CRITICAL FIX: Override the removeRootFromPath behavior to always preserve directory structure
-				// Monkey patch the website's downloadable creation to preserve paths
-				const originalGetTargetPathForFile = website.getTargetPathForFile.bind(website);
-				website.getTargetPathForFile = function(file: TFile, filename?: string): Path {
-					const targetPath = originalGetTargetPathForFile(file, filename);
-					// Ensure the full relative path is preserved by not allowing any root removal
-					const originalPath = new Path(file.path);
-					if (filename) originalPath.fullName = filename;
-					originalPath.setWorkingDirectory(destination.path);
-					originalPath.slugify(website.exportOptions.slugifyPaths);
-					ExportLog.log(`🔧 Preserving full path: "${file.path}" -> "${originalPath.path}"`);
-					return originalPath;
-				};
+			// CRITICAL FIX: Override the Website's path processing to preserve directory structure
+			// Since we detected a mixed vault (globalExportRoot is empty), we need to override
+			// path processing to preserve full directory structure
+			const originalMethod = website.getTargetPathForFile;
+			website.getTargetPathForFile = function(file: TFile, filename?: string): Path {
+				ExportLog.log(`🔧 Mixed vault path processing for: ${file.path}`);
+				
+				// Use the normal Website method first
+				const targetPath = originalMethod.call(this, file, filename);
+				
+				// But ensure it uses the full path instead of removing exportRoot
+				// This simulates what our Downloadable.removeRootFromPath override does
+				const fullPath = new Path(file.path);
+				if (filename) fullPath.fullName = filename;
+				fullPath.setWorkingDirectory(destination.path);
+				fullPath.slugify(website.exportOptions.slugifyPaths);
+				
+				ExportLog.log(`🔧 Final mixed vault path: ${fullPath.path}`);
+				return fullPath;
+			}.bind(website);				ExportLog.log(`🔧 Path processing overridden for mixed vault`);
 			} else {
 				website.exportOptions.exportRoot = globalExportRoot;
 				ExportLog.log(`🔧 Chunk using global export root: "${globalExportRoot}" (overrode chunk-calculated root)`);

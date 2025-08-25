@@ -65,6 +65,14 @@ export class Attachment
 
 	private removeRootFromPath(path: Path, allowSlugify: boolean = true)
 	{
+		// CHUNKED EXPORT FIX: For mixed vaults (empty exportRoot), preserve full directory structure
+		if (this.exportOptions.exportRoot === "" || this.exportOptions.exportRoot === undefined) {
+			// Don't remove any root - preserve the full relative directory structure
+			console.log(`🔧 Preserving full path for mixed vault: "${path.path}"`);
+			return path;
+		}
+		
+		// Original logic for normal exports
 		// remove the export root from the target path
 		const root = new Path(this.exportOptions.exportRoot ?? "").slugify(allowSlugify && this.exportOptions.slugifyPaths).path + "/";
 		if (path.path.startsWith(root))
