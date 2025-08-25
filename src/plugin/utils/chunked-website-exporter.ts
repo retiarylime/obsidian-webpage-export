@@ -218,22 +218,26 @@ export class ChunkedWebsiteExporter {
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
 			
-			// CRITICAL: Set Settings overrides BEFORE loading to ensure Webpage constructors get correct values
-			const originalSettings = Settings.exportOptions.exportRoot;
-			const originalFlattenPaths = Settings.exportOptions.flattenExportPaths;
-			Settings.exportOptions.exportRoot = globalExportRoot;
-			Settings.exportOptions.flattenExportPaths = false;
-			ExportLog.log(`🔧 Pre-load Settings override - exportRoot: "${globalExportRoot}", flattenExportPaths: false`);
-			
+			// Load files first - this will cause website.load() to calculate and set its own exportRoot
 			await website.load(files);
 			
-			// Log what the chunk calculated as its root before override
+			// Log what the chunk calculated as its root 
 			const chunkCalculatedRoot = website.exportOptions.exportRoot;
 			ExportLog.log(`🔧 Chunk calculated root: "${chunkCalculatedRoot}" from ${files.length} files`);
 			
-			// CRITICAL: Also override website.exportOptions to ensure consistency
+			// CRITICAL: Override BOTH Settings and website.exportOptions AFTER load() to prevent overwriting
+			const originalSettings = Settings.exportOptions.exportRoot;
+			const originalFlattenPaths = Settings.exportOptions.flattenExportPaths;
+			
+			// Override Settings for any subsequent operations
+			Settings.exportOptions.exportRoot = globalExportRoot;
+			Settings.exportOptions.flattenExportPaths = false;
+			
+			// Override website.exportOptions to ensure consistency (website.load() overwrote this)
 			website.exportOptions.exportRoot = globalExportRoot;
 			website.exportOptions.flattenExportPaths = false;
+			
+			ExportLog.log(`🔧 Post-load Settings override - exportRoot: "${globalExportRoot}", flattenExportPaths: false`);
 			ExportLog.log(`🔧 Website exportOptions override - exportRoot: "${globalExportRoot}"`);
 			
 			// Store the original values to restore later if needed
