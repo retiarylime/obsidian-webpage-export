@@ -70,6 +70,7 @@ export class ChunkedWebsiteExporter {
 			// CRITICAL: Calculate global exportRoot from ALL files to preserve directory structure
 			const globalExportRoot = this.findCommonRootPath(files);
 			ExportLog.log(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
+			console.log("Global root path: " + globalExportRoot); // Match original Website logging
 			
 			// Debug: log sample file paths to understand structure
 			const sampleFiles = files.slice(0, 5);
@@ -217,11 +218,38 @@ export class ChunkedWebsiteExporter {
 			const website = new Website(destination);
 			await website.load(files);
 			
+			// Log what the chunk calculated as its root before override
+			const chunkCalculatedRoot = website.exportOptions.exportRoot;
+			ExportLog.log(`🔧 Chunk calculated root: "${chunkCalculatedRoot}" from ${files.length} files`);
+			
 			// CRITICAL: Override the chunk-calculated exportRoot with global root to preserve directory structure
 			// Each chunk would calculate a different root based on its subset of files, flattening the structure
 			// By using the global root calculated from ALL files, we maintain the original directory hierarchy
-			website.exportOptions.exportRoot = globalExportRoot;
-			ExportLog.log(`🔧 Chunk using global export root: "${globalExportRoot}" (overrode chunk-calculated root)`);
+			
+			// SPECIAL HANDLING: If globalExportRoot is empty (mixed vault), preserve full directory paths
+			if (globalExportRoot === "") {
+				// For mixed vaults, don't strip any root path - this preserves the full relative path structure
+				website.exportOptions.exportRoot = "";
+				ExportLog.log(`🔧 Mixed vault detected - preserving full directory structure (empty exportRoot)`);
+				
+				// CRITICAL FIX: Override the removeRootFromPath behavior to always preserve directory structure
+				// Monkey patch the website's downloadable creation to preserve paths
+				const originalGetTargetPathForFile = website.getTargetPathForFile.bind(website);
+				website.getTargetPathForFile = function(file: TFile, filename?: string): Path {
+					const targetPath = originalGetTargetPathForFile(file, filename);
+					// Ensure the full relative path is preserved by not allowing any root removal
+					const originalPath = new Path(file.path);
+					if (filename) originalPath.fullName = filename;
+					originalPath.setWorkingDirectory(destination.path);
+					originalPath.slugify(website.exportOptions.slugifyPaths);
+					ExportLog.log(`🔧 Preserving full path: "${file.path}" -> "${originalPath.path}"`);
+					return originalPath;
+				};
+			} else {
+				website.exportOptions.exportRoot = globalExportRoot;
+				ExportLog.log(`🔧 Chunk using global export root: "${globalExportRoot}" (overrode chunk-calculated root)`);
+			}
+			console.log(`Chunk ${isFirstChunk ? '1' : '?'}: "${chunkCalculatedRoot}" -> "${globalExportRoot || 'empty (preserve full paths)'}"`);
 			
 			let builtWebsite: Website | undefined;
 			try {
