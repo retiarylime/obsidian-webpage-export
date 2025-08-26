@@ -1,27 +1,27 @@
-[INFO]   📦 Large vault detected (5410 files) - using chunked export
-plugin:webpage-html-export:12110 [INFO]   🔄 Starting chunked export of 5410 files (chunks: 30)
-plugin:webpage-html-export:12110 [INFO]   Created 181 chunks for processing
+[INFO]   📦 Large vault detected (11 files) - using chunked export
+plugin:webpage-html-export:12110 [INFO]   🔄 Starting chunked export of 11 files (chunks: 30)
+plugin:webpage-html-export:12110 [INFO]   Created 1 chunks for processing
 plugin:webpage-html-export:12110 [INFO]   🔧 Global export root for all chunks: ""
-plugin:webpage-html-export:82755 Global root path: 
+plugin:webpage-html-export:82785 Global root path: 
 plugin:webpage-html-export:12110 [INFO]   🔧 Sample file paths:
-plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md"
-plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md"
-plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md"
 plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md"
-plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md"
+plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md"
+plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가깝다.md"
+plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가꾸다.md"
+plugin:webpage-html-export:12110 [INFO]      - "Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md"
 plugin:webpage-html-export:12110 [INFO]   🔧 Using calculated globalExportRoot to match regular exporter behavior exactly
-plugin:webpage-html-export:12110 [INFO]   🔨 Processing chunk 1/181
-plugin:webpage-html-export:82855 🔧🔧 CHUNK BUILD START - globalExportRoot: ""
-plugin:webpage-html-export:82856 🔧🔧 CHUNK BUILD START - Settings.exportOptions.exportRoot BEFORE: "Korean/2000 Essential Korean Words - Beginner & Intermediate"
-plugin:webpage-html-export:82857 🔧🔧 CHUNK BUILD START - Settings.exportOptions.flattenExportPaths BEFORE: false
-plugin:webpage-html-export:82865 🔧🔧 SETTINGS OVERRIDE APPLIED:
-plugin:webpage-html-export:82866 🔧🔧   Settings.exportOptions.exportRoot: ""
-plugin:webpage-html-export:82867 🔧🔧   Settings.exportOptions.flattenExportPaths: false
-plugin:webpage-html-export:82868 🔧🔧   website.exportOptions.exportRoot: ""
-plugin:webpage-html-export:82869 🔧🔧   website.exportOptions.flattenExportPaths: false
+plugin:webpage-html-export:12110 [INFO]   🔨 Processing chunk 1/1
+plugin:webpage-html-export:82886 🔧🔧 CHUNK BUILD START - globalExportRoot: ""
+plugin:webpage-html-export:82887 🔧🔧 CHUNK BUILD START - Settings.exportOptions.exportRoot BEFORE: ""
+plugin:webpage-html-export:82888 🔧🔧 CHUNK BUILD START - Settings.exportOptions.flattenExportPaths BEFORE: false
+plugin:webpage-html-export:82896 🔧🔧 SETTINGS OVERRIDE APPLIED:
+plugin:webpage-html-export:82897 🔧🔧   Settings.exportOptions.exportRoot: ""
+plugin:webpage-html-export:82898 🔧🔧   Settings.exportOptions.flattenExportPaths: false
+plugin:webpage-html-export:82899 🔧🔧   website.exportOptions.exportRoot: ""
+plugin:webpage-html-export:82900 🔧🔧   website.exportOptions.flattenExportPaths: false
 plugin:webpage-html-export:12110 [INFO]   🔧 Pre-load Settings and website.exportOptions override - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:82871 🔧🔧 CALLING website.load() with 30 files
-plugin:webpage-html-export:82016 Root path: Korean/2000 Essential Korean Words - Beginner & Intermediate
+plugin:webpage-html-export:82902 🔧🔧 CALLING website.load() with 11 files
+plugin:webpage-html-export:82037 Root path: 
 plugin:webpage-html-export:12110 [INFO]   Including stylesheet: css-settings-manager
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
 plugin:webpage-html-export:4178    path: ""
@@ -228,83 +228,14 @@ plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
 plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "site-lib/media/2308ab1944a6bfa5c5b8.svg"
 plugin:webpage-html-export:66251 Theme styles loaded Default
-plugin:webpage-html-export:81483 No metadata found. Creating new metadata.
+plugin:webpage-html-export:81489 No metadata found. Creating new metadata.
 plugin:webpage-html-export:12110 [INFO] No search-index.json exists. Creating new index.  Error: No index found
-    at Index.load (plugin:webpage-html-export:81533:15)
-    at async Website.load (plugin:webpage-html-export:82020:7)
-    at async _ChunkedWebsiteExporter.buildChunkWebsite (plugin:webpage-html-export:82872:7)
-    at async _ChunkedWebsiteExporter.exportInChunks (plugin:webpage-html-export:82778:32)
-    at async HTMLExporter.exportFiles (plugin:webpage-html-export:83183:20)
-    at async HTMLExporter.export (plugin:webpage-html-export:83170:21)
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md, filename: -들.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/-들.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/-들.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/-들.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/-들.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/-들.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md, filename: PC방.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/pc방.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/pc방.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/pc방.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/pc방.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/pc방.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md, filename: 가게.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가게.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가게.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가게.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가게.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가게.html
+    at Index.load (plugin:webpage-html-export:81539:15)
+    at async Website.load (plugin:webpage-html-export:82041:7)
+    at async _ChunkedWebsiteExporter.buildChunkWebsite (plugin:webpage-html-export:82903:7)
+    at async _ChunkedWebsiteExporter.exportInChunks (plugin:webpage-html-export:82808:32)
+    at async HTMLExporter.exportFiles (plugin:webpage-html-export:83236:20)
+    at async HTMLExporter.export (plugin:webpage-html-export:83223:21)
 plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md, filename: 가격.md
 plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가격.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
@@ -328,29 +259,6 @@ plugin:webpage-html-export:4181    flattenExportPaths: false
 plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md"
 plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가격.html
 plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가격.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md, filename: 가구.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가구.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가구.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가구.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가구.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가구.html
 plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md, filename: 가까이.md
 plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가까이.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
@@ -420,29 +328,6 @@ plugin:webpage-html-export:4181    flattenExportPaths: false
 plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가꾸다.md"
 plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가꾸다.html
 plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가꾸다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md, filename: 가끔.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가끔.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가끔.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가끔.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가끔.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가끔.html
 plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md, filename: 가난.md
 plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가난.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
@@ -466,496 +351,155 @@ plugin:webpage-html-export:4181    flattenExportPaths: false
 plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md"
 plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가난.html
 plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가난.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md, filename: 가늘다.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가늘다.md
+plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md, filename: - 다 왔어요_ - 덜 왔어요_1404746307380.md
+plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/korean-grammar-sentences-by-evita/-다-왔어요_-덜-왔어요_1404746307380.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가늘다.md"
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/-다-왔어요_-덜-왔어요_1404746307380.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가늘다.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/-다-왔어요_-덜-왔어요_1404746307380.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가늘다.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가늘다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md, filename: 가능.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가능.md
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md"
+plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/korean-grammar-sentences-by-evita/-다-왔어요_-덜-왔어요_1404746307380.html
+plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/korean-grammar-sentences-by-evita/-다-왔어요_-덜-왔어요_1404746307380.html
+plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md, filename: - 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md
+plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/korean-grammar-sentences-by-evita/-도쿄가-어때요_-도쿄는-많이-복잡해요_1382222775220.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가능.md"
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/-도쿄가-어때요_-도쿄는-많이-복잡해요_1382222775220.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가능.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/-도쿄가-어때요_-도쿄는-많이-복잡해요_1382222775220.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가능.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가능.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md, filename: 가다.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가다.md
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md"
+plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/korean-grammar-sentences-by-evita/-도쿄가-어때요_-도쿄는-많이-복잡해요_1382222775220.html
+plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/korean-grammar-sentences-by-evita/-도쿄가-어때요_-도쿄는-많이-복잡해요_1382222775220.html
+plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md, filename: - 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md
+plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/korean-grammar-sentences-by-evita/-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가다.md"
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가다.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가다.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md, filename: 가득.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가득.md
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md"
+plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/korean-grammar-sentences-by-evita/-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840.html
+plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/korean-grammar-sentences-by-evita/-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840.html
+plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md, filename: - 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md
+plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/korean-grammar-sentences-by-evita/-어제-본-공연이-어땠어요_-아주-재미있더라고요_1499108624294.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가득.md"
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/-어제-본-공연이-어땠어요_-아주-재미있더라고요_1499108624294.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가득.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/-어제-본-공연이-어땠어요_-아주-재미있더라고요_1499108624294.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가득.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가득.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md, filename: 가루.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가루.md
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md"
+plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/korean-grammar-sentences-by-evita/-어제-본-공연이-어땠어요_-아주-재미있더라고요_1499108624294.html
+plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/korean-grammar-sentences-by-evita/-어제-본-공연이-어땠어요_-아주-재미있더라고요_1499108624294.html
+plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md, filename: - 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md
+plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/korean-grammar-sentences-by-evita/-어제-영화-재미있었어요_-재미있기는요.-보다가-졸았어요_1498996701066.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가루.md"
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/-어제-영화-재미있었어요_-재미있기는요.-보다가-졸았어요_1498996701066.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가루.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/-어제-영화-재미있었어요_-재미있기는요.-보다가-졸았어요_1498996701066.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가루.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가루.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md, filename: 가르치다.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가르치다.md
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md"
+plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/korean-grammar-sentences-by-evita/-어제-영화-재미있었어요_-재미있기는요.-보다가-졸았어요_1498996701066.html
+plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/korean-grammar-sentences-by-evita/-어제-영화-재미있었어요_-재미있기는요.-보다가-졸았어요_1498996701066.html
+plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md, filename: 지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md
+plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/korean-grammar-sentences-by-evita/지금-카페에서-어제-산-책을-읽고-있어요_1404746308170.md
 plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가르치다.md"
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/지금-카페에서-어제-산-책을-읽고-있어요_1404746308170.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가르치다.md"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/지금-카페에서-어제-산-책을-읽고-있어요_1404746308170.md"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md"
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가르치다.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가르치다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md, filename: 가리다.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가리다.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가리다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가리다.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가리다.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가리다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md, filename: 가리키다.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가리키다.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가리키다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가리키다.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가리키다.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가리키다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md, filename: 가만히.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가만히.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가만히.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가만히.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가만히.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가만히.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md, filename: 가뭄.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가뭄.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가뭄.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가뭄.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가뭄.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가뭄.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md, filename: 가방.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가방.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가방.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가방.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가방.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가방.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md, filename: 가볍다.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가볍다.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가볍다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가볍다.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가볍다.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가볍다.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md, filename: 가수.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가수.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가수.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가수.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가수.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가수.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md, filename: 가스.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가스.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가스.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가스.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가스.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가스.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md, filename: 가습기.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가습기.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가습기.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가습기.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가습기.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가습기.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md, filename: 가요.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가요.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가요.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가요.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가요.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가요.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md, filename: 가운데.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가운데.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가운데.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가운데.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가운데.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가운데.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md, filename: 가위.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가위.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가위.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가위.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가위.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가위.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md, filename: 가을.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가을.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가을.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가을.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가을.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가을.html
-plugin:webpage-html-export:79669 🔧 Webpage constructor - file: Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md, filename: 가입.md
-plugin:webpage-html-export:79670 🔧 Webpage constructor - targetPath before: korean/2000-essential-korean-words-beginner-&-intermediate/가입.md
-plugin:webpage-html-export:79671 🔧 Webpage constructor - exportRoot: "", flattenExportPaths: false
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/가입.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/가입.md"
-plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md"
-plugin:webpage-html-export:4179    exportRoot: ""
-plugin:webpage-html-export:4180    exportRoot type: string
-plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md"
-plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/2000-essential-korean-words-beginner-&-intermediate/가입.html
-plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/2000-essential-korean-words-beginner-&-intermediate/가입.html
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md: 2
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md: 3
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md: 4
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md: 5
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md: 6
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md: 7
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가깝다.md: 8
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가꾸다.md: 9
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md: 10
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md: 11
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md: 12
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md: 13
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md: 14
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md: 15
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md: 16
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md: 17
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md: 18
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md: 19
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md: 20
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md: 21
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md: 22
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md: 23
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md: 24
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md: 25
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md: 26
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md: 27
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md: 28
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md: 29
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md: 30
-plugin:webpage-html-export:82074 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md: 31
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md"
+plugin:webpage-html-export:79686 🔧 Webpage constructor - targetPath after parent: korean/korean-grammar-sentences-by-evita/지금-카페에서-어제-산-책을-읽고-있어요_1404746308170.html
+plugin:webpage-html-export:79693 🔧 Webpage constructor - FINAL targetPath: korean/korean-grammar-sentences-by-evita/지금-카페에서-어제-산-책을-읽고-있어요_1404746308170.html
+plugin:webpage-html-export:82101 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md: 2
+plugin:webpage-html-export:82101 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md: 3
+plugin:webpage-html-export:82101 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가깝다.md: 4
+plugin:webpage-html-export:82101 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가꾸다.md: 5
+plugin:webpage-html-export:82101 File tree order for Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md: 6
+plugin:webpage-html-export:82101 File tree order for Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md: 8
+plugin:webpage-html-export:82101 File tree order for Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md: 9
+plugin:webpage-html-export:82101 File tree order for Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md: 10
+plugin:webpage-html-export:82101 File tree order for Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md: 11
+plugin:webpage-html-export:82101 File tree order for Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md: 12
+plugin:webpage-html-export:82101 File tree order for Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md: 13
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
 plugin:webpage-html-export:4178    path: ""
 plugin:webpage-html-export:4179    exportRoot: ""
@@ -968,83 +512,443 @@ plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
 plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "site-lib/html/file-tree-content.html"
-plugin:webpage-html-export:82874 🔧🔧 POST-LOAD VALUES:
-plugin:webpage-html-export:82875 🔧🔧   Chunk calculated root: ""
-plugin:webpage-html-export:82876 🔧🔧   Settings.exportOptions.exportRoot: ""
-plugin:webpage-html-export:82877 🔧🔧   Settings.exportOptions.flattenExportPaths: false
-plugin:webpage-html-export:82878 🔧🔧   website.exportOptions.exportRoot: ""
-plugin:webpage-html-export:82879 🔧🔧   website.exportOptions.flattenExportPaths: false
-plugin:webpage-html-export:12110 [INFO]   🔧 Chunk calculated root after load(): "" from 30 files
-plugin:webpage-html-export:82883 🔧🔧 FINAL OVERRIDE APPLIED:
-plugin:webpage-html-export:82884 🔧🔧   website.exportOptions.exportRoot: ""
-plugin:webpage-html-export:82885 🔧🔧   website.exportOptions.flattenExportPaths: false
+plugin:webpage-html-export:82905 🔧🔧 POST-LOAD VALUES:
+plugin:webpage-html-export:82906 🔧🔧   Chunk calculated root: ""
+plugin:webpage-html-export:82907 🔧🔧   Settings.exportOptions.exportRoot: ""
+plugin:webpage-html-export:82908 🔧🔧   Settings.exportOptions.flattenExportPaths: false
+plugin:webpage-html-export:82909 🔧🔧   website.exportOptions.exportRoot: ""
+plugin:webpage-html-export:82910 🔧🔧   website.exportOptions.flattenExportPaths: false
+plugin:webpage-html-export:12110 [INFO]   🔧 Chunk calculated root after load(): "" from 11 files
+plugin:webpage-html-export:82914 🔧🔧 FINAL OVERRIDE APPLIED:
+plugin:webpage-html-export:82915 🔧🔧   website.exportOptions.exportRoot: ""
+plugin:webpage-html-export:82916 🔧🔧   website.exportOptions.flattenExportPaths: false
 plugin:webpage-html-export:12110 [INFO]   🔧 Post-load website.exportOptions re-override - exportRoot: ""
 plugin:webpage-html-export:12110 [INFO]   🔧 ✅ Chunk configured to match regular exporter exactly
-plugin:webpage-html-export:82890 Chunk 1: calculated="" -> using="" (matches regular exporter)
-plugin:webpage-html-export:82891 🔧 DEBUG: Sample file processing with exportRoot=""
-plugin:webpage-html-export:82894    Input: Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md
-plugin:webpage-html-export:82897    Output: korean/2000-essential-korean-words---beginner-&-intermediate/-들.html
-plugin:webpage-html-export:82894    Input: Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md
-plugin:webpage-html-export:82897    Output: korean/2000-essential-korean-words---beginner-&-intermediate/pc방.html
-plugin:webpage-html-export:82894    Input: Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md
-plugin:webpage-html-export:82897    Output: korean/2000-essential-korean-words---beginner-&-intermediate/가게.html
-plugin:webpage-html-export:82087 Creating website with files:
-Korean/2000 Essential Korean Words - Beginner & Intermediate/-들.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/PC방.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가게.md
+plugin:webpage-html-export:82921 Chunk 1: calculated="" -> using="" (matches regular exporter)
+plugin:webpage-html-export:82922 🔧 DEBUG: Sample file processing with exportRoot=""
+plugin:webpage-html-export:82925    Input: Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md
+plugin:webpage-html-export:82928    Output: korean/2000-essential-korean-words---beginner-&-intermediate/가격.html
+plugin:webpage-html-export:82925    Input: Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md
+plugin:webpage-html-export:82928    Output: korean/2000-essential-korean-words---beginner-&-intermediate/가까이.html
+plugin:webpage-html-export:82925    Input: Korean/2000 Essential Korean Words - Beginner & Intermediate/가깝다.md
+plugin:webpage-html-export:82928    Output: korean/2000-essential-korean-words---beginner-&-intermediate/가깝다.html
+plugin:webpage-html-export:82114 Creating website with files:
 Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가구.md
 Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md
 Korean/2000 Essential Korean Words - Beginner & Intermediate/가깝다.md
 Korean/2000 Essential Korean Words - Beginner & Intermediate/가꾸다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가끔.md
 Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가늘다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가능.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가득.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가루.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가르치다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가리다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가리키다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가만히.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가뭄.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가방.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가볍다.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가수.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가스.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가습기.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가요.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가운데.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가위.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가을.md
-Korean/2000 Essential Korean Words - Beginner & Intermediate/가입.md
+Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md
+Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md
+Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md
+Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md
+Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md
+Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md
 plugin:webpage-html-export:12123 [WARNING]   Creating an RSS feed requires a site url to be set in the export settings.
 warning @ plugin:webpage-html-export:12123
-validateSettings @ plugin:webpage-html-export:82178
-build @ plugin:webpage-html-export:82090
+validateSettings @ plugin:webpage-html-export:82205
+build @ plugin:webpage-html-export:82117
 await in build (async)
-buildChunkWebsite @ plugin:webpage-html-export:82901
+buildChunkWebsite @ plugin:webpage-html-export:82932
 await in buildChunkWebsite (async)
-exportInChunks @ plugin:webpage-html-export:82778
+exportInChunks @ plugin:webpage-html-export:82808
 await in exportInChunks (async)
-exportFiles @ plugin:webpage-html-export:83183
-export @ plugin:webpage-html-export:83170
-[Violation] 'requestAnimationFrame' handler took 71ms
+exportFiles @ plugin:webpage-html-export:83236
+export @ plugin:webpage-html-export:83223
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 13 12
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ - 덜 왔어요_1404746307380.md found embedded sources: ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…nces%20by%20Evita/assets/eks824.mp3?1754214038673']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/assets/eks824.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/assets/eks824.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/assets/eks824.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/assets/eks824.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/Korean%20Grammar%20Sentences%20by%20Evita/assets/eks824.mp3?1754214038673 -> Korean/Korean Grammar Sentences by Evita/assets/eks824.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks824.mp3 (24879 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/Korean Grammar Sentences by Evita/assets/eks824.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks824.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/Korean Grammar Sentences by Evita/assets/eks824.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks824.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 17 16
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요_ - 도쿄는 많이 복잡해요_1382222775220.md found embedded sources: ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…nces%20by%20Evita/assets/eks240.mp3?1754214038874']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/assets/eks240.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/assets/eks240.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/assets/eks240.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/assets/eks240.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/Korean%20Grammar%20Sentences%20by%20Evita/assets/eks240.mp3?1754214038874 -> Korean/Korean Grammar Sentences by Evita/assets/eks240.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks240.mp3 (57547 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/Korean Grammar Sentences by Evita/assets/eks240.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks240.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/Korean Grammar Sentences by Evita/assets/eks240.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks240.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 17 16
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/Korean Grammar Sentences by Evita/- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요_1382222777840.md found embedded sources: ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…nces%20by%20Evita/assets/eks766.mp3?1754214038756']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/assets/eks766.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/assets/eks766.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/assets/eks766.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/assets/eks766.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/Korean%20Grammar%20Sentences%20by%20Evita/assets/eks766.mp3?1754214038756 -> Korean/Korean Grammar Sentences by Evita/assets/eks766.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks766.mp3 (72157 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/Korean Grammar Sentences by Evita/assets/eks766.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks766.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/Korean Grammar Sentences by Evita/assets/eks766.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks766.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 14 13
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/Korean Grammar Sentences by Evita/- 어제 영화 재미있었어요_ - 재미있기는요. 보다가 졸았어요_1498996701066.md found embedded sources: ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…nces%20by%20Evita/assets/ks1132.mp3?1754214397270']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/assets/ks1132.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/assets/ks1132.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/assets/ks1132.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/assets/ks1132.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/Korean%20Grammar%20Sentences%20by%20Evita/assets/ks1132.mp3?1754214397270 -> Korean/Korean Grammar Sentences by Evita/assets/ks1132.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1132.mp3 (40733 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/Korean Grammar Sentences by Evita/assets/ks1132.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1132.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/Korean Grammar Sentences by Evita/assets/ks1132.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1132.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 14 13
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/Korean Grammar Sentences by Evita/- 어제 본 공연이 어땠어요_ - 아주 재미있더라고요_1499108624294.md found embedded sources: ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…nces%20by%20Evita/assets/ks1144.mp3?1754214397270']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/assets/ks1144.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/assets/ks1144.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/assets/ks1144.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/assets/ks1144.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/Korean%20Grammar%20Sentences%20by%20Evita/assets/ks1144.mp3?1754214397270 -> Korean/Korean Grammar Sentences by Evita/assets/ks1144.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1144.mp3 (26461 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/Korean Grammar Sentences by Evita/assets/ks1144.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1144.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/Korean Grammar Sentences by Evita/assets/ks1144.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1144.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 12 11
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/Korean Grammar Sentences by Evita/지금 카페에서 어제 산 책을 읽고 있어요_1404746308170.md found embedded sources: ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…nces%20by%20Evita/assets/eks947.mp3?1754214397268']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/Korean Grammar Sentences by Evita/assets/eks947.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/Korean Grammar Sentences by Evita/assets/eks947.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/korean-grammar-sentences-by-evita/assets/eks947.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/korean-grammar-sentences-by-evita/assets/eks947.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/Korean%20Grammar%20Sentences%20by%20Evita/assets/eks947.mp3?1754214397268 -> Korean/Korean Grammar Sentences by Evita/assets/eks947.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks947.mp3 (44543 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/Korean Grammar Sentences by Evita/assets/eks947.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks947.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/Korean Grammar Sentences by Evita/assets/eks947.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks947.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+[Violation] 'requestAnimationFrame' handler took 51ms
+[Violation] 'requestAnimationFrame' handler took 86ms
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 39 38
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/2000 Essential Korean Words - Beginner & Intermediate/가깝다.md found embedded sources: (2) ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…EA%B0%80%EA%B9%9D%EB%8B%A4_word.mp3?1750605603831', 'app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…0%80%EA%B9%9D%EB%8B%A4_sentence.mp3?1750605603831']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_word.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_word.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/44_0_%EA%B0%80%EA%B9%9D%EB%8B%A4_word.mp3?1750605603831 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_word.mp3 (35779 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_word.mp3 (type: Attachment)
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_sentence.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_sentence.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/44_0_%EA%B0%80%EA%B9%9D%EB%8B%A4_sentence.mp3?1750605603831 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_sentence.mp3 (66499 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_word.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 49 48
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/2000 Essential Korean Words - Beginner & Intermediate/가격.md found embedded sources: (2) ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…ts/40_0_%EA%B0%80%EA%B2%A9_word.mp3?1750605588641', 'app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…0_0_%EA%B0%80%EA%B2%A9_sentence.mp3?1750605588641']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_word.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_word.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/40_0_%EA%B0%80%EA%B2%A9_word.mp3?1750605588641 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_word.mp3 (35779 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_word.mp3 (type: Attachment)
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_sentence.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_sentence.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/40_0_%EA%B0%80%EA%B2%A9_sentence.mp3?1750605588641 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_sentence.mp3 (74649 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_word.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+[Violation] 'requestAnimationFrame' handler took 55ms
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 44 43
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/2000 Essential Korean Words - Beginner & Intermediate/가난.md found embedded sources: (2) ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…ts/16_0_%EA%B0%80%EB%82%9C_word.mp3?1750605423949', 'app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…6_0_%EA%B0%80%EB%82%9C_sentence.mp3?1750605423949']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_word.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_word.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/16_0_%EA%B0%80%EB%82%9C_word.mp3?1750605423949 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_word.mp3 (33271 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_word.mp3 (type: Attachment)
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_sentence.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_sentence.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/16_0_%EA%B0%80%EB%82%9C_sentence.mp3?1750605423949 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_sentence.mp3 (104115 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_word.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:11397 Rendered
+plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
+plugin:webpage-html-export:11420 33 32
+plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
+plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/2000 Essential Korean Words - Beginner & Intermediate/가꾸다.md found embedded sources: (2) ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…EA%B0%80%EA%BE%B8%EB%8B%A4_word.mp3?1750605533518', 'app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…0%80%EA%BE%B8%EB%8B%A4_sentence.mp3?1750605533518']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_word.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_word.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_word.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/32_0_%EA%B0%80%EA%BE%B8%EB%8B%A4_word.mp3?1750605533518 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_word.mp3 (37033 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_word.mp3 (type: Attachment)
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_sentence.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_sentence.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/32_0_%EA%B0%80%EA%BE%B8%EB%8B%A4_sentence.mp3?1750605533518 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_sentence.mp3 (95338 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_word.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
 plugin:webpage-html-export:11397 Rendered
 plugin:webpage-html-export:12110 [INFO]   Waiting for all sections to be counted...
 plugin:webpage-html-export:11420 36 35
 plugin:webpage-html-export:12110 [INFO]   Waiting for transclusions to render...
 plugin:webpage-html-export:12110 [INFO]   Waiting for generic plugins to render...
+plugin:webpage-html-export:80081 🎵 MARKDOWN with MP3: Korean/2000 Essential Korean Words - Beginner & Intermediate/가까이.md found embedded sources: (2) ['app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…EA%B0%80%EA%B9%8C%EC%9D%B4_word.mp3?1750605431285', 'app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/r…0%80%EA%B9%8C%EC%9D%B4_sentence.mp3?1750605431285']
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/9_0_가리키다_word.mp3"
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_word.mp3"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/9_0_가리키다_word.mp3"
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_word.mp3"
 plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
-plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/9_0_가리키다_word.mp3"
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_word.mp3"
 plugin:webpage-html-export:4179    exportRoot: ""
 plugin:webpage-html-export:4180    exportRoot type: string
 plugin:webpage-html-export:4181    flattenExportPaths: false
-plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for m
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_word.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/17_0_%EA%B0%80%EA%B9%8C%EC%9D%B4_word.mp3?1750605431285 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_word.mp3 (37033 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_word.mp3 (type: Attachment)
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_sentence.mp3"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_sentence.mp3"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_sentence.mp3"
+plugin:webpage-html-export:82248 🎵 createAttachmentFromSrc MP3: app://cd43a1b08d27a72b1d97ee4f23120a66dbcd/media/rl/wdpurp/trash/obsidian/lang-vault/Korean/2000%20Essential%20Korean%20Words%20-%20Beginner%20&%20Intermediate/assets/17_0_%EA%B0%80%EA%B9%8C%EC%9D%B4_sentence.mp3?1750605431285 -> Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_sentence.mp3 (96592 bytes)
+plugin:webpage-html-export:80095 🎵 EMBEDDED MP3 attachment created: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_word.mp3 (type: Attachment)
+plugin:webpage-html-export:81673 🎵 INDEX: Mapping MP3 raw attachment: Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_sentence.mp3 (type: Attachment)
+plugin:webpage-html-export:79931 undefined
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: ""
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: ""
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "site-lib/rss.xml"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "site-lib/rss.xml"
+plugin:webpage-html-export:82162 Website {sourceFiles: Array(11), exportOptions: {…}, destination: _Path, index: Index, webpageTemplate: _WebpageTemplate, …}
+plugin:webpage-html-export:12110 [INFO]   🏗️ First chunk - ensuring complete website infrastructure
+plugin:webpage-html-export:12110 [INFO]   📋 First chunk assets: 56 total, CSS: false, JS: false
+plugin:webpage-html-export:12110 [INFO]   🏗️ First chunk set as base: 11 files in tree
+plugin:webpage-html-export:12110 [INFO]   📊 Memory after chunk 1/1: 188MB
+plugin:webpage-html-export:12110 [INFO]   🎯 Finalizing website - identical to original exporter
+plugin:webpage-html-export:12110 [INFO]   🌲 Regenerating file tree with 11 files
+plugin:webpage-html-export:83103 🌲 DEBUG: Sample attachmentsShownInTree files: (10) ['Korean/2000 Essential Korean Words - Beginner & In…tial-korean-words-beginner-&-intermediate/가격.html', 'Korean/2000 Essential Korean Words - Beginner & In…ial-korean-words-beginner-&-intermediate/가까이.html', 'Korean/2000 Essential Korean Words - Beginner & In…ial-korean-words-beginner-&-intermediate/가깝다.html', 'Korean/2000 Essential Korean Words - Beginner & In…ial-korean-words-beginner-&-intermediate/가꾸다.html', 'Korean/2000 Essential Korean Words - Beginner & In…tial-korean-words-beginner-&-intermediate/가난.html', 'Korean/Korean Grammar Sentences by Evita/- 다 왔어요_ …ntences-by-evita/-다-왔어요_-덜-왔어요_1404746307380.html', 'Korean/Korean Grammar Sentences by Evita/- 도쿄가 어때요…by-evita/-도쿄가-어때요_-도쿄는-많이-복잡해요_1382222775220.html', 'Korean/Korean Grammar Sentences by Evita/- 목이 아파요.…/-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840.html', 'Korean/Korean Grammar Sentences by Evita/- 어제 본 공연…ita/-어제-본-공연이-어땠어요_-아주-재미있더라고요_1499108624294.html', 'Korean/Korean Grammar Sentences by Evita/- 어제 영화 재…어제-영화-재미있었어요_-재미있기는요.-보다가-졸았어요_1498996701066.html']
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: ""
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: ""
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "site-lib/html/file-tree-content.html"
+plugin:webpage-html-export:12110 [INFO]   ✅ File tree regenerated successfully
+plugin:webpage-html-export:12110 [INFO]   ✅ Chunked export complete: 11 pages, 45 attachments, 11 in tree
+plugin:webpage-html-export:83267 🎵 DEBUG: Found 16 MP3 files total:
+plugin:webpage-html-export:83269   - Korean/Korean Grammar Sentences by Evita/assets/eks824.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks824.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/Korean Grammar Sentences by Evita/assets/eks240.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks240.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/Korean Grammar Sentences by Evita/assets/eks766.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks766.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/Korean Grammar Sentences by Evita/assets/ks1132.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1132.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/Korean Grammar Sentences by Evita/assets/ks1144.mp3 -> korean/korean-grammar-sentences-by-evita/assets/ks1144.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/Korean Grammar Sentences by Evita/assets/eks947.mp3 -> korean/korean-grammar-sentences-by-evita/assets/eks947.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_word.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/44_0_가깝다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/44_0_가깝다_sentence.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_word.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/40_0_가격_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/40_0_가격_sentence.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_word.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/16_0_가난_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/16_0_가난_sentence.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_word.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/32_0_가꾸다_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/32_0_가꾸다_sentence.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_word.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_word.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83269   - Korean/2000 Essential Korean Words - Beginner & Intermediate/assets/17_0_가까이_sentence.mp3 -> korean/2000-essential-korean-words-beginner-&-intermediate/assets/17_0_가까이_sentence.mp3 (Attachment, instanceof Webpage: false)
+plugin:webpage-html-export:83275 🎵 DEBUG: 16 MP3 files will be downloaded as attachments
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: ""
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: ""
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "site-lib/metadata.json"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "site-lib/metadata.json"
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: ""
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: ""
+plugin:webpage-html-export:4177 🔧 DOWNLOADABLE removeRootFromPath called:
+plugin:webpage-html-export:4178    path: "site-lib/search-index.json"
+plugin:webpage-html-export:4179    exportRoot: ""
+plugin:webpage-html-export:4180    exportRoot type: string
+plugin:webpage-html-export:4181    flattenExportPaths: false
+plugin:webpage-html-export:4183 🔧 ✅ Preserving full path for mixed vault: "site-lib/search-index.json"
+plugin:webpage-html-export:12110 [INFO]   Closing render window

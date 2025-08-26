@@ -158,6 +158,13 @@ export class Website
 			try
 			{
 				const isConvertable = MarkdownRendererAPI.isConvertable(file.extension);
+				const isAudioFile = ["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(file.extension);
+
+				// Skip standalone processing of audio files - they should only be processed when embedded in markdown
+				// This matches the behavior of the regular exporter
+				if (isAudioFile) {
+					continue;
+				}
 
 				// Make sure files which need to be saved directly without conversion are added to the index as attachments
 				if (!isConvertable || (MarkdownRendererAPI.viewableMediaExtensions.contains(file.extension)))
@@ -167,11 +174,6 @@ export class Website
 					let attachment = new Attachment(data, path, file, this.exportOptions);
 					attachment.showInTree = true;
 					
-					// Debug: log MP3 attachment creation
-					if (file.extension === "mp3") {
-						console.log(`🎵 Creating RAW MP3 Attachment: ${file.path} -> ${path.path}`);
-					}
-					
 					await this.index.addFile(attachment);
 				}
 
@@ -180,11 +182,6 @@ export class Website
 				{
 					let webpage = new Webpage(file, file.name, this, this.exportOptions);
 					webpage.showInTree = true;
-					
-					// Debug: log MP3 webpage creation
-					if (file.extension === "mp3") {
-						console.log(`🎵 Creating MP3 Webpage: ${file.path} -> ${webpage.targetPath.path}`);
-					}
 					
 					await this.index.addFile(webpage);
 				}
