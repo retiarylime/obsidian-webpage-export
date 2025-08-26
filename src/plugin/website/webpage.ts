@@ -68,7 +68,8 @@ export class Webpage extends Attachment
 		if (!MarkdownRendererAPI.isConvertable(file.extension)) throw new Error("File type not supported: " + file.extension);
 
 		const targetPath = website.getTargetPathForFile(file, filename);
-		options = Object.assign(Settings.exportOptions, options);
+		// CRITICAL FIX: Don't modify global Settings.exportOptions - use a proper copy
+		options = Object.assign({}, Settings.exportOptions, options);
 
 		// DEBUG: Log what's happening in Webpage constructor for mixed vaults
 		if (options.exportRoot === "" || options.exportRoot === undefined) {
