@@ -116,6 +116,7 @@ export class ChunkedWebsiteExporter {
 					// Merge into final website - maintains all data structures
 					if (i === 0) {
 						finalWebsite = chunkWebsite; // First chunk becomes the base
+						ExportLog.log(`🏗️ First chunk set as base: ${finalWebsite.index.attachmentsShownInTree.length} files in tree`);
 					} else {
 						if (finalWebsite && finalWebsite.index) {
 							await this.mergeWebsites(chunkWebsite, finalWebsite);
@@ -337,6 +338,14 @@ export class ChunkedWebsiteExporter {
 				return;
 			}
 			
+			// Debug: Log merge counts before merging
+			const beforeWebpages = finalWebsite.index.webpages.length;
+			const beforeAttachments = finalWebsite.index.attachments.length;
+			const beforeAttachmentsShownInTree = finalWebsite.index.attachmentsShownInTree.length;
+			
+			console.log(`🔄 MERGE: Before - Webpages: ${beforeWebpages}, Attachments: ${beforeAttachments}, AttachmentsShownInTree: ${beforeAttachmentsShownInTree}`);
+			console.log(`🔄 MERGE: Chunk has - Webpages: ${chunkWebsite.index.webpages.length}, Attachments: ${chunkWebsite.index.attachments.length}, AttachmentsShownInTree: ${chunkWebsite.index.attachmentsShownInTree.length}`);
+			
 			// Safely merge webpages (avoid duplicates)
 			if (chunkWebsite.index.webpages && Array.isArray(chunkWebsite.index.webpages)) {
 				for (const webpage of chunkWebsite.index.webpages) {
@@ -366,6 +375,14 @@ export class ChunkedWebsiteExporter {
 					}
 				}
 			}
+			
+			// Debug: Log merge counts after merging
+			const afterWebpages = finalWebsite.index.webpages.length;
+			const afterAttachments = finalWebsite.index.attachments.length;
+			const afterAttachmentsShownInTree = finalWebsite.index.attachmentsShownInTree.length;
+			
+			console.log(`🔄 MERGE: After - Webpages: ${afterWebpages}, Attachments: ${afterAttachments}, AttachmentsShownInTree: ${afterAttachmentsShownInTree}`);
+			console.log(`🔄 MERGE: Added - Webpages: ${afterWebpages - beforeWebpages}, Attachments: ${afterAttachments - beforeAttachments}, AttachmentsShownInTree: ${afterAttachmentsShownInTree - beforeAttachmentsShownInTree}`);
 			
 			// Safely merge newFiles (content + assets)
 			if (chunkWebsite.index.newFiles && Array.isArray(chunkWebsite.index.newFiles)) {
@@ -459,34 +476,49 @@ export class ChunkedWebsiteExporter {
 				return;
 			}
 			
-			// Get the JSON representation of the chunk search index
+			// Get the JSON representation of the chunk search index to examine its structure
 			const chunkJson = chunkWebsite.index.minisearch.toJSON();
-			const chunkJsonString = JSON.stringify(chunkJson);
 			
-			// Simple approach: Re-add all webpages from chunk to final search index
-			// This leverages existing search index functionality without accessing private properties
+			// Debug: Log the structure to understand what's available
+			ExportLog.log(`🔍 DEBUG: Chunk search index structure: ${JSON.stringify(Object.keys(chunkJson))}`);
+			ExportLog.log(`🔍 DEBUG: Document count: ${chunkJson.documentCount}`);
+			
+			// The most reliable approach is to iterate through the webpages and re-add them properly
+			// This ensures we get the full search content from the webpage's outputData
 			let mergedCount = 0;
 			for (const webpage of chunkWebsite.index.webpages) {
 				if (webpage && webpage.targetPath) {
 					const webpagePath = webpage.targetPath.path;
 					// Check if the webpage is already in the final index to avoid duplicates
 					if (!finalWebsite.index.minisearch.has(webpagePath)) {
-						// Manually create search document with public properties
-						const searchDoc = {
-							path: webpagePath,
-							title: webpage.title || '',
-							aliases: [],
-							headers: [],
-							tags: [],
-							content: '' // Content will be minimal but functional
-						};
-						finalWebsite.index.minisearch.add(searchDoc);
-						mergedCount++;
+						// Re-create the search document using the webpage's actual data
+						try {
+							const headersInfo = await webpage.outputData.renderedHeadings;
+							// Remove title header if it's the first one
+							if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
+								headersInfo.shift();
+							}
+							const headers = headersInfo.map((header) => header.heading);
+
+							const searchDoc = {
+								title: webpage.title,
+								aliases: webpage.outputData.aliases,
+								headers: headers,
+								tags: webpage.outputData.allTags,
+								path: webpagePath,
+								content: webpage.outputData.description + " " + webpage.outputData.searchContent,
+							};
+							
+							finalWebsite.index.minisearch.add(searchDoc);
+							mergedCount++;
+						} catch (err) {
+							ExportLog.warning(`Failed to add search document for ${webpagePath}: ${err}`);
+						}
 					}
 				}
 			}
 			
-			ExportLog.log(`🔍 Merged ${mergedCount} search documents from chunk`);
+			ExportLog.log(`✅ Successfully merged ${mergedCount} search documents from chunk`);
 			
 		} catch (error) {
 			ExportLog.error(error, "Failed to merge search indices");
@@ -503,6 +535,10 @@ export class ChunkedWebsiteExporter {
 			}
 			
 			ExportLog.log(`🌲 Regenerating file tree with ${finalWebsite.index.attachmentsShownInTree.length} files`);
+			
+			// Debug: Log some sample files to see what we have
+			const sampleFiles = finalWebsite.index.attachmentsShownInTree.slice(0, 10);
+			console.log(`🌲 DEBUG: Sample attachmentsShownInTree files:`, sampleFiles.map(f => `${f.sourcePath} -> ${f.targetPath.path}`));
 			
 			// Recreate file tree with all merged attachments
 			const paths = finalWebsite.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));

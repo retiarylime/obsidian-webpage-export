@@ -623,6 +623,12 @@ export class Webpage extends Attachment
 	public async getAttachments(): Promise<Attachment[]>
 	{
 		const sources = this.srcLinks;
+		
+		// Debug: log if this is a markdown file with embedded MP3s
+		if (this.source.extension === "md" && sources.some(src => src.includes(".mp3"))) {
+			console.log(`🎵 MARKDOWN with MP3: ${this.source.path} found embedded sources:`, sources.filter(src => src.includes(".mp3")));
+		}
+		
 		for (const src of sources)
 		{
 			if ((!src.startsWith("app://") && /\w+:(\/\/|\\\\)/.exec(src)) || // link is a URL except for app://
@@ -638,6 +644,11 @@ export class Webpage extends Attachment
 			{
 				ExportLog.log("Attachment source not found: " + src);
 				continue;
+			}
+
+			// Debug: log if we're creating an MP3 attachment from embedded reference
+			if (sourcePath.endsWith(".mp3")) {
+				console.log(`🎵 EMBEDDED MP3 attachment created: ${sourcePath} -> ${attachment.targetPath.path} (type: ${attachment.constructor.name})`);
 			}
 
 			if (!this.attachments.includes(attachment)) 

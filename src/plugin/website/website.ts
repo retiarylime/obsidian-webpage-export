@@ -166,6 +166,12 @@ export class Website
 					const path = this.getTargetPathForFile(file);
 					let attachment = new Attachment(data, path, file, this.exportOptions);
 					attachment.showInTree = true;
+					
+					// Debug: log MP3 attachment creation
+					if (file.extension === "mp3") {
+						console.log(`🎵 Creating RAW MP3 Attachment: ${file.path} -> ${path.path}`);
+					}
+					
 					await this.index.addFile(attachment);
 				}
 
@@ -174,6 +180,12 @@ export class Website
 				{
 					let webpage = new Webpage(file, file.name, this, this.exportOptions);
 					webpage.showInTree = true;
+					
+					// Debug: log MP3 webpage creation
+					if (file.extension === "mp3") {
+						console.log(`🎵 Creating MP3 Webpage: ${file.path} -> ${webpage.targetPath.path}`);
+					}
+					
 					await this.index.addFile(webpage);
 				}
 
@@ -446,6 +458,12 @@ export class Website
 
 		const attachment = new Attachment(data, target, file, this.exportOptions);
 		if (!attachment.sourcePath) attachment.sourcePath = attachedFile.pathname;
+		
+		// Debug: log MP3 attachment creation from embedded references
+		if (attachedFile.pathname.endsWith(".mp3")) {
+			console.log(`🎵 createAttachmentFromSrc MP3: ${src} -> ${attachedFile.pathname} -> ${target.path} (${data.length} bytes)`);
+		}
+		
 		return attachment;
 	}
 

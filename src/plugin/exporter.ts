@@ -99,8 +99,21 @@ export class HTMLExporter
 					}
 					else
 					{
-						await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
-						await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
+						// Debug: Check MP3 files before download
+						const newAttachments = website.index.newFiles.filter((f) => !(f instanceof Webpage));
+						const updatedAttachments = website.index.updatedFiles.filter((f) => !(f instanceof Webpage));
+						
+						const allMP3s = website.index.newFiles.concat(website.index.updatedFiles).filter(f => f.sourcePath?.endsWith(".mp3"));
+						console.log(`🎵 DEBUG: Found ${allMP3s.length} MP3 files total:`);
+						allMP3s.forEach(mp3 => {
+							console.log(`  - ${mp3.sourcePath} -> ${mp3.targetPath.path} (${mp3.constructor.name}, instanceof Webpage: ${mp3 instanceof Webpage})`);
+						});
+						
+						const mp3Attachments = newAttachments.concat(updatedAttachments).filter(f => f.sourcePath?.endsWith(".mp3"));
+						console.log(`🎵 DEBUG: ${mp3Attachments.length} MP3 files will be downloaded as attachments`);
+						
+						await Utils.downloadAttachments(newAttachments);
+						await Utils.downloadAttachments(updatedAttachments);
 
 						if (Settings.exportPreset != ExportPreset.RawDocuments)
 						{
@@ -169,6 +182,26 @@ export class HTMLExporter
 				{
 					await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
 					await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
+
+					// Debug: log MP3 download filtering for regular export
+					const regularNewMP3s = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
+					const regularNewMP3Attachments = regularNewMP3s.filter(f => !(f instanceof Webpage));
+					const regularNewMP3Webpages = regularNewMP3s.filter(f => f instanceof Webpage);
+					if (regularNewMP3s.length > 0) {
+						console.log(`🎵 REGULAR DOWNLOAD FILTER - MP3 files: ${regularNewMP3s.length} total, ${regularNewMP3Attachments.length} attachments to download, ${regularNewMP3Webpages.length} webpages filtered out`);
+						regularNewMP3Attachments.forEach(f => console.log(`  ✅ Will download: ${f.sourcePath} -> ${f.targetPath.path}`));
+						regularNewMP3Webpages.forEach(f => console.log(`  ❌ Filtered out: ${f.sourcePath} -> ${f.targetPath.path} (${f.constructor.name})`));
+					}
+
+					// Debug: log MP3 download filtering for chunked export
+					const newMP3s = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
+					const newMP3Attachments = newMP3s.filter(f => !(f instanceof Webpage));
+					const newMP3Webpages = newMP3s.filter(f => f instanceof Webpage);
+					if (newMP3s.length > 0) {
+						console.log(`🎵 CHUNKED DOWNLOAD FILTER - MP3 files: ${newMP3s.length} total, ${newMP3Attachments.length} attachments to download, ${newMP3Webpages.length} webpages filtered out`);
+						newMP3Attachments.forEach(f => console.log(`  ✅ Will download: ${f.sourcePath} -> ${f.targetPath.path}`));
+						newMP3Webpages.forEach(f => console.log(`  ❌ Filtered out: ${f.sourcePath} -> ${f.targetPath.path} (${f.constructor.name})`));
+					}
 
 					if (Settings.exportPreset != ExportPreset.RawDocuments)
 					{

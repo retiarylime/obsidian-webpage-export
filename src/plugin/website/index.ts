@@ -310,9 +310,33 @@ export class Index
 			this.sourceToWebpage.set(file.sourcePath, file);
 		}
 
-		if (file instanceof Attachment && file.sourcePath && !this.sourceToAttachment.has(file.sourcePath))
+		// CRITICAL FIX: Only store raw Attachments in sourceToAttachment, not Webpages
+		// This prevents Webpage instances from overriding raw binary Attachment instances
+		if (file instanceof Attachment && !(file instanceof Webpage) && file.sourcePath && !this.sourceToAttachment.has(file.sourcePath))
 		{
 			this.sourceToAttachment.set(file.sourcePath, file);
+			
+			// Debug: MP3 attachment mapping
+			if (file.sourcePath?.endsWith(".mp3")) {
+				console.log(`🎵 INDEX: Mapping MP3 raw attachment: ${file.sourcePath} -> ${file.targetPath.path} (type: ${file.constructor.name})`);
+			}
+		}
+		else if (file instanceof Attachment && !(file instanceof Webpage) && file.sourcePath && this.sourceToAttachment.has(file.sourcePath))
+		{
+			// Debug: Check if MP3 is being overridden
+			if (file.sourcePath?.endsWith(".mp3")) {
+				const existing = this.sourceToAttachment.get(file.sourcePath);
+				console.log(`🎵 INDEX: MP3 raw attachment mapping already exists - NOT overriding ${file.sourcePath}:`);
+				console.log(`  Existing: ${existing?.constructor.name} -> ${existing?.targetPath.path}`);
+				console.log(`  New: ${file.constructor.name} -> ${file.targetPath.path}`);
+			}
+		}
+		else if (file instanceof Webpage && file.sourcePath)
+		{
+			// Debug: Log when Webpages are NOT stored in sourceToAttachment
+			if (file.sourcePath?.endsWith(".mp3")) {
+				console.log(`🎵 INDEX: MP3 Webpage NOT stored in sourceToAttachment: ${file.sourcePath} -> ${file.targetPath.path} (type: ${file.constructor.name})`);
+			}
 		}
 
 		// only update the index if the file is new or updated
