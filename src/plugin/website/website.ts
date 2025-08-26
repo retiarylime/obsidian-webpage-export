@@ -125,7 +125,11 @@ export class Website
 		this.sourceFiles = files?.filter((file) => file) ?? [];
 
 		let rootPath = this.findCommonRootPath(this.sourceFiles);
-		this.exportOptions.exportRoot = rootPath;
+		
+		// CRITICAL FIX: Don't overwrite exportRoot if it's already been set to empty string (chunked export override)
+		if (this.exportOptions.exportRoot !== "") {
+			this.exportOptions.exportRoot = rootPath;
+		}
 		console.log("Root path: " + rootPath);
 
 		await AssetHandler.reloadAssets(this.exportOptions);
