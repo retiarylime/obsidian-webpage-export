@@ -107,6 +107,10 @@ export class ChunkedWebsiteExporter {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
 					
+					// CRITICAL: Process embedded attachments for each webpage in this chunk
+					// This matches the regular exporter flow: website.ts:290-292
+					await this.processChunkAttachments(chunkWebsite);
+					
 					// Validate chunk website before merging
 					if (!chunkWebsite.index) {
 						ExportLog.warning(`Chunk ${i + 1} missing index - skipping merge`);
@@ -468,6 +472,7 @@ export class ChunkedWebsiteExporter {
 	
 	/**
 	 * Merge search indices from chunk website into final website
+	 * This EXACTLY matches the regular exporter's addWebpageToMinisearch logic from index.ts
 	 */
 	private static async mergeSearchIndices(chunkWebsite: Website, finalWebsite: Website): Promise<void> {
 		try {
@@ -476,57 +481,85 @@ export class ChunkedWebsiteExporter {
 				return;
 			}
 			
-			// Get the JSON representation of the chunk search index to examine its structure
-			const chunkJson = chunkWebsite.index.minisearch.toJSON();
+			ExportLog.log(`🔍 Merging search index: ${chunkWebsite.index.webpages.length} webpages from chunk`);
 			
-			// Debug: Log the structure to understand what's available
-			ExportLog.log(`🔍 DEBUG: Chunk search index structure: ${JSON.stringify(Object.keys(chunkJson))}`);
-			ExportLog.log(`🔍 DEBUG: Document count: ${chunkJson.documentCount}`);
-			
-			// The most reliable approach is to iterate through the webpages and re-add them properly
-			// This ensures we get the full search content from the webpage's outputData
 			let mergedCount = 0;
+			let skippedCount = 0;
+			let errorCount = 0;
+			
 			for (const webpage of chunkWebsite.index.webpages) {
-				if (webpage && webpage.targetPath) {
-					const webpagePath = webpage.targetPath.path;
-					// Check if the webpage is already in the final index to avoid duplicates
-					if (!finalWebsite.index.minisearch.has(webpagePath)) {
-						// Re-create the search document using the webpage's actual data
-						try {
-							const headersInfo = await webpage.outputData.renderedHeadings;
-							// Remove title header if it's the first one
-							if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
-								headersInfo.shift();
-							}
-							const headers = headersInfo.map((header) => header.heading);
-
-							const searchDoc = {
-								title: webpage.title,
-								aliases: webpage.outputData.aliases,
-								headers: headers,
-								tags: webpage.outputData.allTags,
-								path: webpagePath,
-								content: webpage.outputData.description + " " + webpage.outputData.searchContent,
-							};
-							
-							finalWebsite.index.minisearch.add(searchDoc);
-							mergedCount++;
-						} catch (err) {
-							ExportLog.warning(`Failed to add search document for ${webpagePath}: ${err}`);
-						}
+				if (!webpage || !webpage.targetPath) {
+					skippedCount++;
+					continue;
+				}
+				
+				const webpagePath = webpage.targetPath.path;
+				
+				// Check if the webpage is already in the final index to avoid duplicates
+				if (finalWebsite.index.minisearch.has(webpagePath)) {
+					console.log(`🔍 SKIP: Search document already exists: ${webpagePath}`);
+					skippedCount++;
+					continue;
+				}
+				
+				try {
+					// Use EXACT same logic as regular exporter's addWebpageToMinisearch
+					// from index.ts:335-350
+					const headersInfo = await webpage.outputData.renderedHeadings;
+					
+					// Remove title header if it's the first one (exact match to regular exporter)
+					if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
+						headersInfo.shift();
 					}
+					
+					const headers = headersInfo.map((header) => header.heading);
+					
+					// Create search document with EXACT same structure as regular exporter
+					const searchDocument = {
+						title: webpage.title,
+						aliases: webpage.outputData.aliases,
+						headers: headers,
+						tags: webpage.outputData.allTags,
+						path: webpagePath,
+						content: webpage.outputData.description + " " + webpage.outputData.searchContent,
+					};
+					
+					// Validate search document completeness
+					if (!searchDocument.title) {
+						ExportLog.warning(`Search document missing title: ${webpagePath}`);
+					}
+					if (!searchDocument.content || searchDocument.content.trim() === " ") {
+						ExportLog.warning(`Search document missing content: ${webpagePath}`);
+					}
+					
+					// Add to final website's search index
+					finalWebsite.index.minisearch.add(searchDocument);
+					mergedCount++;
+					
+					console.log(`🔍 MERGED: ${webpagePath} (title: "${searchDocument.title}", content: ${searchDocument.content.length} chars, headers: ${headers.length}, tags: ${searchDocument.tags.length})`);
+					
+				} catch (err) {
+					ExportLog.error(err, `Failed to merge search document for ${webpagePath}`);
+					console.log(`🔍 ERROR: Could not merge search document for ${webpagePath}: ${err}`);
+					errorCount++;
 				}
 			}
 			
-			ExportLog.log(`✅ Successfully merged ${mergedCount} search documents from chunk`);
+			// Comprehensive merge summary
+			ExportLog.log(`✅ Search index merge complete: ${mergedCount} merged, ${skippedCount} skipped, ${errorCount} errors`);
+			
+			// Validate final search index state
+			const finalDocCount = finalWebsite.index.minisearch.documentCount;
+			console.log(`🔍 FINAL: Search index now contains ${finalDocCount} total documents`);
 			
 		} catch (error) {
-			ExportLog.error(error, "Failed to merge search indices");
+			ExportLog.error(error, "Critical failure in search index merging");
 		}
 	}
 	
 	/**
 	 * Regenerate file tree for the final merged website with ALL files
+	 * This ensures the file tree includes files from ALL chunks, not just the first one
 	 */
 	private static async regenerateFileTree(finalWebsite: Website): Promise<void> {
 		try {
@@ -534,18 +567,41 @@ export class ChunkedWebsiteExporter {
 				return; // File tree not enabled, skip
 			}
 			
-			ExportLog.log(`🌲 Regenerating file tree with ${finalWebsite.index.attachmentsShownInTree.length} files`);
+			ExportLog.log(`🌲 Regenerating file tree for merged website...`);
 			
-			// Debug: Log some sample files to see what we have
-			const sampleFiles = finalWebsite.index.attachmentsShownInTree.slice(0, 10);
-			console.log(`🌲 DEBUG: Sample attachmentsShownInTree files:`, sampleFiles.map(f => `${f.sourcePath} -> ${f.targetPath.path}`));
+			// CRITICAL: Rebuild attachmentsShownInTree to include ALL files from ALL chunks
+			// The regular exporter builds this during normal processing, but chunked export
+			// needs to explicitly rebuild it after merging
+			await this.rebuildAttachmentsShownInTree(finalWebsite);
 			
-			// Recreate file tree with all merged attachments
+			ExportLog.log(`🌲 Building file tree with ${finalWebsite.index.attachmentsShownInTree.length} files`);
+			
+			// Debug: Log file distribution to verify completeness
+			const filesByExtension = new Map<string, number>();
+			for (const file of finalWebsite.index.attachmentsShownInTree) {
+				const extension = file.sourcePath?.split('.').pop()?.toLowerCase() || 'unknown';
+				filesByExtension.set(extension, (filesByExtension.get(extension) || 0) + 1);
+			}
+			
+			const extensionSummary = Array.from(filesByExtension.entries())
+				.map(([ext, count]) => `${count} .${ext}`)
+				.join(', ');
+			console.log(`🌲 FILE TREE: File distribution - ${extensionSummary}`);
+			
+			// Debug: Log some sample files to verify paths
+			const sampleFiles = finalWebsite.index.attachmentsShownInTree.slice(0, 5);
+			console.log(`🌲 DEBUG: Sample attachmentsShownInTree files:`);
+			for (const file of sampleFiles) {
+				console.log(`  - ${file.sourcePath} -> ${file.targetPath.path} (root: "${file.sourcePathRootRelative}")`);
+			}
+			
+			// Create file tree with all merged files - exact same logic as regular exporter
 			const paths = finalWebsite.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
 			const { FileTree } = await import("../features/file-tree");
 			const { AssetLoader } = await import("../asset-loaders/base-asset");
 			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 			
+			// Configure file tree exactly like regular exporter
 			finalWebsite.fileTree = new FileTree(paths, false, true);
 			finalWebsite.fileTree.makeLinksWebStyle = finalWebsite.exportOptions.slugifyPaths ?? true;
 			finalWebsite.fileTree.showNestingIndicator = true;
@@ -555,11 +611,12 @@ export class ChunkedWebsiteExporter {
 			finalWebsite.fileTree.title = finalWebsite.exportOptions.siteName ?? app.vault.getName();
 			finalWebsite.fileTree.id = "file-explorer";
 			
+			// Generate file tree HTML
 			const tempContainer = document.createElement("div");
 			await finalWebsite.fileTree.generate(tempContainer);
 			const data = tempContainer.innerHTML;
 			
-			// Update tree order for all attachments
+			// Update tree order for all attachments (exact same logic as regular exporter)
 			finalWebsite.index.attachmentsShownInTree.forEach((file) => {
 				if (!file.sourcePathRootRelative) return;
 				const fileTreeItem = finalWebsite.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
@@ -569,11 +626,101 @@ export class ChunkedWebsiteExporter {
 			tempContainer.remove();
 			finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 			
-			ExportLog.log(`✅ File tree regenerated successfully`);
+			ExportLog.log(`✅ File tree regenerated with ${paths.length} files`);
 			
 		} catch (error) {
 			ExportLog.error(error, "Failed to regenerate file tree for merged website");
 		}
+	}
+	
+	/**
+	 * Rebuild attachmentsShownInTree to include ALL files from ALL merged chunks
+	 * This is critical because the file tree depends on this collection
+	 */
+	private static async rebuildAttachmentsShownInTree(finalWebsite: Website): Promise<void> {
+		try {
+			ExportLog.log(`🔧 Rebuilding attachmentsShownInTree collection...`);
+			
+			// Clear existing collection to start fresh
+			finalWebsite.index.attachmentsShownInTree = [];
+			
+			// Add all webpages to the tree (these should be shown)
+			for (const webpage of finalWebsite.index.webpages) {
+				if (webpage && webpage.targetPath) {
+					finalWebsite.index.attachmentsShownInTree.push(webpage);
+				}
+			}
+			
+			// Add all attachments that should be shown in tree
+			// This includes embedded files and standalone assets
+			for (const attachment of finalWebsite.index.attachments) {
+				if (attachment && attachment.targetPath) {
+					// Check if this attachment should be shown in tree
+					// (typically all attachments are shown unless specifically excluded)
+					const shouldShow = this.shouldAttachmentBeShownInTree(attachment);
+					if (shouldShow) {
+						finalWebsite.index.attachmentsShownInTree.push(attachment);
+					}
+				}
+			}
+			
+			// Remove duplicates based on targetPath
+			const seen = new Set<string>();
+			finalWebsite.index.attachmentsShownInTree = finalWebsite.index.attachmentsShownInTree.filter(file => {
+				if (!file.targetPath) return false;
+				const path = file.targetPath.path;
+				if (seen.has(path)) return false;
+				seen.add(path);
+				return true;
+			});
+			
+			// Sort by path for consistent tree structure
+			finalWebsite.index.attachmentsShownInTree.sort((a, b) => {
+				const pathA = a.sourcePathRootRelative || a.sourcePath || "";
+				const pathB = b.sourcePathRootRelative || b.sourcePath || "";
+				return pathA.localeCompare(pathB);
+			});
+			
+			ExportLog.log(`🔧 Rebuilt attachmentsShownInTree: ${finalWebsite.index.attachmentsShownInTree.length} files total`);
+			
+			// Debug: Log the breakdown
+			const webpageCount = finalWebsite.index.attachmentsShownInTree.filter(f => f.constructor.name.includes('Webpage')).length;
+			const attachmentCount = finalWebsite.index.attachmentsShownInTree.length - webpageCount;
+			console.log(`🔧 BREAKDOWN: ${webpageCount} webpages, ${attachmentCount} attachments`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to rebuild attachmentsShownInTree collection");
+		}
+	}
+	
+	/**
+	 * Determine if an attachment should be shown in the file tree
+	 */
+	private static shouldAttachmentBeShownInTree(attachment: any): boolean {
+		// Generally all attachments should be shown unless they are:
+		// 1. System files (CSS, JS, etc.)
+		// 2. Temporary files
+		// 3. Hidden files
+		
+		if (!attachment.sourcePath && !attachment.targetPath) return false;
+		
+		const sourcePath = attachment.sourcePath || "";
+		const targetPath = attachment.targetPath?.path || "";
+		
+		// Exclude system/library files
+		if (targetPath.includes('site-lib/') || 
+			targetPath.includes('search-index.json') || 
+			targetPath.includes('metadata.json')) {
+			return false;
+		}
+		
+		// Exclude temporary or generated files
+		if (sourcePath.includes('.obsidian-export-progress.json')) {
+			return false;
+		}
+		
+		// Include everything else (images, documents, media, etc.)
+		return true;
 	}
 	
 	/**
@@ -657,6 +804,76 @@ export class ChunkedWebsiteExporter {
 			await fs.unlink(progressFile);
 		} catch (error) {
 			// Ignore cleanup errors
+		}
+	}
+	
+	/**
+	 * Process embedded attachments for each webpage in the chunk
+	 * This matches the regular exporter flow: website.ts:290-292
+	 * Handles ALL file types: images, audio, video, PDFs, etc.
+	 */
+	private static async processChunkAttachments(chunkWebsite: Website): Promise<void> {
+		try {
+			ExportLog.log(`🔗 Processing embedded attachments for ${chunkWebsite.index.webpages.length} webpages in chunk`);
+			
+			let totalAttachments = 0;
+			const attachmentsByType = new Map<string, number>();
+			
+			for (const webpage of chunkWebsite.index.webpages) {
+				if (webpage && webpage.getAttachments) {
+					// Extract all embedded attachments from this webpage (images, audio, video, PDFs, etc.)
+					const attachments = await webpage.getAttachments();
+					
+					// Add attachments to the chunk's index
+					if (attachments && attachments.length > 0) {
+						chunkWebsite.index.addFiles(attachments);
+						totalAttachments += attachments.length;
+						
+						// Count attachments by file type for comprehensive debugging
+						for (const attachment of attachments) {
+							if (attachment.sourcePath) {
+								const extension = attachment.sourcePath.split('.').pop()?.toLowerCase() || 'unknown';
+								attachmentsByType.set(extension, (attachmentsByType.get(extension) || 0) + 1);
+								
+								// Debug log for various media types
+								if (['mp3', 'wav', 'ogg', 'aac', 'm4a', 'flac'].includes(extension)) {
+									console.log(`🎵 AUDIO: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
+								} else if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp', 'ico'].includes(extension)) {
+									console.log(`🖼️ IMAGE: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
+								} else if (['mp4', 'mov', 'avi', 'webm', 'mpeg', 'mkv'].includes(extension)) {
+									console.log(`🎬 VIDEO: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
+								} else if (extension === 'pdf') {
+									console.log(`📄 PDF: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
+								} else {
+									console.log(`📎 FILE: ${attachment.sourcePath} -> ${attachment.targetPath.path} (${extension})`);
+								}
+							}
+						}
+						
+						// Log summary for this webpage if it has embedded files
+						if (attachments.length > 0) {
+							const types = Array.from(attachmentsByType.entries())
+								.filter(([, count]) => count > 0)
+								.map(([ext, count]) => `${count} ${ext}`)
+								.join(', ');
+							console.log(`📋 WEBPAGE ${webpage.source.path}: ${attachments.length} embedded files (${types})`);
+						}
+					}
+				}
+			}
+			
+			// Comprehensive summary of all attachment types processed
+			if (attachmentsByType.size > 0) {
+				const summary = Array.from(attachmentsByType.entries())
+					.map(([ext, count]) => `${count} .${ext}`)
+					.join(', ');
+				ExportLog.log(`✅ Processed ${totalAttachments} embedded attachments: ${summary}`);
+			} else {
+				ExportLog.log(`✅ No embedded attachments found in this chunk`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to process embedded attachments for chunk");
 		}
 	}
 }
