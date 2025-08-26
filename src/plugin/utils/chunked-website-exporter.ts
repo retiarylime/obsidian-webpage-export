@@ -215,6 +215,10 @@ export class ChunkedWebsiteExporter {
 	 */
 	private static async buildChunkWebsite(files: TFile[], destination: Path, globalExportRoot: string, isFirstChunk: boolean = false): Promise<Website | undefined> {
 		try {
+			console.log(`🔧🔧 CHUNK BUILD START - globalExportRoot: "${globalExportRoot}"`);
+			console.log(`🔧🔧 CHUNK BUILD START - Settings.exportOptions.exportRoot BEFORE: "${Settings.exportOptions.exportRoot}"`);
+			console.log(`🔧🔧 CHUNK BUILD START - Settings.exportOptions.flattenExportPaths BEFORE: ${Settings.exportOptions.flattenExportPaths}`);
+			
 			// Create and build website EXACTLY like original exporter
 			const website = new Website(destination);
 			
@@ -228,18 +232,36 @@ export class ChunkedWebsiteExporter {
 			website.exportOptions.exportRoot = globalExportRoot;
 			website.exportOptions.flattenExportPaths = false;
 			
+			console.log(`🔧🔧 SETTINGS OVERRIDE APPLIED:`);
+			console.log(`🔧🔧   Settings.exportOptions.exportRoot: "${Settings.exportOptions.exportRoot}"`);
+			console.log(`🔧🔧   Settings.exportOptions.flattenExportPaths: ${Settings.exportOptions.flattenExportPaths}`);
+			console.log(`🔧🔧   website.exportOptions.exportRoot: "${website.exportOptions.exportRoot}"`);
+			console.log(`🔧🔧   website.exportOptions.flattenExportPaths: ${website.exportOptions.flattenExportPaths}`);
+			
 			ExportLog.log(`🔧 Pre-load Settings and website.exportOptions override - exportRoot: "${globalExportRoot}", flattenExportPaths: false`);
 			
 			// Load files - this will cause website.load() to calculate and overwrite website.exportOptions.exportRoot
+			console.log(`🔧🔧 CALLING website.load() with ${files.length} files`);
 			await website.load(files);
 			
 			// Log what the chunk calculated as its root after load()
 			const chunkCalculatedRoot = website.exportOptions.exportRoot;
+			console.log(`🔧🔧 POST-LOAD VALUES:`);
+			console.log(`🔧🔧   Chunk calculated root: "${chunkCalculatedRoot}"`);
+			console.log(`🔧🔧   Settings.exportOptions.exportRoot: "${Settings.exportOptions.exportRoot}"`);
+			console.log(`🔧🔧   Settings.exportOptions.flattenExportPaths: ${Settings.exportOptions.flattenExportPaths}`);
+			console.log(`🔧🔧   website.exportOptions.exportRoot: "${website.exportOptions.exportRoot}"`);
+			console.log(`🔧🔧   website.exportOptions.flattenExportPaths: ${website.exportOptions.flattenExportPaths}`);
+			
 			ExportLog.log(`🔧 Chunk calculated root after load(): "${chunkCalculatedRoot}" from ${files.length} files`);
 			
 			// CRITICAL: Override website.exportOptions AGAIN after load() since it got overwritten
 			website.exportOptions.exportRoot = globalExportRoot;
 			website.exportOptions.flattenExportPaths = false;
+			
+			console.log(`🔧🔧 FINAL OVERRIDE APPLIED:`);
+			console.log(`🔧🔧   website.exportOptions.exportRoot: "${website.exportOptions.exportRoot}"`);
+			console.log(`🔧🔧   website.exportOptions.flattenExportPaths: ${website.exportOptions.flattenExportPaths}`);
 			
 			ExportLog.log(`🔧 Post-load website.exportOptions re-override - exportRoot: "${globalExportRoot}"`);
 			
