@@ -107,9 +107,9 @@ export class ChunkedWebsiteExporter {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
 					
-					// CRITICAL: Process embedded attachments for each webpage in this chunk
-					// This matches the regular exporter flow: website.ts:290-292
-					await this.processChunkAttachments(chunkWebsite);
+					// NOTE: Attachment processing is handled automatically during website.build()
+					// via the same renderDocument() -> getAttachments() -> addFiles() sequence as regular exporter
+					// No need for separate processChunkAttachments call
 					
 					// Validate chunk website before merging
 					if (!chunkWebsite.index) {
@@ -807,73 +807,4 @@ export class ChunkedWebsiteExporter {
 		}
 	}
 	
-	/**
-	 * Process embedded attachments for each webpage in the chunk
-	 * This matches the regular exporter flow: website.ts:290-292
-	 * Handles ALL file types: images, audio, video, PDFs, etc.
-	 */
-	private static async processChunkAttachments(chunkWebsite: Website): Promise<void> {
-		try {
-			ExportLog.log(`🔗 Processing embedded attachments for ${chunkWebsite.index.webpages.length} webpages in chunk`);
-			
-			let totalAttachments = 0;
-			const attachmentsByType = new Map<string, number>();
-			
-			for (const webpage of chunkWebsite.index.webpages) {
-				if (webpage && webpage.getAttachments) {
-					// Extract all embedded attachments from this webpage (images, audio, video, PDFs, etc.)
-					const attachments = await webpage.getAttachments();
-					
-					// Add attachments to the chunk's index
-					if (attachments && attachments.length > 0) {
-						chunkWebsite.index.addFiles(attachments);
-						totalAttachments += attachments.length;
-						
-						// Count attachments by file type for comprehensive debugging
-						for (const attachment of attachments) {
-							if (attachment.sourcePath) {
-								const extension = attachment.sourcePath.split('.').pop()?.toLowerCase() || 'unknown';
-								attachmentsByType.set(extension, (attachmentsByType.get(extension) || 0) + 1);
-								
-								// Debug log for various media types
-								if (['mp3', 'wav', 'ogg', 'aac', 'm4a', 'flac'].includes(extension)) {
-									console.log(`🎵 AUDIO: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
-								} else if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp', 'ico'].includes(extension)) {
-									console.log(`🖼️ IMAGE: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
-								} else if (['mp4', 'mov', 'avi', 'webm', 'mpeg', 'mkv'].includes(extension)) {
-									console.log(`🎬 VIDEO: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
-								} else if (extension === 'pdf') {
-									console.log(`📄 PDF: ${attachment.sourcePath} -> ${attachment.targetPath.path}`);
-								} else {
-									console.log(`📎 FILE: ${attachment.sourcePath} -> ${attachment.targetPath.path} (${extension})`);
-								}
-							}
-						}
-						
-						// Log summary for this webpage if it has embedded files
-						if (attachments.length > 0) {
-							const types = Array.from(attachmentsByType.entries())
-								.filter(([, count]) => count > 0)
-								.map(([ext, count]) => `${count} ${ext}`)
-								.join(', ');
-							console.log(`📋 WEBPAGE ${webpage.source.path}: ${attachments.length} embedded files (${types})`);
-						}
-					}
-				}
-			}
-			
-			// Comprehensive summary of all attachment types processed
-			if (attachmentsByType.size > 0) {
-				const summary = Array.from(attachmentsByType.entries())
-					.map(([ext, count]) => `${count} .${ext}`)
-					.join(', ');
-				ExportLog.log(`✅ Processed ${totalAttachments} embedded attachments: ${summary}`);
-			} else {
-				ExportLog.log(`✅ No embedded attachments found in this chunk`);
-			}
-			
-		} catch (error) {
-			ExportLog.error(error, "Failed to process embedded attachments for chunk");
-		}
-	}
 }
