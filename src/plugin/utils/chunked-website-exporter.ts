@@ -42,6 +42,7 @@ export class ChunkedWebsiteExporter {
 	private static readonly PROGRESS_FILE = ".obsidian-export-progress.json";
 	private static readonly LOG_FILE = "log.txt"; // Persistent log file
 	private static logFilePath: string | null = null;
+	private static originalExportLogMethods: any = null;
 	
 	/**
 	 * Initialize persistent logging for chunked export
@@ -51,6 +52,9 @@ export class ChunkedWebsiteExporter {
 			const fs = require('fs').promises;
 			const path = require('path');
 			this.logFilePath = path.join(destination.path, this.LOG_FILE);
+			
+			// Intercept ExportLog methods to also write to file
+			this.interceptExportLogMethods();
 			
 			if (!isResuming) {
 				// Fresh export - create new log with header
@@ -84,6 +88,74 @@ EXPORT RESUMED: ${timestamp}
 	}
 	
 	/**
+	 * Intercept ExportLog methods to write all logs to persistent file
+	 */
+	private static interceptExportLogMethods(): void {
+		if (this.originalExportLogMethods || !this.logFilePath) return;
+		
+		// Store original methods
+		this.originalExportLogMethods = {
+			log: ExportLog.log,
+			warning: ExportLog.warning,
+			error: ExportLog.error,
+			progress: ExportLog.progress
+		};
+		
+		const self = this;
+		
+		// Override log method
+		ExportLog.log = function(message: any, messageTitle: string = "") {
+			self.originalExportLogMethods.log.call(this, message, messageTitle);
+			const logMessage = self.formatLogMessage('INFO', messageTitle, message);
+			self.logToPersistentFile(logMessage);
+		};
+		
+		// Override warning method
+		ExportLog.warning = function(message: any, messageTitle: string = "") {
+			self.originalExportLogMethods.warning.call(this, message, messageTitle);
+			const logMessage = self.formatLogMessage('WARNING', messageTitle, message);
+			self.logToPersistentFile(logMessage);
+		};
+		
+		// Override error method
+		ExportLog.error = function(message: any, messageTitle: string = "", fatal: boolean = false) {
+			self.originalExportLogMethods.error.call(this, message, messageTitle, fatal);
+			const logMessage = self.formatLogMessage(fatal ? 'FATAL' : 'ERROR', messageTitle, message);
+			self.logToPersistentFile(logMessage);
+		};
+		
+		// Override progress method
+		ExportLog.progress = function(progressBy: number, message: string, subMessage: string, progressColor?: string) {
+			self.originalExportLogMethods.progress.call(this, progressBy, message, subMessage, progressColor);
+			const logMessage = `PROGRESS: ${message} - ${subMessage}`;
+			self.logToPersistentFile(logMessage);
+		};
+	}
+	
+	/**
+	 * Restore original ExportLog methods
+	 */
+	private static restoreExportLogMethods(): void {
+		if (!this.originalExportLogMethods) return;
+		
+		ExportLog.log = this.originalExportLogMethods.log;
+		ExportLog.warning = this.originalExportLogMethods.warning;
+		ExportLog.error = this.originalExportLogMethods.error;
+		ExportLog.progress = this.originalExportLogMethods.progress;
+		
+		this.originalExportLogMethods = null;
+	}
+	
+	/**
+	 * Format log message for persistent storage
+	 */
+	private static formatLogMessage(level: string, title: string, message: any): string {
+		const messageString = (typeof message === "string") ? message : JSON.stringify(message);
+		const titleString = title ? `${title}: ` : "";
+		return `[${level}] ${titleString}${messageString}`;
+	}
+	
+	/**
 	 * Write a log entry to the persistent log file
 	 */
 	private static async logToPersistentFile(message: string): Promise<void> {
@@ -98,27 +170,6 @@ EXPORT RESUMED: ${timestamp}
 			// Silently fail to avoid disrupting export
 			console.error("Failed to write to persistent log:", error);
 		}
-	}
-	
-	/**
-	 * Enhanced logging that writes to both console and persistent log file
-	 */
-	private static async logBoth(message: string, level: 'log' | 'warning' | 'error' = 'log'): Promise<void> {
-		// Always log to console via ExportLog
-		switch (level) {
-			case 'log':
-				ExportLog.log(message);
-				break;
-			case 'warning':
-				ExportLog.warning(message);
-				break;
-			case 'error':
-				ExportLog.error(message, "Chunked Export Error");
-				break;
-		}
-		
-		// Also log to persistent file
-		await this.logToPersistentFile(message);
 	}
 	
 	/**
@@ -155,17 +206,17 @@ EXPORT RESUMED: ${timestamp}
 			// Initialize persistent logging
 			await this.initializePersistentLogging(destination, isResuming);
 			
-			await this.logBoth(`🔄 Starting chunked export of ${files.length} files (chunks: ${chunkSize})`);
+			await this.logToPersistentFile(`🔄 Starting chunked export of ${files.length} files (chunks: ${chunkSize})`);
 			
 			if (isResuming) {
 				startChunk = existingProgress.completedChunks.length;
 				resumeFromExistingState = !!existingProgress.lastChunkWebsiteState;
 				
 				if (resumeFromExistingState) {
-					await this.logBoth(`🔄 CRASH RECOVERY: Resuming from chunk ${startChunk + 1} with preserved website state`);
-					await this.logBoth(`🔄 Previous state: ${existingProgress.lastChunkWebsiteState?.webpages?.length || 0} pages, ${existingProgress.lastChunkWebsiteState?.attachments?.length || 0} attachments`);
+					ExportLog.log(`🔄 CRASH RECOVERY: Resuming from chunk ${startChunk + 1} with preserved website state`);
+					ExportLog.log(`🔄 Previous state: ${existingProgress.lastChunkWebsiteState?.webpages?.length || 0} pages, ${existingProgress.lastChunkWebsiteState?.attachments?.length || 0} attachments`);
 				} else {
-					await this.logBoth(`📤 Resuming from chunk ${startChunk + 1} (no preserved state)`);
+					ExportLog.log(`📤 Resuming from chunk ${startChunk + 1} (no preserved state)`);
 				}
 			}
 			
@@ -174,22 +225,22 @@ EXPORT RESUMED: ${timestamp}
 			ExportLog.addToProgressCap(files.length * 2);
 			
 			const chunks = this.createChunks(files, chunkSize);
-			await this.logBoth(`Created ${chunks.length} chunks for processing`);
+			ExportLog.log(`Created ${chunks.length} chunks for processing`);
 			
 		// CRITICAL: Calculate global exportRoot from ALL files using exact same logic as regular exporter
 		// Use existing progress value if resuming to ensure consistency
 		const globalExportRoot = existingProgress?.globalExportRoot || this.findCommonRootPath(files);
-		await this.logBoth(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
+		ExportLog.log(`🔧 Global export root for all chunks: "${globalExportRoot}"`);
 		console.log("Global root path: " + globalExportRoot); // Match original Website logging
 		
 		// Debug: log sample file paths to understand structure
 		const sampleFiles = files.slice(0, 5);
-		await this.logBoth(`🔧 Sample file paths:`);
+		ExportLog.log(`🔧 Sample file paths:`);
 		for (const file of sampleFiles) {
-			await this.logBoth(`   - "${file.path}"`);
+			ExportLog.log(`   - "${file.path}"`);
 		}
 
-		await this.logBoth(`🔧 Using ${existingProgress?.globalExportRoot ? 'restored' : 'calculated'} globalExportRoot to match regular exporter behavior exactly`);
+		ExportLog.log(`🔧 Using ${existingProgress?.globalExportRoot ? 'restored' : 'calculated'} globalExportRoot to match regular exporter behavior exactly`);
 		
 		const progress: ChunkProgress = {
 			totalChunks: chunks.length,
@@ -207,12 +258,12 @@ EXPORT RESUMED: ${timestamp}
 			
 			for (let i = startChunk; i < chunks.length; i++) {
 				if (this.isCancelled()) {
-					await this.logBoth("Export cancelled", 'warning');
+					ExportLog.warning("Export cancelled");
 					await this.saveProgress(progress);
 					return undefined;
 				}
 				
-				await this.logBoth(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
+				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
 				
 				try {
 					// Build chunk website with calculated globalExportRoot to match regular exporter exactly
@@ -227,19 +278,19 @@ EXPORT RESUMED: ${timestamp}
 					
 					// Validate chunk website before merging
 					if (!chunkWebsite.index) {
-						await this.logBoth(`Chunk ${i + 1} missing index - skipping merge`, 'warning');
+						ExportLog.warning(`Chunk ${i + 1} missing index - skipping merge`);
 						continue;
 					}
 					
 					// Merge into final website - maintains all data structures
 					if (i === 0) {
 						finalWebsite = chunkWebsite; // First chunk becomes the base
-						await this.logBoth(`🏗️ First chunk set as base: ${finalWebsite.index.attachmentsShownInTree.length} files in tree`);
+						ExportLog.log(`🏗️ First chunk set as base: ${finalWebsite.index.attachmentsShownInTree.length} files in tree`);
 					} else {
 						if (finalWebsite && finalWebsite.index) {
 							await this.mergeWebsites(chunkWebsite, finalWebsite);
 						} else {
-							await this.logBoth(`Final website invalid at chunk ${i + 1} - reinitializing`, 'warning');
+							ExportLog.warning(`Final website invalid at chunk ${i + 1} - reinitializing`);
 							finalWebsite = chunkWebsite;
 						}
 					}
@@ -250,7 +301,7 @@ EXPORT RESUMED: ${timestamp}
 					// Enhanced: Save website state for true continuity across restarts
 					if (finalWebsite) {
 						progress.lastChunkWebsiteState = this.serializeWebsiteState(finalWebsite);
-						await this.logBoth(`💾 Saved website state after chunk ${i + 1} (${progress.lastChunkWebsiteState.webpages.length} pages, ${progress.lastChunkWebsiteState.attachments.length} attachments)`);
+						ExportLog.log(`💾 Saved website state after chunk ${i + 1} (${progress.lastChunkWebsiteState.webpages.length} pages, ${progress.lastChunkWebsiteState.attachments.length} attachments)`);
 					}
 					
 					await this.saveProgress(progress);
@@ -259,7 +310,7 @@ EXPORT RESUMED: ${timestamp}
 					await this.performMemoryCleanup(i + 1, chunks.length);
 					
 				} catch (error) {
-					await this.logBoth(`Error in chunk ${i + 1}: ${error}`, 'error');
+					ExportLog.error(error, `Error in chunk ${i + 1}`);
 					await this.saveProgress(progress);
 					throw error;
 				}
@@ -267,7 +318,7 @@ EXPORT RESUMED: ${timestamp}
 			
 			// Finalize the website EXACTLY like original exporter
 			if (finalWebsite) {
-				await this.logBoth("🎯 Finalizing website - identical to original exporter");
+				ExportLog.log("🎯 Finalizing website - identical to original exporter");
 				
 				// CRITICAL: Regenerate file tree with ALL merged files
 				await this.regenerateFileTree(finalWebsite);
@@ -275,46 +326,49 @@ EXPORT RESUMED: ${timestamp}
 				await finalWebsite.index.finalize();
 				
 				// DEBUG: Validate final website state before returning
-				await this.logBoth(`🔍 FINAL VALIDATION: Search index has ${finalWebsite.index.minisearch?.documentCount || 0} documents`);
-				await this.logBoth(`🔍 FINAL VALIDATION: Website data has ${Object.keys(finalWebsite.index.websiteData.webpages).length} webpages in metadata`);
-				await this.logBoth(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.attachments.length} attachments in metadata`);
-				await this.logBoth(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.shownInTree.length} files in tree metadata`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Search index has ${finalWebsite.index.minisearch?.documentCount || 0} documents`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${Object.keys(finalWebsite.index.websiteData.webpages).length} webpages in metadata`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.attachments.length} attachments in metadata`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.shownInTree.length} files in tree metadata`);
 				
 				// DEBUG: Test that the site-lib data generation will work
 				try {
 					const testWebsiteData = finalWebsite.index.websiteDataAttachment();
 					const testSearchIndex = finalWebsite.index.indexDataAttachment();
 					
-					await this.logBoth(`🔍 SITE-LIB TEST: metadata.json will be ${testWebsiteData.data?.length || 0} bytes`);
-					await this.logBoth(`🔍 SITE-LIB TEST: search-index.json will be ${testSearchIndex.data?.length || 0} bytes`);
+					ExportLog.log(`🔍 SITE-LIB TEST: metadata.json will be ${testWebsiteData.data?.length || 0} bytes`);
+					ExportLog.log(`🔍 SITE-LIB TEST: search-index.json will be ${testSearchIndex.data?.length || 0} bytes`);
 					
 					if (testWebsiteData.data && testWebsiteData.data.length > 100) {
-						await this.logBoth(`✅ SITE-LIB: Website metadata generation ready`);
+						ExportLog.log(`✅ SITE-LIB: Website metadata generation ready`);
 					} else {
-						await this.logBoth("❌ SITE-LIB: Website metadata generation failed - data too small", 'error');
+						ExportLog.error("❌ SITE-LIB: Website metadata generation failed - data too small");
 					}
 					
 					if (testSearchIndex.data && testSearchIndex.data.length > 10) {
-						await this.logBoth(`✅ SITE-LIB: Search index generation ready`);
+						ExportLog.log(`✅ SITE-LIB: Search index generation ready`);
 					} else {
-						await this.logBoth("❌ SITE-LIB: Search index generation failed - data too small", 'error');
+						ExportLog.error("❌ SITE-LIB: Search index generation failed - data too small");
 					}
 				} catch (siteLibError) {
-					await this.logBoth(`❌ SITE-LIB: Failed to test site-lib data generation: ${siteLibError}`, 'error');
+					ExportLog.error(siteLibError, "❌ SITE-LIB: Failed to test site-lib data generation");
 				}
 				
 				// Clean up progress
 				await this.cleanupProgress(destination);
 				
-				await this.logBoth(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
+				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
 			}
 			
 			return finalWebsite;
 			
 		} catch (error) {
-			await this.logBoth(`Chunked export failed: ${error}`, 'error');
+			ExportLog.error(error, "Chunked export failed");
 			return undefined;
 		} finally {
+			// Restore original ExportLog methods
+			this.restoreExportLogMethods();
+			
 			// Final log entry
 			await this.logToPersistentFile(`
 =============================================================================
