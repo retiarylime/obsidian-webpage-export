@@ -50,8 +50,13 @@ export class HTMLExporter
 
 	public static async exportFiles(files: TFile[], destination: Path, saveFiles: boolean, deleteOld: boolean) : Promise<Website | undefined>
 	{
+		// DEBUG: Always log export decision
+		ExportLog.log(`🔍 EXPORT DECISION: ${files.length} files detected`);
+		const shouldUseChunked = ChunkedWebsiteExporter.shouldUseChunkedExport(files);
+		ExportLog.log(`🔍 EXPORT DECISION: shouldUseChunkedExport = ${shouldUseChunked} (threshold: >10 files)`);
+		
 		// Check if we should use chunked export for large file sets
-		if (ChunkedWebsiteExporter.shouldUseChunkedExport(files))
+		if (shouldUseChunked)
 		{
 			ExportLog.log(`📦 Large vault detected (${files.length} files) - using chunked export`);
 			
@@ -136,6 +141,7 @@ export class HTMLExporter
 		}
 
 		// Regular export for smaller vaults
+		ExportLog.log(`📄 Small vault detected (${files.length} files) - using regular export`);
 		MarkdownRendererAPI.beginBatch();
 		let website = undefined;
 		try

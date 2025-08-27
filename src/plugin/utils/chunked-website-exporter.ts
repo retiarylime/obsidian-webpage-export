@@ -153,6 +153,35 @@ export class ChunkedWebsiteExporter {
 				
 				await finalWebsite.index.finalize();
 				
+				// DEBUG: Validate final website state before returning
+				ExportLog.log(`🔍 FINAL VALIDATION: Search index has ${finalWebsite.index.minisearch?.documentCount || 0} documents`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${Object.keys(finalWebsite.index.websiteData.webpages).length} webpages in metadata`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.attachments.length} attachments in metadata`);
+				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.shownInTree.length} files in tree metadata`);
+				
+				// DEBUG: Test that the site-lib data generation will work
+				try {
+					const testWebsiteData = finalWebsite.index.websiteDataAttachment();
+					const testSearchIndex = finalWebsite.index.indexDataAttachment();
+					
+					ExportLog.log(`🔍 SITE-LIB TEST: metadata.json will be ${testWebsiteData.data?.length || 0} bytes`);
+					ExportLog.log(`🔍 SITE-LIB TEST: search-index.json will be ${testSearchIndex.data?.length || 0} bytes`);
+					
+					if (testWebsiteData.data && testWebsiteData.data.length > 100) {
+						ExportLog.log(`✅ SITE-LIB: Website metadata generation ready`);
+					} else {
+						ExportLog.error("❌ SITE-LIB: Website metadata generation failed - data too small");
+					}
+					
+					if (testSearchIndex.data && testSearchIndex.data.length > 10) {
+						ExportLog.log(`✅ SITE-LIB: Search index generation ready`);
+					} else {
+						ExportLog.error("❌ SITE-LIB: Search index generation failed - data too small");
+					}
+				} catch (siteLibError) {
+					ExportLog.error(siteLibError, "❌ SITE-LIB: Failed to test site-lib data generation");
+				}
+				
 				// Clean up progress
 				await this.cleanupProgress(destination);
 				
