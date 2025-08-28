@@ -1523,14 +1523,24 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.error(searchError, "Failed to generate search-index.json");
 			}
 			
-			// 3. Generate file-tree-content.html INCREMENTALLY (contains ALL chunks)
+			// 3. Get file-tree-content.html via AssetHandler system (same as regular exporter)
 			try {
 				if (website.fileTreeAsset) {
-					filesToDownload.push(website.fileTreeAsset);
 					const totalTreeFiles = website.index.attachmentsShownInTree?.length || 0;
 					ExportLog.log(`✅ Generated file-tree-content.html INCREMENTALLY (${website.fileTreeAsset.data?.length || 0} bytes) - includes ${totalTreeFiles} files from ALL ${currentChunk} chunks`);
 				} else {
 					ExportLog.warning(`⚠️ File tree asset not available - skipping file-tree-content.html`);
+				}
+				
+				// Get all pending AssetHandler downloads (includes file tree asset)
+				const { AssetHandler } = await import("../asset-loaders/asset-handler");
+				const assetHandlerDownloads = AssetHandler.getDownloads(website.destination, website.exportOptions);
+				const fileTreeDownloads = assetHandlerDownloads.filter((asset: any) => 
+					asset.filename === "file-tree.html" || asset.filename === "file-tree-content.html"
+				);
+				if (fileTreeDownloads.length > 0) {
+					filesToDownload.push(...fileTreeDownloads);
+					ExportLog.log(`📁 Added ${fileTreeDownloads.length} file tree assets from AssetHandler`);
 				}
 			} catch (fileTreeError) {
 				ExportLog.error(fileTreeError, "Failed to add file-tree-content.html to download queue");
@@ -1722,35 +1732,11 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 			tempContainer.remove();
 
-			// Create the file tree asset (generated content needs proper path setup)
-			// CRITICAL: Manually construct proper relative path to avoid AssetLoader path issues
-			const { Path } = await import("../utils/path");
-			const { Attachment } = await import("../utils/downloadable");
-			const { LoadMethod } = await import("../asset-loaders/asset-types");
-			
-			// Create proper relative path with working directory set (same structure as regular website)
-			const fileTreeRelativePath = new Path("site-lib/html/file-tree.html");
-			fileTreeRelativePath.setWorkingDirectory(website.destination.path);
-			
-			// Create attachment with proper path (bypassing AssetLoader constructor issues)
-			const fileTreeAttachment = new Attachment(htmlData, fileTreeRelativePath, null, website.exportOptions);
-			// Add AssetLoader properties for compatibility with existing code
-			(fileTreeAttachment as any).type = AssetType.HTML;
-			(fileTreeAttachment as any).inlinePolicy = InlinePolicy.Auto;
-			(fileTreeAttachment as any).mutability = Mutability.Temporary;
-			(fileTreeAttachment as any).minify = true;
-			(fileTreeAttachment as any).loadMethod = LoadMethod.Async;
-			(fileTreeAttachment as any).loadPriority = 100;
-			(fileTreeAttachment as any).onlineURL = undefined;
-			(fileTreeAttachment as any).childAssets = [];
-			// Add the required methods
-			(fileTreeAttachment as any).load = async () => {};
-			(fileTreeAttachment as any).minifyAsset = async () => {};
-			(fileTreeAttachment as any).isInlineFormat = () => false;
-			(fileTreeAttachment as any).getHTML = () => htmlData;
-			
-			// Cast to AssetLoader to satisfy TypeScript
-			website.fileTreeAsset = fileTreeAttachment as any;
+			// Create the file tree asset (use EXACT same approach as regular website)
+			// CRITICAL: Ensure AssetHandler is initialized with final website's options
+			const { AssetHandler } = await import("../asset-loaders/asset-handler");
+			await AssetHandler.reloadAssets(website.exportOptions);
+			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
 			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
