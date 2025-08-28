@@ -383,8 +383,15 @@ EXPORT RESUMED: ${timestamp}
 				// This is essential for crash recovery where attachments may not be in newFiles/updatedFiles
 				await this.ensureAttachmentsAreQueued(finalWebsite);
 				
-				// CRITICAL: Regenerate file tree with ALL merged files
-				await this.regenerateFileTree(finalWebsite);
+				// CRITICAL: Only regenerate file tree for fresh exports
+				// When resuming from crash, file tree was already built incrementally and is complete
+				if (isResuming && startChunk > 0) {
+					ExportLog.log("🌲 CRASH RECOVERY: Skipping file tree regeneration - already built incrementally");
+					ExportLog.log(`🌲 CRASH RECOVERY: File tree contains ${finalWebsite.index.attachmentsShownInTree.length} files from incremental builds`);
+				} else {
+					ExportLog.log("🌲 FRESH EXPORT: Regenerating file tree with ALL merged files");
+					await this.regenerateFileTree(finalWebsite);
+				}
 				
 				await finalWebsite.index.finalize();
 				
@@ -1532,6 +1539,25 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.log(`ℹ️ No existing metadata found (will create new one)`);
 			}
 			
+			// CRITICAL: Try to restore existing file tree asset from disk 
+			// This prevents recreating file-tree-content.html when resuming from crash
+			const fileTreePath = path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html');
+			try {
+				const fileTreeData = await fs.readFile(fileTreePath, 'utf8');
+				if (fileTreeData && fileTreeData.length > 0) {
+					const { AssetLoader } = await import("../asset-loaders/base-asset");
+					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+					
+					// Restore the file tree asset from existing file on disk
+					website.fileTreeAsset = new AssetLoader("file-tree.html", fileTreeData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+					ExportLog.log(`✅ CRASH RECOVERY: Restored file tree asset from disk (${fileTreeData.length} bytes) - will be preserved`);
+				} else {
+					ExportLog.log(`⚠️ File tree file exists but is empty`);
+				}
+			} catch (fileTreeError) {
+				ExportLog.log(`ℹ️ No existing file tree found on disk (will create fresh one incrementally)`);
+			}
+			
 		} catch (error) {
 			ExportLog.error(error, "Failed to load existing website data from disk");
 		}
@@ -1920,7 +1946,52 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			const { AssetLoader } = await import("../asset-loaders/base-asset");
 			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 
-			// CRITICAL: For first chunk, create new tree. For subsequent chunks, extend existing tree
+			// CRITICAL: Check if we already have a file tree asset from crash recovery
+			// If so, preserve it and only update with new data, don't recreate from scratch
+			const hasExistingFileTreeAsset = website.fileTreeAsset && website.fileTreeAsset.data;
+			
+			if (hasExistingFileTreeAsset && currentChunk > 1) {
+				ExportLog.log(`🌲 CRASH RECOVERY: File tree asset already exists (${website.fileTreeAsset.data.length} bytes) - updating incrementally`);
+				
+				// CRITICAL: When resuming from crash, we already have a complete file tree from previous chunks
+				// We only need to ensure the tree includes current chunk files
+				// Don't recreate the entire tree as it would overwrite the existing file-tree-content.html
+				
+				// Update the file tree structure with all accumulated files but preserve the existing asset data
+				const allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+				ExportLog.log(`🌲 CRASH RECOVERY: Updating tree structure with ${allPaths.length} total accumulated files`);
+				
+				// Create file tree structure for tree order calculations but don't regenerate HTML
+				website.fileTree = new FileTree(allPaths, false, true);
+				website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
+				website.fileTree.showNestingIndicator = true;
+				website.fileTree.generateWithItemsClosed = true;
+				website.fileTree.showFileExtentionTags = true;
+				website.fileTree.hideFileExtentionTags = ["md"];
+				website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
+				website.fileTree.id = "file-explorer";
+				
+				// Generate minimal tree structure for tree order calculation (but don't use the HTML)
+				const tempContainer = document.createElement("div");
+				await website.fileTree.generate(tempContainer);
+				
+				// Update tree order for all attachments shown in tree
+				website.index.attachmentsShownInTree.forEach((file) => {
+					if (!file.sourcePathRootRelative) return;
+					const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
+					file.treeOrder = fileTreeItem?.treeOrder ?? 0;
+				});
+				
+				tempContainer.remove();
+				
+				// CRITICAL: Keep the existing file tree asset data - don't overwrite it
+				// This preserves the existing file-tree-content.html that was built incrementally
+				ExportLog.log(`✅ CRASH RECOVERY: File tree structure updated while preserving existing asset (${website.fileTreeAsset.data.length} bytes)`);
+				
+				return; // Exit early - don't recreate the file tree asset
+			}
+
+			// CRITICAL: For first chunk or when no existing asset, create new tree
 			let allPaths: Path[] = [];
 			
 			if (currentChunk === 1 || !website.fileTree) {
