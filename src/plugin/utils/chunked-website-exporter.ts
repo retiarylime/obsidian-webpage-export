@@ -792,7 +792,9 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					fields: ['title', 'aliases', 'headers', 'tags', 'content'],
 					storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
 					processTerm: (term: any, _fieldName: any) =>
-						stopWords.includes(term) ? null : term.toLowerCase()
+						stopWords.includes(term) ? null : term.toLowerCase(),
+					// CRITICAL: Disable auto-vacuum to prevent TreeIterator corruption
+					autoVacuum: false
 				};
 				finalWebsite.index.minisearch = new MiniSearch(minisearchOptions);
 				ExportLog.log("🔍 Recreated corrupted MiniSearch object");
@@ -963,7 +965,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				fields: ['title', 'aliases', 'headers', 'tags', 'content'],
 				storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
 				processTerm: (term: any, _fieldName: any) =>
-					stopWords.includes(term) ? null : term.toLowerCase()
+					stopWords.includes(term) ? null : term.toLowerCase(),
+				autoVacuum: false  // Disable auto-vacuum to prevent TreeIterator corruption
 			};
 			
 			// Create fresh MiniSearch instance
@@ -1019,7 +1022,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				fields: ['title', 'aliases', 'headers', 'tags', 'content'],
 				storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
 				processTerm: (term: any, _fieldName: any) =>
-					stopWords.includes(term) ? null : term.toLowerCase()
+					stopWords.includes(term) ? null : term.toLowerCase(),
+				autoVacuum: false  // Disable auto-vacuum to prevent TreeIterator corruption
 			};
 			website.index.minisearch = new MiniSearch(minisearchOptions);
 		}
@@ -1443,7 +1447,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 							fields: ['title', 'aliases', 'headers', 'tags', 'content'],
 							storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
 							processTerm: (term: any, _fieldName: any) =>
-								stopWords.includes(term) ? null : term.toLowerCase()
+								stopWords.includes(term) ? null : term.toLowerCase(),
+							autoVacuum: false  // Disable auto-vacuum to prevent TreeIterator corruption
 						};
 						website.index.minisearch = new MiniSearch(minisearchOptions);
 						

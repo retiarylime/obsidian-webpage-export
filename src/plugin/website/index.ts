@@ -29,7 +29,10 @@ export class Index
 		fields: ['title', 'aliases', 'headers', 'tags', 'content'],
 		storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
 		processTerm: (term:any, _fieldName:any) =>
-			this.stopWords.includes(term) ? null : term.toLowerCase()
+			this.stopWords.includes(term) ? null : term.toLowerCase(),
+		// CRITICAL: Disable auto-vacuum to prevent TreeIterator corruption
+		// Auto-vacuum can corrupt the tree structure during iteration
+		autoVacuum: false
 	}
 
 	public webpages: Webpage[] = [];
@@ -548,10 +551,26 @@ export class Index
 						if (!this.minisearch) return;
 						needsDiscard = false; // Skip discard after rebuild
 					} else {
-						this.minisearch.discard(webpagePath);
+						// CRITICAL: Wrap discard operation to catch TreeIterator corruption
+						// The error often occurs during vacuum operations triggered by discard
+						try {
+							this.minisearch.discard(webpagePath);
+						} catch (discardError) {
+							// Check if this is a TreeIterator corruption error
+							if (discardError.message && (discardError.message.includes('keys') || 
+							   discardError.message.includes('TreeIterator') || 
+							   discardError.message.includes('Cannot read properties of undefined'))) {
+								ExportLog.warning(`Detected MiniSearch TreeIterator corruption during discard for ${webpagePath}, rebuilding index`);
+								await this.rebuildMinisearch();
+								if (!this.minisearch) return; // Rebuild failed, abort
+							} else {
+								// Re-throw non-TreeIterator errors
+								throw discardError;
+							}
+						}
 					}
 				} catch (discardError) {
-					// MiniSearch TreeIterator error - index is corrupted, rebuild it
+					// Fallback: MiniSearch TreeIterator error - index is corrupted, rebuild it
 					ExportLog.warning(`MiniSearch discard failed for ${webpagePath}, rebuilding index: ${discardError.message}`);
 					await this.rebuildMinisearch();
 					if (!this.minisearch) return; // Rebuild failed, abort
@@ -591,6 +610,25 @@ export class Index
 			content: ((webpage.outputData?.description || '') + " " + (webpage.outputData?.searchContent || '')).trim() || webpage.title || 'No content',
 		};
 
+		// CRITICAL: Comprehensive document validation before adding to MiniSearch
+		if (!searchDocument.id || typeof searchDocument.id !== 'string' || searchDocument.id.length === 0) {
+			ExportLog.warning(`Invalid document ID for ${webpagePath}, skipping search index entry`);
+			return;
+		}
+		
+		if (!searchDocument.title || typeof searchDocument.title !== 'string') {
+			searchDocument.title = 'Untitled';
+		}
+		
+		if (!searchDocument.content || typeof searchDocument.content !== 'string') {
+			searchDocument.content = searchDocument.title;
+		}
+		
+		// Ensure arrays don't contain null/undefined values
+		searchDocument.aliases = searchDocument.aliases.filter(a => a != null && typeof a === 'string');
+		searchDocument.headers = searchDocument.headers.filter(h => h != null && typeof h === 'string');
+		searchDocument.tags = searchDocument.tags.filter(t => t != null && typeof t === 'string');
+		
 		// CRITICAL: Safe add operation with error recovery
 		try {
 			if (!this.minisearch) return; // Safety check
