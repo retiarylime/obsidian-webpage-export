@@ -511,21 +511,50 @@ export class Index
 
 		const webpagePath = webpage.targetPath.path;
 		
-		// CRITICAL: Safe discard operation with comprehensive error handling
+		// CRITICAL: Complete isolation of MiniSearch operations to prevent TreeIterator corruption
 		try {
-			if (this.minisearch.has(webpagePath)) {
+			// First, validate the minisearch instance is healthy
+			if (!this.minisearch || typeof this.minisearch.has !== 'function') {
+				ExportLog.warning(`MiniSearch instance invalid, rebuilding from scratch`);
+				await this.rebuildMinisearch();
+				if (!this.minisearch) return; // Still failed, abort
+			}
+
+			// CRITICAL: Safe discard operation with comprehensive error handling
+			let needsDiscard = false;
+			try {
+				needsDiscard = this.minisearch.has(webpagePath);
+			} catch (hasError) {
+				ExportLog.warning(`MiniSearch has() check failed, rebuilding index: ${hasError.message}`);
+				await this.rebuildMinisearch();
+				if (!this.minisearch) return; // Rebuild failed, abort
+				
+				// Try has() again after rebuild
+				try {
+					needsDiscard = this.minisearch.has(webpagePath);
+				} catch (secondHasError) {
+					ExportLog.error(secondHasError, `MiniSearch still broken after rebuild, skipping ${webpagePath}`);
+					return; // Give up on this document
+				}
+			}
+
+			// Only discard if we confirmed the document exists
+			if (needsDiscard) {
 				try {
 					this.minisearch.discard(webpagePath);
 				} catch (discardError) {
 					// MiniSearch TreeIterator error - index is corrupted, rebuild it
 					ExportLog.warning(`MiniSearch discard failed for ${webpagePath}, rebuilding index: ${discardError.message}`);
 					await this.rebuildMinisearch();
+					if (!this.minisearch) return; // Rebuild failed, abort
+					
+					// Don't try to discard again after rebuild - just proceed to add
 				}
 			}
-		} catch (hasError) {
-			// Even the has() check failed - index is completely corrupted
-			ExportLog.warning(`MiniSearch has() check failed, rebuilding index: ${hasError.message}`);
-			await this.rebuildMinisearch();
+		} catch (criticalError) {
+			ExportLog.error(criticalError, `Critical MiniSearch error, creating fresh index`);
+			// Create completely fresh instance
+			this.minisearch = new Minisearch(this.minisearchOptions);
 		}
 
 		// Prepare document data with comprehensive validation
@@ -556,17 +585,18 @@ export class Index
 
 		// CRITICAL: Safe add operation with error recovery
 		try {
+			if (!this.minisearch) return; // Safety check
 			this.minisearch.add(searchDocument);
 		} catch (addError) {
-			ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}, attempting recovery`);
+			ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}, attempting final recovery`);
 			
-			// Try rebuilding index and adding again
+			// Last resort: create completely fresh instance and try once more
 			try {
-				await this.rebuildMinisearch();
+				this.minisearch = new Minisearch(this.minisearchOptions);
 				this.minisearch.add(searchDocument);
-				ExportLog.log(`Successfully added ${webpagePath} after index rebuild`);
-			} catch (recoveryError) {
-				ExportLog.error(recoveryError, `Failed to add ${webpagePath} even after index rebuild`);
+				ExportLog.log(`Successfully added ${webpagePath} to fresh search index`);
+			} catch (finalError) {
+				ExportLog.error(finalError, `Failed to add ${webpagePath} even with fresh index - skipping document`);
 				// Continue without this document rather than crashing the entire export
 			}
 		}
