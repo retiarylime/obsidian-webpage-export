@@ -1508,17 +1508,29 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.error(searchError, "Failed to generate search-index.json");
 			}
 			
-			// 3. Download/save the site-lib files to disk
+			// 3. Generate file-tree-content.html (file tree HTML)
+			try {
+				if (website.fileTreeAsset) {
+					filesToDownload.push(website.fileTreeAsset);
+					ExportLog.log(`✅ Generated file-tree-content.html (${website.fileTreeAsset.data?.length || 0} bytes)`);
+				} else {
+					ExportLog.warning(`⚠️ File tree asset not available - skipping file-tree-content.html`);
+				}
+			} catch (fileTreeError) {
+				ExportLog.error(fileTreeError, "Failed to add file-tree-content.html to download queue");
+			}
+			
+			// 4. Download/save the site-lib files to disk
 			if (filesToDownload.length > 0) {
 				await Utils.downloadAttachments(filesToDownload);
 				ExportLog.log(`💾 Saved ${filesToDownload.length} site-lib files to disk`);
 			}
 			
-			// 4. CRITICAL: Download raw attachment files incrementally
+			// 5. CRITICAL: Download raw attachment files incrementally
 			// This ensures all embedded files (MP3s, images, etc.) are exported after each chunk
 			await this.downloadIncrementalAttachments(website, currentChunk);
 			
-			// 5. Log current progress for debugging
+			// 6. Log current progress for debugging
 			const searchDocs = website.index.minisearch?.documentCount || 0;
 			const totalFiles = website.index.attachmentsShownInTree?.length || 0;
 			const totalPages = website.index.webpages?.length || 0;
