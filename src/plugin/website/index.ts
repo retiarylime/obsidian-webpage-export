@@ -507,27 +507,126 @@ export class Index
 
 	private async addWebpageToMinisearch(webpage: Webpage)
 	{
-		if (this.minisearch)
-		{
-			const webpagePath = webpage.targetPath.path;
-			if (this.minisearch.has(webpagePath)) 
-			{
-				this.minisearch.discard(webpagePath);
+		if (!this.minisearch) return;
+
+		const webpagePath = webpage.targetPath.path;
+		
+		// CRITICAL: Safe discard operation with comprehensive error handling
+		try {
+			if (this.minisearch.has(webpagePath)) {
+				try {
+					this.minisearch.discard(webpagePath);
+				} catch (discardError) {
+					// MiniSearch TreeIterator error - index is corrupted, rebuild it
+					ExportLog.warning(`MiniSearch discard failed for ${webpagePath}, rebuilding index: ${discardError.message}`);
+					await this.rebuildMinisearch();
+				}
 			}
+		} catch (hasError) {
+			// Even the has() check failed - index is completely corrupted
+			ExportLog.warning(`MiniSearch has() check failed, rebuilding index: ${hasError.message}`);
+			await this.rebuildMinisearch();
+		}
 
-			const headersInfo = await webpage.outputData.renderedHeadings;
-			if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) headersInfo.shift();
-			const headers = headersInfo.map((header) => header.heading);
+		// Prepare document data with comprehensive validation
+		let headersInfo: any[] = [];
+		let headers: string[] = [];
+		
+		try {
+			headersInfo = await webpage.outputData.renderedHeadings || [];
+			if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
+				headersInfo.shift();
+			}
+			headers = headersInfo.map((header) => header.heading);
+		} catch (headerError) {
+			ExportLog.warning(`Failed to extract headers for ${webpagePath}: ${headerError.message}`);
+			headers = [];
+		}
 
-			this.minisearch.add({
-				id: webpagePath,
-				title: webpage.title || 'Untitled',
-				aliases: webpage.outputData.aliases || [],
-				headers: headers || [],
-				tags: webpage.outputData.allTags || [],
-				url: webpagePath,
-				content: (webpage.outputData.description || '') + " " + (webpage.outputData.searchContent || ''),
-			});
+		// Create validated document
+		const searchDocument = {
+			id: webpagePath,
+			title: webpage.title || webpage.source?.basename || 'Untitled',
+			aliases: Array.isArray(webpage.outputData?.aliases) ? webpage.outputData.aliases : [],
+			headers: Array.isArray(headers) ? headers : [],
+			tags: Array.isArray(webpage.outputData?.allTags) ? webpage.outputData.allTags : [],
+			url: webpagePath,
+			content: ((webpage.outputData?.description || '') + " " + (webpage.outputData?.searchContent || '')).trim() || webpage.title || 'No content',
+		};
+
+		// CRITICAL: Safe add operation with error recovery
+		try {
+			this.minisearch.add(searchDocument);
+		} catch (addError) {
+			ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}, attempting recovery`);
+			
+			// Try rebuilding index and adding again
+			try {
+				await this.rebuildMinisearch();
+				this.minisearch.add(searchDocument);
+				ExportLog.log(`Successfully added ${webpagePath} after index rebuild`);
+			} catch (recoveryError) {
+				ExportLog.error(recoveryError, `Failed to add ${webpagePath} even after index rebuild`);
+				// Continue without this document rather than crashing the entire export
+			}
+		}
+	}
+
+	/**
+	 * Rebuild the MiniSearch index from scratch when corruption is detected
+	 */
+	private async rebuildMinisearch(): Promise<void>
+	{
+		try {
+			ExportLog.log("Rebuilding corrupted MiniSearch index...");
+			
+			// Create fresh MiniSearch instance
+			this.minisearch = new Minisearch(this.minisearchOptions);
+			
+			// Re-add all existing webpages to the fresh index
+			let rebuiltCount = 0;
+			for (const existingWebpage of this.webpages) {
+				try {
+					if (!existingWebpage.targetPath) continue;
+					
+					const webpagePath = existingWebpage.targetPath.path;
+					
+					// Get headers safely
+					let headers: string[] = [];
+					try {
+						const headersInfo = await existingWebpage.outputData?.renderedHeadings || [];
+						if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == existingWebpage.title) {
+							headersInfo.shift();
+						}
+						headers = headersInfo.map((header) => header.heading);
+					} catch {
+						headers = [];
+					}
+
+					// Create validated document for rebuilding
+					const rebuildDocument = {
+						id: webpagePath,
+						title: existingWebpage.title || existingWebpage.source?.basename || 'Untitled',
+						aliases: Array.isArray(existingWebpage.outputData?.aliases) ? existingWebpage.outputData.aliases : [],
+						headers: Array.isArray(headers) ? headers : [],
+						tags: Array.isArray(existingWebpage.outputData?.allTags) ? existingWebpage.outputData.allTags : [],
+						url: webpagePath,
+						content: ((existingWebpage.outputData?.description || '') + " " + (existingWebpage.outputData?.searchContent || '')).trim() || existingWebpage.title || 'No content',
+					};
+
+					this.minisearch.add(rebuildDocument);
+					rebuiltCount++;
+				} catch (rebuildError) {
+					// Skip problematic documents during rebuild
+					ExportLog.warning(`Skipped webpage during index rebuild: ${existingWebpage.source?.path} - ${rebuildError.message}`);
+				}
+			}
+			
+			ExportLog.log(`MiniSearch index rebuilt successfully with ${rebuiltCount} documents`);
+		} catch (rebuildError) {
+			ExportLog.error(rebuildError, "Failed to rebuild MiniSearch index");
+			// Create minimal working index
+			this.minisearch = new Minisearch(this.minisearchOptions);
 		}
 	}
 
