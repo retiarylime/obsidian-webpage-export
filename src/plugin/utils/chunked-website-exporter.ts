@@ -383,15 +383,8 @@ EXPORT RESUMED: ${timestamp}
 				// This is essential for crash recovery where attachments may not be in newFiles/updatedFiles
 				await this.ensureAttachmentsAreQueued(finalWebsite);
 				
-				// CRITICAL: Only regenerate file tree for fresh exports
-				// When resuming from crash, file tree was already built incrementally and is complete
-				if (isResuming && startChunk > 0) {
-					ExportLog.log("🌲 CRASH RECOVERY: Skipping file tree regeneration - already built incrementally");
-					ExportLog.log(`🌲 CRASH RECOVERY: File tree contains ${finalWebsite.index.attachmentsShownInTree.length} files from incremental builds`);
-				} else {
-					ExportLog.log("🌲 FRESH EXPORT: Regenerating file tree with ALL merged files");
-					await this.regenerateFileTree(finalWebsite);
-				}
+				// CRITICAL: Regenerate file tree with ALL merged files
+				await this.regenerateFileTree(finalWebsite);
 				
 				await finalWebsite.index.finalize();
 				
@@ -1103,13 +1096,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			});
 			
 			tempContainer.remove();
-			
-			// Create target path with correct working directory (export destination)
-			const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(finalWebsite.destination.path);
-			
-			finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, finalWebsite.exportOptions);
-			// Override the target path to ensure correct working directory
-			finalWebsite.fileTreeAsset.targetPath = targetPath;
+			finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 			
 			ExportLog.log(`✅ File tree regenerated with ${paths.length} files`);
 			
@@ -1545,28 +1532,25 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.log(`ℹ️ No existing metadata found (will create new one)`);
 			}
 			
-			// CRITICAL: Try to restore existing file tree asset from disk 
-			// This prevents recreating file-tree-content.html when resuming from crash
-			const fileTreePath = path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html');
+			// CRITICAL: Try to load existing file-tree-content.html to preserve file tree across sessions
 			try {
-				const fileTreeData = await fs.readFile(fileTreePath, 'utf8');
-				if (fileTreeData && fileTreeData.length > 0) {
+				const fileTreePath = path.join(destination.path, 'site-lib', 'file-tree-content.html');
+				const existingFileTree = await fs.readFile(fileTreePath, 'utf8');
+				
+				if (existingFileTree && existingFileTree.length > 0) {
+					// Create AssetLoader for existing file tree HTML
 					const { AssetLoader } = await import("../asset-loaders/base-asset");
 					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 					
-					// Create target path with correct working directory (export destination)
-					const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(website.destination.path);
+					website.fileTreeAsset = new AssetLoader("file-tree.html", existingFileTree, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 					
-					// Restore the file tree asset from existing file on disk
-					website.fileTreeAsset = new AssetLoader("file-tree.html", fileTreeData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, website.exportOptions);
-					// Override the target path to ensure correct working directory
-					website.fileTreeAsset.targetPath = targetPath;
-					ExportLog.log(`✅ CRASH RECOVERY: Restored file tree asset from disk (${fileTreeData.length} bytes) - will be preserved`);
+					ExportLog.log(`✅ Restored existing file tree: ${existingFileTree.length} bytes HTML from previous sessions`);
+					ExportLog.log(`🌲 File tree will be preserved and extended incrementally`);
 				} else {
-					ExportLog.log(`⚠️ File tree file exists but is empty`);
+					ExportLog.log(`⚠️ File tree exists but is empty`);
 				}
 			} catch (fileTreeError) {
-				ExportLog.log(`ℹ️ No existing file tree found on disk (will create fresh one incrementally)`);
+				ExportLog.log(`ℹ️ No existing file tree found (will create new one incrementally)`);
 			}
 			
 		} catch (error) {
@@ -1928,7 +1912,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 	/**
 	 * Generate file tree INCREMENTALLY - adding new files to existing tree structure
-	 * This ensures file-tree-content.html grows progressively with each chunk
+	 * NEVER recreates file-tree-content.html - always preserves and extends existing file
+	 * This ensures file-tree-content.html grows progressively across all sessions and interruptions
 	 */
 	private static async generateIncrementalFileTree(website: Website, currentChunk: number, totalChunks: number): Promise<void> {
 		try {
@@ -1937,205 +1922,127 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				return;
 			}
 
-			ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
+			ExportLog.log(`🌲 Generating INCREMENTAL file tree for chunk ${currentChunk}/${totalChunks} - NEVER recreating existing file...`);
 
 			// Get files from current chunk that should be shown in tree
 			const currentChunkFiles = website.index.attachmentsShownInTree || [];
 			ExportLog.log(`🌲 Current chunk has ${currentChunkFiles.length} files for tree`);
 
-			if (currentChunkFiles.length === 0) {
-				ExportLog.log(`🌲 No files in current chunk - skipping tree generation`);
+			// CRITICAL: Always try to load existing file tree from disk first
+			const existingPaths = await this.loadExistingFileTreePaths(website);
+			ExportLog.log(`🌲 Loaded ${existingPaths.length} existing paths from disk`);
+
+			// Get new paths from current chunk (only ones not already in existing paths)
+			const currentPaths = currentChunkFiles.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+			const existingPathStrings = new Set(existingPaths.map(p => p.path));
+			const newPaths = currentPaths.filter(p => !existingPathStrings.has(p.path));
+			
+			ExportLog.log(`🌲 Current chunk: ${currentPaths.length} paths, ${newPaths.length} are new`);
+
+			if (newPaths.length === 0) {
+				ExportLog.log(`🌲 No new files to add to existing tree - using existing file-tree-content.html`);
+				
+				// Still create the fileTree object with existing paths for consistency
+				if (existingPaths.length > 0) {
+					await this.createFileTreeAssetFromPaths(website, existingPaths);
+				}
 				return;
 			}
 
-			// Create paths from current chunk files
-			const currentPaths = currentChunkFiles.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-			ExportLog.log(`🌲 Generated ${currentPaths.length} paths from current chunk`);
+			// Combine existing paths with new paths for complete tree
+			const allPaths = [...existingPaths, ...newPaths];
+			ExportLog.log(`🌲 Building INCREMENTAL tree: ${existingPaths.length} existing + ${newPaths.length} new = ${allPaths.length} total paths`);
 
+			// Create file tree with ALL paths (existing + new)
+			await this.createFileTreeAssetFromPaths(website, allPaths);
+
+			// Update tree order for all attachments shown in tree
+			website.index.attachmentsShownInTree.forEach((file) => {
+				if (!file.sourcePathRootRelative) return;
+				const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
+				file.treeOrder = fileTreeItem?.treeOrder ?? 0;
+			});
+
+			ExportLog.log(`✅ INCREMENTAL file tree extended: added ${newPaths.length} new files, total ${allPaths.length} files`);
+
+			// Debug: Log file distribution for current chunk only
+			const filesByExtension = new Map<string, number>();
+			for (const file of currentChunkFiles) {
+				const extension = file.sourcePath?.split('.').pop()?.toLowerCase() || 'unknown';
+				filesByExtension.set(extension, (filesByExtension.get(extension) || 0) + 1);
+			}
+
+			if (filesByExtension.size > 0) {
+				const extensionSummary = Array.from(filesByExtension.entries())
+					.map(([ext, count]) => `${count} .${ext}`)
+					.join(', ');
+				console.log(`🌲 CHUNK ${currentChunk} ADDITIONS: ${extensionSummary}`);
+			}
+
+		} catch (error) {
+			ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
+			// Don't throw - continue with export even if file tree generation fails
+		}
+	}
+
+	/**
+	 * Load existing file tree paths from disk if file-tree-content.html exists
+	 * This preserves the tree structure across sessions and interruptions
+	 */
+	private static async loadExistingFileTreePaths(website: Website): Promise<Path[]> {
+		try {
+			const fs = require('fs').promises;
+			const path = require('path');
+			
+			// Check for existing file-tree-content.html in site-lib
+			const fileTreePath = path.join(website.destination.path, 'site-lib', 'file-tree-content.html');
+			
+			try {
+				const existingContent = await fs.readFile(fileTreePath, 'utf8');
+				ExportLog.log(`🌲 Found existing file-tree-content.html (${existingContent.length} bytes) - extracting paths...`);
+				
+				// Parse existing HTML to extract file paths
+				// The file tree HTML contains data-path attributes that we can extract
+				const pathMatches = existingContent.match(/data-path="([^"]+)"/g) || [];
+				const existingPaths = pathMatches
+					.map((match: string) => match.match(/data-path="([^"]+)"/)?.[1])
+					.filter(Boolean)
+					.map((pathStr: any) => new Path(pathStr as string));
+					
+				ExportLog.log(`🌲 Extracted ${existingPaths.length} paths from existing file tree HTML`);
+				
+				// Debug: Log some sample existing paths
+				const samplePaths = existingPaths.slice(0, 5);
+				if (samplePaths.length > 0) {
+					ExportLog.log(`🌲 Sample existing paths: ${samplePaths.map((p: Path) => p.path).join(', ')}`);
+				}
+				
+				return existingPaths;
+				
+			} catch (readError) {
+				// File doesn't exist or can't be read - this is normal for first chunk
+				ExportLog.log(`🌲 No existing file-tree-content.html found - starting fresh tree`);
+				return [];
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to load existing file tree paths from disk");
+			return [];
+		}
+	}
+
+	/**
+	 * Create file tree asset from the given paths
+	 * This is the core tree generation logic extracted for reuse
+	 */
+	private static async createFileTreeAssetFromPaths(website: Website, allPaths: Path[]): Promise<void> {
+		try {
 			// Import required modules
 			const { FileTree } = await import("../features/file-tree");
 			const { AssetLoader } = await import("../asset-loaders/base-asset");
 			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 
-			// CRITICAL: Check if we should do incremental addition
-			// For crash recovery: check if we have existing file tree asset
-			// For normal export: check if this is a subsequent chunk (after first)
-			const hasExistingFileTreeAsset = website.fileTreeAsset && website.fileTreeAsset.data;
-			let shouldDoIncrementalAdd = hasExistingFileTreeAsset || currentChunk > 1;
-			
-			if (shouldDoIncrementalAdd) {
-				ExportLog.log(`🌲 ${hasExistingFileTreeAsset ? 'CRASH RECOVERY' : 'INCREMENTAL'}: Adding files to existing tree structure`);
-				
-				// Get the existing tree HTML (either from crash recovery or previous chunks)
-				let existingTreeHtml = "";
-				if (hasExistingFileTreeAsset) {
-					// From crash recovery
-					existingTreeHtml = String(website.fileTreeAsset.data);
-					ExportLog.log(`🌲 Using existing tree from crash recovery (${existingTreeHtml.length} bytes)`);
-				} else if (currentChunk > 1) {
-					// From previous chunk in normal export - website.fileTree should exist
-					if (website.fileTree) {
-						// Generate HTML from current tree structure to get existing content
-						const existingContainer = document.createElement("div");
-						await website.fileTree.generate(existingContainer);
-						existingTreeHtml = existingContainer.innerHTML;
-						existingContainer.remove();
-						ExportLog.log(`🌲 Using existing tree from previous chunks (${existingTreeHtml.length} bytes)`);
-					} else {
-						ExportLog.warning(`🌲 No existing file tree found for chunk ${currentChunk} - falling back to full generation`);
-						shouldDoIncrementalAdd = false;
-					}
-				}
-				
-				if (shouldDoIncrementalAdd && existingTreeHtml.length > 0) {
-					// CRITICAL: Get only the NEW files from current chunk that aren't already in the tree
-					const newChunkFiles = currentChunkFiles.filter(file => {
-						if (!file.sourcePathRootRelative) return false;
-						// Check if this file path is already in the existing HTML
-						const pathPattern = file.sourcePathRootRelative.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-						return !existingTreeHtml.includes(pathPattern);
-					});
-					
-					if (newChunkFiles.length === 0) {
-						ExportLog.log(`🌲 No new files to add to existing tree - preserving current tree`);
-						
-						// Still need to update tree order calculations for all files
-						const allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-						website.fileTree = new FileTree(allPaths, false, true);
-						website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
-						website.fileTree.showNestingIndicator = true;
-						website.fileTree.generateWithItemsClosed = true;
-						website.fileTree.showFileExtentionTags = true;
-						website.fileTree.hideFileExtentionTags = ["md"];
-						website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
-						website.fileTree.id = "file-explorer";
-						
-						// Generate for tree order calculations only
-						const tempContainer = document.createElement("div");
-						await website.fileTree.generate(tempContainer);
-						
-						// Update tree order for all attachments
-						website.index.attachmentsShownInTree.forEach((file) => {
-							if (!file.sourcePathRootRelative) return;
-							const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
-							file.treeOrder = fileTreeItem?.treeOrder ?? 0;
-						});
-						
-						tempContainer.remove();
-						return; // Exit early - no new files to add
-					}
-					
-					ExportLog.log(`🌲 INCREMENTAL: Adding ${newChunkFiles.length} new files to existing tree`);
-					
-					// CRITICAL: Create a tree with only the NEW files for incremental addition
-					const newFilePaths = newChunkFiles.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-					const incrementalFileTree = new FileTree(newFilePaths, false, true);
-					incrementalFileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
-					incrementalFileTree.showNestingIndicator = true;
-					incrementalFileTree.generateWithItemsClosed = true;
-					incrementalFileTree.showFileExtentionTags = true;
-					incrementalFileTree.hideFileExtentionTags = ["md"];
-					
-					// Generate HTML for just the new files
-					const newTreeContainer = document.createElement("div");
-					await incrementalFileTree.generate(newTreeContainer);
-					const newTreeHtml = newTreeContainer.innerHTML;
-					newTreeContainer.remove();
-					
-					// CRITICAL: Append the new tree HTML to the existing tree
-					// This preserves the existing structure while adding new files
-					let updatedTreeHtml = String(existingTreeHtml); // Ensure it's a string
-					
-					// Find the insertion point in the existing HTML (before closing tags)
-					// Look for the last </ul> or similar structure to insert before
-					const insertionPoint = updatedTreeHtml.lastIndexOf('</ul>');
-					if (insertionPoint !== -1 && newTreeHtml.trim().length > 0) {
-						// Extract just the new file entries from the generated HTML
-						// Remove outer container tags and extract just the list items
-						const tempDiv = document.createElement('div');
-						tempDiv.innerHTML = newTreeHtml;
-						const newListItems = tempDiv.querySelectorAll('li');
-						
-						let newItemsHtml = '';
-						newListItems.forEach(li => {
-							newItemsHtml += li.outerHTML;
-						});
-						
-						if (newItemsHtml.length > 0) {
-							// Insert the new items before the closing </ul> tag
-							updatedTreeHtml = updatedTreeHtml.substring(0, insertionPoint) + 
-											newItemsHtml + 
-											updatedTreeHtml.substring(insertionPoint);
-							
-							ExportLog.log(`🌲 INCREMENTAL: Successfully appended ${newListItems.length} new file entries to existing tree`);
-						}
-						
-						tempDiv.remove();
-					} else {
-						// Fallback: if we can't find proper insertion point, append to end
-						updatedTreeHtml = updatedTreeHtml + newTreeHtml;
-						ExportLog.log(`🌲 INCREMENTAL: Fallback - appended new tree HTML to end of existing tree`);
-					}
-					
-					// Update the file tree asset with the incremented HTML
-					const { AssetLoader } = await import("../asset-loaders/base-asset");
-					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
-					
-					// Create target path with correct working directory (export destination)
-					const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(website.destination.path);
-					
-					website.fileTreeAsset = new AssetLoader("file-tree.html", updatedTreeHtml, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, website.exportOptions);
-					// Override the target path to ensure correct working directory
-					website.fileTreeAsset.targetPath = targetPath;
-					
-					// Still need to create full tree structure for tree order calculations
-					const allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-					website.fileTree = new FileTree(allPaths, false, true);
-					website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
-					website.fileTree.showNestingIndicator = true;
-					website.fileTree.generateWithItemsClosed = true;
-					website.fileTree.showFileExtentionTags = true;
-					website.fileTree.hideFileExtentionTags = ["md"];
-					website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
-					website.fileTree.id = "file-explorer";
-					
-					// Generate for tree order calculations only (don't use this HTML)
-					const orderContainer = document.createElement("div");
-					await website.fileTree.generate(orderContainer);
-					
-					// Update tree order for all attachments
-					website.index.attachmentsShownInTree.forEach((file) => {
-						if (!file.sourcePathRootRelative) return;
-						const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
-						file.treeOrder = fileTreeItem?.treeOrder ?? 0;
-					});
-					
-					orderContainer.remove();
-					
-					ExportLog.log(`✅ INCREMENTAL: Appended files to existing tree (${updatedTreeHtml.length} bytes total)`);
-					
-					return; // Exit early - incremental append complete
-				}
-			}
-
-			// CRITICAL: For first chunk or when no existing asset, create new tree
-			let allPaths: Path[] = [];
-			
-			if (currentChunk === 1 || !website.fileTree) {
-				// First chunk - create fresh file tree
-				ExportLog.log(`🌲 First chunk - creating fresh file tree`);
-				allPaths = currentPaths;
-			} else {
-				// Subsequent chunks - use ALL files in website.index.attachmentsShownInTree
-				// This contains the accumulated files from all processed chunks
-				ExportLog.log(`🌲 Chunk ${currentChunk} - building file tree from all accumulated files`);
-				
-				allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-				
-				ExportLog.log(`🌲 Total accumulated files for tree: ${allPaths.length}`);
-			}
-
-			// Create/update file tree with all paths
+			// Create file tree with all paths
 			website.fileTree = new FileTree(allPaths, false, true);
 			website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
 			website.fileTree.showNestingIndicator = true;
@@ -2149,46 +2056,18 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			const tempContainer = document.createElement("div");
 			await website.fileTree.generate(tempContainer);
 			const htmlData = tempContainer.innerHTML;
-
-			// Update tree order for all attachments shown in tree
-			website.index.attachmentsShownInTree.forEach((file) => {
-				if (!file.sourcePathRootRelative) return;
-				const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
-				file.treeOrder = fileTreeItem?.treeOrder ?? 0;
-			});
-
 			tempContainer.remove();
 
 			// Create the file tree asset (use EXACT same approach as regular website)
 			// CRITICAL: Ensure AssetHandler is initialized with final website's options
 			const { AssetHandler } = await import("../asset-loaders/asset-handler");
 			await AssetHandler.reloadAssets(website.exportOptions);
-			// Create target path with correct working directory (export destination)
-			const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(website.destination.path);
-			
-			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, website.exportOptions);
-			// Override the target path to ensure correct working directory
-			website.fileTreeAsset.targetPath = targetPath;
+			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
-			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
-
-			// Debug: Log file distribution
-			const filesByExtension = new Map<string, number>();
-			for (const file of currentChunkFiles) {
-				const extension = file.sourcePath?.split('.').pop()?.toLowerCase() || 'unknown';
-				filesByExtension.set(extension, (filesByExtension.get(extension) || 0) + 1);
-			}
-
-			if (filesByExtension.size > 0) {
-				const extensionSummary = Array.from(filesByExtension.entries())
-					.map(([ext, count]) => `${count} .${ext}`)
-					.join(', ');
-				console.log(`🌲 CHUNK ${currentChunk} FILE TREE: ${extensionSummary}`);
-			}
+			ExportLog.log(`🌲 Created file tree asset with ${allPaths.length} total files (${htmlData.length} bytes HTML)`);
 
 		} catch (error) {
-			ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
-			// Don't throw - continue with export even if file tree generation fails
+			ExportLog.error(error, "Failed to create file tree asset from paths");
 		}
 	}
 	
