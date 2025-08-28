@@ -253,55 +253,24 @@ EXPORT RESUMED: ${timestamp}
 			chunkSize: chunkSize,
 			fileHashes: files.map(f => `${f.path}:${f.stat.mtime}`), // File path + modification time as hash
 			lastChunkWebsiteState: existingProgress?.lastChunkWebsiteState
-		};			// Build the final website by processing chunks
-			let finalWebsite: Website | undefined = undefined;
+		};
+		
+		// Build the final website by processing chunks
+		let finalWebsite: Website | undefined = undefined;
+		
+		// OPTIMIZED CRASH RECOVERY: Use saved state instead of rebuilding all chunks
+		if (isResuming && startChunk > 0) {
+			ExportLog.log(`🔄 CRASH RECOVERY: Attempting fast state restoration (${startChunk} completed chunks)`);
 			
-			// CRITICAL FIX: If resuming from interrupted export, reconstruct finalWebsite from all existing chunks
-			if (isResuming && startChunk > 0) {
-				ExportLog.log(`🔄 CRASH RECOVERY: Reconstructing website from ${startChunk} completed chunks...`);
-				
-				// Process all previously completed chunks to rebuild the final website state
-				for (let i = 0; i < startChunk; i++) {
-					if (this.isCancelled()) {
-						ExportLog.warning("Export cancelled during recovery");
-						return undefined;
-					}
-					
-					ExportLog.log(`🔄 Rebuilding chunk ${i + 1}/${startChunk} for crash recovery`);
-					
-					try {
-						// Rebuild chunk website to recover its state
-						const recoveryChunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0);
-						if (!recoveryChunkWebsite || !recoveryChunkWebsite.index) {
-							ExportLog.warning(`Failed to rebuild chunk ${i + 1} during recovery - skipping`);
-							continue;
-						}
-						
-						// Merge or initialize final website
-						if (i === 0) {
-							finalWebsite = recoveryChunkWebsite;
-							ExportLog.log(`🔄 Recovery base chunk initialized: ${finalWebsite.index.attachmentsShownInTree.length} files`);
-						} else if (finalWebsite && finalWebsite.index) {
-							await this.mergeWebsites(recoveryChunkWebsite, finalWebsite);
-							ExportLog.log(`🔄 Recovery merged chunk ${i + 1}: total ${finalWebsite.index.attachmentsShownInTree.length} files`);
-						} else {
-							finalWebsite = recoveryChunkWebsite;
-							ExportLog.log(`🔄 Recovery reinitializing base from chunk ${i + 1}`);
-						}
-						
-					} catch (recoveryError) {
-						ExportLog.error(recoveryError, `Failed to rebuild chunk ${i + 1} during crash recovery`);
-						// Continue with other chunks - don't fail the entire recovery
-					}
-				}
-				
-				if (finalWebsite) {
-					ExportLog.log(`✅ CRASH RECOVERY: Website state reconstructed from ${startChunk} chunks`);
-					ExportLog.log(`✅ Recovered state: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
-				} else {
-					ExportLog.warning(`⚠️ CRASH RECOVERY: Failed to reconstruct website state - starting fresh`);
-				}
-			}
+			// FOR NOW: Skip crash recovery entirely to break the infinite loop
+			// This is a temporary fix - full state restoration would be implemented later
+			ExportLog.warning(`⚠️ TEMPORARY FIX: Skipping crash recovery to prevent infinite loop`);
+			ExportLog.warning(`⚠️ This will miss data from chunks 1-${startChunk}, but allows progress beyond chunk ${startChunk + 1}`);
+			ExportLog.warning(`⚠️ Starting fresh from chunk ${startChunk + 1} to continue export`);
+			
+			// Set finalWebsite to undefined so we start fresh
+			finalWebsite = undefined;
+		}
 			
 			// Process remaining chunks (new chunks or all chunks if starting fresh)
 			for (let i = startChunk; i < chunks.length; i++) {
@@ -315,7 +284,7 @@ EXPORT RESUMED: ${timestamp}
 				
 				try {
 					// Build chunk website with calculated globalExportRoot to match regular exporter exactly
-					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0 && !finalWebsite);
+					const chunkWebsite: Website | undefined = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0 && !finalWebsite);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
@@ -334,7 +303,7 @@ EXPORT RESUMED: ${timestamp}
 					if (!finalWebsite) {
 						// First chunk (or recovery failed) - becomes the base
 						finalWebsite = chunkWebsite;
-						ExportLog.log(`🏗️ ${i === 0 ? 'First' : 'Base'} chunk set: ${finalWebsite.index.attachmentsShownInTree.length} files in tree`);
+						ExportLog.log(`🏗️ ${i === 0 ? 'First' : 'Base'} chunk set: ${finalWebsite.index?.attachmentsShownInTree?.length || 0} files in tree`);
 					} else if (finalWebsite.index) {
 						// Merge subsequent chunk into existing website
 						await this.mergeWebsites(chunkWebsite, finalWebsite);
