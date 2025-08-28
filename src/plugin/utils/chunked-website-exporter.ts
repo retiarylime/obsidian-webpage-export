@@ -1476,8 +1476,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// Finalize the website index to prepare for site-lib generation
 			await website.index.finalize();
 			
-			// Regenerate file tree with current data
-			await this.regenerateFileTree(website);
+			// Regenerate file tree with current data INCREMENTALLY
+			await this.generateIncrementalFileTree(website, currentChunk, totalChunks);
 			
 			// Generate and save the critical site-lib files
 			const filesToDownload = [];
@@ -1630,6 +1630,103 @@ EXPORT SESSION END: ${new Date().toISOString()}
 		} catch (error) {
 			ExportLog.error(error, `Failed to download incremental attachments after chunk ${currentChunk}`);
 			// Don't throw - we want the chunked export to continue even if some downloads fail
+		}
+	}
+
+	/**
+	 * Generate file tree INCREMENTALLY - adding new files to existing tree structure
+	 * This ensures file-tree-content.html grows progressively with each chunk
+	 */
+	private static async generateIncrementalFileTree(website: Website, currentChunk: number, totalChunks: number): Promise<void> {
+		try {
+			if (!website.exportOptions.fileNavigationOptions.enabled) {
+				ExportLog.log(`🌲 File navigation disabled - skipping file tree generation`);
+				return;
+			}
+
+			ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
+
+			// Get files from current chunk that should be shown in tree
+			const currentChunkFiles = website.index.attachmentsShownInTree || [];
+			ExportLog.log(`🌲 Current chunk has ${currentChunkFiles.length} files for tree`);
+
+			if (currentChunkFiles.length === 0) {
+				ExportLog.log(`🌲 No files in current chunk - skipping tree generation`);
+				return;
+			}
+
+			// Create paths from current chunk files
+			const currentPaths = currentChunkFiles.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+			ExportLog.log(`🌲 Generated ${currentPaths.length} paths from current chunk`);
+
+			// Import required modules
+			const { FileTree } = await import("../features/file-tree");
+			const { AssetLoader } = await import("../asset-loaders/base-asset");
+			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+
+			// CRITICAL: For first chunk, create new tree. For subsequent chunks, extend existing tree
+			let allPaths: Path[] = [];
+			
+			if (currentChunk === 1 || !website.fileTree) {
+				// First chunk - create fresh file tree
+				ExportLog.log(`🌲 First chunk - creating fresh file tree`);
+				allPaths = currentPaths;
+			} else {
+				// Subsequent chunks - use ALL files in website.index.attachmentsShownInTree
+				// This contains the accumulated files from all processed chunks
+				ExportLog.log(`🌲 Chunk ${currentChunk} - building file tree from all accumulated files`);
+				
+				allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+				
+				ExportLog.log(`🌲 Total accumulated files for tree: ${allPaths.length}`);
+			}
+
+			// Create/update file tree with all paths
+			website.fileTree = new FileTree(allPaths, false, true);
+			website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
+			website.fileTree.showNestingIndicator = true;
+			website.fileTree.generateWithItemsClosed = true;
+			website.fileTree.showFileExtentionTags = true;
+			website.fileTree.hideFileExtentionTags = ["md"];
+			website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
+			website.fileTree.id = "file-explorer";
+
+			// Generate the HTML
+			const tempContainer = document.createElement("div");
+			await website.fileTree.generate(tempContainer);
+			const htmlData = tempContainer.innerHTML;
+
+			// Update tree order for all attachments shown in tree
+			website.index.attachmentsShownInTree.forEach((file) => {
+				if (!file.sourcePathRootRelative) return;
+				const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
+				file.treeOrder = fileTreeItem?.treeOrder ?? 0;
+			});
+
+			tempContainer.remove();
+
+			// Create the file tree asset
+			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+
+			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
+
+			// Debug: Log file distribution
+			const filesByExtension = new Map<string, number>();
+			for (const file of currentChunkFiles) {
+				const extension = file.sourcePath?.split('.').pop()?.toLowerCase() || 'unknown';
+				filesByExtension.set(extension, (filesByExtension.get(extension) || 0) + 1);
+			}
+
+			if (filesByExtension.size > 0) {
+				const extensionSummary = Array.from(filesByExtension.entries())
+					.map(([ext, count]) => `${count} .${ext}`)
+					.join(', ');
+				console.log(`🌲 CHUNK ${currentChunk} FILE TREE: ${extensionSummary}`);
+			}
+
+		} catch (error) {
+			ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
+			// Don't throw - continue with export even if file tree generation fails
 		}
 	}
 	
