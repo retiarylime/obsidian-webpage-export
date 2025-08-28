@@ -340,6 +340,12 @@ EXPORT RESUMED: ${timestamp}
 					
 					await this.saveProgress(progress);
 					
+					// CRITICAL: Generate site-lib files after each chunk so they're always available
+					// This ensures crash recovery works and partial exports are functional
+					if (finalWebsite) {
+						await this.generateSiteLibFiles(finalWebsite, i + 1, chunks.length);
+					}
+					
 					// Memory cleanup
 					await this.performMemoryCleanup(i + 1, chunks.length);
 					
@@ -369,27 +375,29 @@ EXPORT RESUMED: ${timestamp}
 				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.attachments.length} attachments in metadata`);
 				ExportLog.log(`🔍 FINAL VALIDATION: Website data has ${finalWebsite.index.websiteData.shownInTree.length} files in tree metadata`);
 				
-				// DEBUG: Test that the site-lib data generation will work
+				// DEBUG: Test that the site-lib data generation worked (files already generated incrementally)
 				try {
 					const testWebsiteData = finalWebsite.index.websiteDataAttachment();
 					const testSearchIndex = finalWebsite.index.indexDataAttachment();
 					
-					ExportLog.log(`🔍 SITE-LIB TEST: metadata.json will be ${testWebsiteData.data?.length || 0} bytes`);
-					ExportLog.log(`🔍 SITE-LIB TEST: search-index.json will be ${testSearchIndex.data?.length || 0} bytes`);
+					ExportLog.log(`🔍 FINAL VALIDATION: metadata.json contains ${testWebsiteData.data?.length || 0} bytes`);
+					ExportLog.log(`🔍 FINAL VALIDATION: search-index.json contains ${testSearchIndex.data?.length || 0} bytes`);
 					
 					if (testWebsiteData.data && testWebsiteData.data.length > 100) {
-						ExportLog.log(`✅ SITE-LIB: Website metadata generation ready`);
+						ExportLog.log(`✅ SITE-LIB: Website metadata is complete`);
 					} else {
-						ExportLog.error("❌ SITE-LIB: Website metadata generation failed - data too small");
+						ExportLog.error("❌ SITE-LIB: Website metadata is incomplete");
 					}
 					
 					if (testSearchIndex.data && testSearchIndex.data.length > 10) {
-						ExportLog.log(`✅ SITE-LIB: Search index generation ready`);
+						ExportLog.log(`✅ SITE-LIB: Search index is complete`);
 					} else {
-						ExportLog.error("❌ SITE-LIB: Search index generation failed - data too small");
+						ExportLog.error("❌ SITE-LIB: Search index is incomplete");
 					}
+					
+					ExportLog.log(`ℹ️ Site-lib files were generated incrementally after each chunk and are already on disk`);
 				} catch (siteLibError) {
-					ExportLog.error(siteLibError, "❌ SITE-LIB: Failed to test site-lib data generation");
+					ExportLog.error(siteLibError, "❌ SITE-LIB: Failed to validate final site-lib data");
 				}
 				
 				// Clean up progress
@@ -1411,6 +1419,71 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			.replace(/\.md$/, '.html');
 		
 		return destination.joinString(webPath);
+	}
+	
+	/**
+	 * Generate site-lib files (search index, metadata, file tree) after each chunk
+	 * This ensures they're always available for crash recovery and partial exports are functional
+	 */
+	private static async generateSiteLibFiles(website: Website, currentChunk: number, totalChunks: number): Promise<void> {
+		try {
+			ExportLog.log(`📚 Generating site-lib files after chunk ${currentChunk}/${totalChunks}...`);
+			
+			const { Utils } = await import("../utils/utils");
+			
+			// Finalize the website index to prepare for site-lib generation
+			await website.index.finalize();
+			
+			// Regenerate file tree with current data
+			await this.regenerateFileTree(website);
+			
+			// Generate and save the critical site-lib files
+			const filesToDownload = [];
+			
+			// 1. Generate metadata.json
+			try {
+				const websiteDataAttachment = website.index.websiteDataAttachment();
+				if (websiteDataAttachment && websiteDataAttachment.data) {
+					filesToDownload.push(websiteDataAttachment);
+					ExportLog.log(`✅ Generated metadata.json (${websiteDataAttachment.data.length} bytes)`);
+				} else {
+					ExportLog.warning(`⚠️ Failed to generate metadata.json`);
+				}
+			} catch (metadataError) {
+				ExportLog.error(metadataError, "Failed to generate metadata.json");
+			}
+			
+			// 2. Generate search-index.json
+			try {
+				const searchIndexAttachment = website.index.indexDataAttachment();
+				if (searchIndexAttachment && searchIndexAttachment.data) {
+					filesToDownload.push(searchIndexAttachment);
+					ExportLog.log(`✅ Generated search-index.json (${searchIndexAttachment.data.length} bytes)`);
+				} else {
+					ExportLog.warning(`⚠️ Failed to generate search-index.json`);
+				}
+			} catch (searchError) {
+				ExportLog.error(searchError, "Failed to generate search-index.json");
+			}
+			
+			// 3. Download/save the site-lib files to disk
+			if (filesToDownload.length > 0) {
+				await Utils.downloadAttachments(filesToDownload);
+				ExportLog.log(`💾 Saved ${filesToDownload.length} site-lib files to disk`);
+			}
+			
+			// 4. Log current progress for debugging
+			const searchDocs = website.index.minisearch?.documentCount || 0;
+			const totalFiles = website.index.attachmentsShownInTree?.length || 0;
+			const totalPages = website.index.webpages?.length || 0;
+			const totalAttachments = website.index.attachments?.length || 0;
+			
+			ExportLog.log(`📊 Current export status: ${totalPages} pages, ${totalAttachments} attachments, ${totalFiles} in tree, ${searchDocs} searchable docs`);
+			
+		} catch (error) {
+			ExportLog.error(error, `Failed to generate site-lib files after chunk ${currentChunk}`);
+			// Don't throw - we want the chunked export to continue even if site-lib generation fails
+		}
 	}
 	
 }
