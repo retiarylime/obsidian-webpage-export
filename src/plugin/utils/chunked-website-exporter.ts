@@ -1225,18 +1225,59 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				
 				// Restore search index if it exists and has data
 				if (searchIndex && Array.isArray(searchIndex) && searchIndex.length > 0) {
-					// Rebuild minisearch from the data
-					const { default: MiniSearch } = await import('minisearch');
-					website.index.minisearch = new MiniSearch({
-						fields: ['title', 'content'],
-						storeFields: ['title', 'content', 'url'],
-						searchOptions: { fuzzy: 0.2, prefix: true }
-					});
-					
-					// Add all documents back to the search index
-					website.index.minisearch.addAll(searchIndex);
-					
-					ExportLog.log(`✅ Restored search index with ${searchIndex.length} documents`);
+					try {
+						// Rebuild minisearch from the data with robust error handling
+						const { default: MiniSearch } = await import('minisearch');
+						website.index.minisearch = new MiniSearch({
+							fields: ['title', 'content'],
+							storeFields: ['title', 'content', 'url'],
+							searchOptions: { fuzzy: 0.2, prefix: true }
+						});
+						
+						// Add documents one by one with validation to avoid MiniSearch errors
+						let addedCount = 0;
+						let errorCount = 0;
+						
+						for (const doc of searchIndex) {
+							try {
+								// Validate document structure
+								if (!doc || typeof doc !== 'object') {
+									errorCount++;
+									continue;
+								}
+								
+								// Ensure required fields exist
+								const validDoc = {
+									id: doc.id || doc.url || `doc_${addedCount}`,
+									title: doc.title || 'Untitled',
+									content: doc.content || '',
+									url: doc.url || doc.id || `doc_${addedCount}`
+								};
+								
+								// Only add if we have an ID
+								if (validDoc.id) {
+									website.index.minisearch.add(validDoc);
+									addedCount++;
+								} else {
+									errorCount++;
+								}
+							} catch (docError) {
+								errorCount++;
+								// Continue with other documents
+							}
+						}
+						
+						ExportLog.log(`✅ Restored search index: ${addedCount} documents added, ${errorCount} errors skipped`);
+						
+						if (addedCount === 0) {
+							ExportLog.warning(`⚠️ No valid search documents could be restored - creating fresh index`);
+							website.index.minisearch = undefined; // Will be recreated fresh
+						}
+						
+					} catch (minisearchError) {
+						ExportLog.error(minisearchError, "Failed to restore search index - will create fresh one");
+						website.index.minisearch = undefined; // Will be recreated fresh
+					}
 				} else {
 					ExportLog.log(`⚠️ Search index exists but is empty`);
 				}
@@ -1345,15 +1386,21 @@ EXPORT SESSION END: ${new Date().toISOString()}
 							// Add to search index if we have existing search data
 							if (website.index.minisearch) {
 								try {
-									// Add basic search data (content would need to be read from HTML file)
-									website.index.minisearch.add({
+									// Add basic search data with robust error handling
+									const searchDoc = {
 										id: webpage.targetPath.path,
 										title: sourceFile.basename,
 										content: sourceFile.basename, // Simplified content
 										url: webpage.targetPath.path
-									});
+									};
+									
+									// Validate document before adding
+									if (searchDoc.id && searchDoc.title) {
+										website.index.minisearch.add(searchDoc);
+									}
 								} catch (searchAddError) {
-									// Ignore search index errors during recovery
+									// Ignore search index errors during recovery - don't fail the entire process
+									console.log(`Search index error for ${sourceFile.path}: ${searchAddError.message}`);
 								}
 							}
 						}
