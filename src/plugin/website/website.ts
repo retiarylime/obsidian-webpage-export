@@ -126,8 +126,9 @@ export class Website
 
 		let rootPath = this.findCommonRootPath(this.sourceFiles);
 		
-		// CRITICAL FIX: Don't overwrite exportRoot if it's already been set to empty string (chunked export override)
-		if (this.exportOptions.exportRoot !== "") {
+		// CRITICAL FIX: Don't overwrite exportRoot if it's been set by chunked exporter
+		// The chunked exporter sets a special flag to indicate it has already calculated the global root
+		if (!(this.exportOptions as any)._chunkExporterOverride) {
 			this.exportOptions.exportRoot = rootPath;
 		}
 		console.log("Root path: " + rootPath);

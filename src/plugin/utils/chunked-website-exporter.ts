@@ -256,6 +256,54 @@ EXPORT RESUMED: ${timestamp}
 		};			// Build the final website by processing chunks
 			let finalWebsite: Website | undefined = undefined;
 			
+			// CRITICAL FIX: If resuming from interrupted export, reconstruct finalWebsite from all existing chunks
+			if (isResuming && startChunk > 0) {
+				ExportLog.log(`🔄 CRASH RECOVERY: Reconstructing website from ${startChunk} completed chunks...`);
+				
+				// Process all previously completed chunks to rebuild the final website state
+				for (let i = 0; i < startChunk; i++) {
+					if (this.isCancelled()) {
+						ExportLog.warning("Export cancelled during recovery");
+						return undefined;
+					}
+					
+					ExportLog.log(`🔄 Rebuilding chunk ${i + 1}/${startChunk} for crash recovery`);
+					
+					try {
+						// Rebuild chunk website to recover its state
+						const recoveryChunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0);
+						if (!recoveryChunkWebsite || !recoveryChunkWebsite.index) {
+							ExportLog.warning(`Failed to rebuild chunk ${i + 1} during recovery - skipping`);
+							continue;
+						}
+						
+						// Merge or initialize final website
+						if (i === 0) {
+							finalWebsite = recoveryChunkWebsite;
+							ExportLog.log(`🔄 Recovery base chunk initialized: ${finalWebsite.index.attachmentsShownInTree.length} files`);
+						} else if (finalWebsite && finalWebsite.index) {
+							await this.mergeWebsites(recoveryChunkWebsite, finalWebsite);
+							ExportLog.log(`🔄 Recovery merged chunk ${i + 1}: total ${finalWebsite.index.attachmentsShownInTree.length} files`);
+						} else {
+							finalWebsite = recoveryChunkWebsite;
+							ExportLog.log(`🔄 Recovery reinitializing base from chunk ${i + 1}`);
+						}
+						
+					} catch (recoveryError) {
+						ExportLog.error(recoveryError, `Failed to rebuild chunk ${i + 1} during crash recovery`);
+						// Continue with other chunks - don't fail the entire recovery
+					}
+				}
+				
+				if (finalWebsite) {
+					ExportLog.log(`✅ CRASH RECOVERY: Website state reconstructed from ${startChunk} chunks`);
+					ExportLog.log(`✅ Recovered state: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
+				} else {
+					ExportLog.warning(`⚠️ CRASH RECOVERY: Failed to reconstruct website state - starting fresh`);
+				}
+			}
+			
+			// Process remaining chunks (new chunks or all chunks if starting fresh)
 			for (let i = startChunk; i < chunks.length; i++) {
 				if (this.isCancelled()) {
 					ExportLog.warning("Export cancelled");
@@ -267,7 +315,7 @@ EXPORT RESUMED: ${timestamp}
 				
 				try {
 					// Build chunk website with calculated globalExportRoot to match regular exporter exactly
-					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0);
+					const chunkWebsite = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0 && !finalWebsite);
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
@@ -282,17 +330,19 @@ EXPORT RESUMED: ${timestamp}
 						continue;
 					}
 					
-					// Merge into final website - maintains all data structures
-					if (i === 0) {
-						finalWebsite = chunkWebsite; // First chunk becomes the base
-						ExportLog.log(`🏗️ First chunk set as base: ${finalWebsite.index.attachmentsShownInTree.length} files in tree`);
+					// Merge into final website - handles both fresh start and crash recovery
+					if (!finalWebsite) {
+						// First chunk (or recovery failed) - becomes the base
+						finalWebsite = chunkWebsite;
+						ExportLog.log(`🏗️ ${i === 0 ? 'First' : 'Base'} chunk set: ${finalWebsite.index.attachmentsShownInTree.length} files in tree`);
+					} else if (finalWebsite.index) {
+						// Merge subsequent chunk into existing website
+						await this.mergeWebsites(chunkWebsite, finalWebsite);
+						ExportLog.log(`🔄 Merged chunk ${i + 1}: total ${finalWebsite.index.attachmentsShownInTree.length} files`);
 					} else {
-						if (finalWebsite && finalWebsite.index) {
-							await this.mergeWebsites(chunkWebsite, finalWebsite);
-						} else {
-							ExportLog.warning(`Final website invalid at chunk ${i + 1} - reinitializing`);
-							finalWebsite = chunkWebsite;
-						}
+						// Final website exists but is invalid - reinitialize
+						ExportLog.warning(`Final website invalid at chunk ${i + 1} - reinitializing`);
+						finalWebsite = chunkWebsite;
 					}
 					
 					// Save progress with website state for crash recovery
@@ -446,6 +496,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// Also pre-set the website.exportOptions before load() to ensure Webpage constructors get correct values
 			website.exportOptions.exportRoot = globalExportRoot;
 			website.exportOptions.flattenExportPaths = false;
+			// Set flag to prevent website.load() from overriding the exportRoot
+			(website.exportOptions as any)._chunkExporterOverride = true;
 			
 			console.log(`🔧🔧 SETTINGS OVERRIDE APPLIED:`);
 			console.log(`🔧🔧   Settings.exportOptions.exportRoot: "${Settings.exportOptions.exportRoot}"`);
