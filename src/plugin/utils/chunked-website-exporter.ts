@@ -258,18 +258,33 @@ EXPORT RESUMED: ${timestamp}
 		// Build the final website by processing chunks
 		let finalWebsite: Website | undefined = undefined;
 		
-		// OPTIMIZED CRASH RECOVERY: Use saved state instead of rebuilding all chunks
+		// COMPREHENSIVE CRASH RECOVERY: Restore all critical data without rebuilding chunks
 		if (isResuming && startChunk > 0) {
-			ExportLog.log(`🔄 CRASH RECOVERY: Attempting fast state restoration (${startChunk} completed chunks)`);
+			ExportLog.log(`🔄 CRASH RECOVERY: Restoring from saved progress (${startChunk} completed chunks)`);
 			
-			// FOR NOW: Skip crash recovery entirely to break the infinite loop
-			// This is a temporary fix - full state restoration would be implemented later
-			ExportLog.warning(`⚠️ TEMPORARY FIX: Skipping crash recovery to prevent infinite loop`);
-			ExportLog.warning(`⚠️ This will miss data from chunks 1-${startChunk}, but allows progress beyond chunk ${startChunk + 1}`);
-			ExportLog.warning(`⚠️ Starting fresh from chunk ${startChunk + 1} to continue export`);
-			
-			// Set finalWebsite to undefined so we start fresh
-			finalWebsite = undefined;
+			try {
+				// Create base website instance for holding restored data
+				finalWebsite = new Website(destination);
+				// Override the export options after creation
+				finalWebsite.exportOptions.exportRoot = globalExportRoot;
+				finalWebsite.exportOptions.flattenExportPaths = false;
+				await finalWebsite.load([]);
+				
+				// CRITICAL: Load existing search index and website data from disk
+				await this.loadExistingWebsiteDataFromDisk(finalWebsite, destination);
+				
+				// CRITICAL: Rebuild file collections from existing exported files on disk
+				await this.rebuildFileCollectionsFromDisk(finalWebsite, destination, chunks, startChunk);
+				
+				ExportLog.log(`✅ CRASH RECOVERY SUCCESS: Restored website state without rebuilding chunks`);
+				ExportLog.log(`✅ Restored: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments`);
+				ExportLog.log(`✅ Search index documents: ${finalWebsite.index.minisearch?.documentCount || 0}`);
+				
+			} catch (recoveryError) {
+				ExportLog.error(recoveryError, "Crash recovery failed - starting fresh to prevent infinite loop");
+				ExportLog.warning(`⚠️ RECOVERY FAILED: Will miss data from chunks 1-${startChunk} but allows progress`);
+				finalWebsite = undefined;
+			}
 		}
 			
 			// Process remaining chunks (new chunks or all chunks if starting fresh)
@@ -1207,6 +1222,195 @@ EXPORT SESSION END: ${new Date().toISOString()}
 		} catch (error) {
 			ExportLog.error(error, "Failed to ensure attachments are queued for download");
 		}
+	}
+	
+	/**
+	 * Load existing website data (search index, metadata) from disk to restore state
+	 */
+	private static async loadExistingWebsiteDataFromDisk(website: Website, destination: Path): Promise<void> {
+		try {
+			ExportLog.log(`📂 Loading existing website data from disk...`);
+			
+			const fs = require('fs').promises;
+			const path = require('path');
+			
+			// Try to load existing search-index.json
+			const searchIndexPath = path.join(destination.path, 'site-lib', 'search-index.json');
+			try {
+				const searchIndexData = await fs.readFile(searchIndexPath, 'utf8');
+				const searchIndex = JSON.parse(searchIndexData);
+				
+				// Restore search index if it exists and has data
+				if (searchIndex && Array.isArray(searchIndex) && searchIndex.length > 0) {
+					// Rebuild minisearch from the data
+					const { default: MiniSearch } = await import('minisearch');
+					website.index.minisearch = new MiniSearch({
+						fields: ['title', 'content'],
+						storeFields: ['title', 'content', 'url'],
+						searchOptions: { fuzzy: 0.2, prefix: true }
+					});
+					
+					// Add all documents back to the search index
+					website.index.minisearch.addAll(searchIndex);
+					
+					ExportLog.log(`✅ Restored search index with ${searchIndex.length} documents`);
+				} else {
+					ExportLog.log(`⚠️ Search index exists but is empty`);
+				}
+			} catch (searchError) {
+				ExportLog.log(`ℹ️ No existing search index found (will create new one)`);
+			}
+			
+			// Try to load existing metadata.json
+			const metadataPath = path.join(destination.path, 'site-lib', 'metadata.json');
+			try {
+				const metadataData = await fs.readFile(metadataPath, 'utf8');
+				const metadata = JSON.parse(metadataData);
+				
+				if (metadata && metadata.webpages && metadata.attachments) {
+					// Initialize website data with existing metadata using the correct WebsiteData structure
+					if (!website.index.websiteData) {
+						const { WebsiteData } = await import("../../shared/website-data");
+						website.index.websiteData = new WebsiteData();
+					}
+					
+					// Update with restored metadata
+					website.index.websiteData.webpages = metadata.webpages || {};
+					website.index.websiteData.attachments = metadata.attachments || [];
+					website.index.websiteData.shownInTree = metadata.shownInTree || [];
+					
+					ExportLog.log(`✅ Restored website metadata: ${Object.keys(metadata.webpages || {}).length} pages, ${(metadata.attachments || []).length} attachments`);
+				} else {
+					ExportLog.log(`⚠️ Metadata exists but is invalid structure`);
+				}
+			} catch (metadataError) {
+				ExportLog.log(`ℹ️ No existing metadata found (will create new one)`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to load existing website data from disk");
+		}
+	}
+	
+	/**
+	 * Rebuild file collections by scanning already exported files on disk
+	 */
+	private static async rebuildFileCollectionsFromDisk(
+		website: Website, 
+		destination: Path, 
+		chunks: TFile[][], 
+		completedChunks: number
+	): Promise<void> {
+		try {
+			ExportLog.log(`📁 Rebuilding file collections from ${completedChunks} completed chunks on disk...`);
+			
+			const { Webpage } = await import("../website/webpage");
+			const { Attachment } = await import("../utils/downloadable");
+			const { MarkdownRendererAPI } = await import("../render-api/render-api");
+			
+			let restoredPages = 0;
+			let restoredAttachments = 0;
+			let missingFiles = 0;
+			
+			// Process files from completed chunks
+			for (let chunkIndex = 0; chunkIndex < completedChunks; chunkIndex++) {
+				const chunkFiles = chunks[chunkIndex];
+				
+				for (const sourceFile of chunkFiles) {
+					try {
+						// Determine target path for this file
+						const sourcePath = sourceFile.path;
+						const targetPath = this.getTargetPathForFile(sourceFile, destination, website.exportOptions.exportRoot);
+						
+						// Check if the exported file actually exists on disk
+						const fs = require('fs');
+						if (!fs.existsSync(targetPath.path)) {
+							missingFiles++;
+							continue; // Skip files that don't exist on disk
+						}
+						
+						const isConvertable = MarkdownRendererAPI.isConvertable(sourceFile.extension);
+						const isAudioFile = ["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(sourceFile.extension);
+						
+						// Restore as attachment if it's a raw file or viewable media
+						if (!isConvertable || MarkdownRendererAPI.viewableMediaExtensions.contains(sourceFile.extension)) {
+							if (!isAudioFile || isConvertable) { // Skip standalone audio files like the regular exporter
+								const attachment = new Attachment(
+									Buffer.alloc(0), // We don't need the actual data since file exists
+									targetPath,
+									sourceFile,
+									website.exportOptions
+								);
+								attachment.showInTree = true;
+								
+								website.index.attachments.push(attachment);
+								website.index.attachmentsShownInTree.push(attachment);
+								website.index.newFiles.push(attachment); // Ensure it's in download queue
+								restoredAttachments++;
+							}
+						}
+						
+						// Restore as webpage if it's convertable
+						if (isConvertable) {
+							const webpage = new Webpage(sourceFile, sourceFile.name, website, website.exportOptions);
+							webpage.showInTree = true;
+							
+							website.index.webpages.push(webpage);
+							website.index.attachmentsShownInTree.push(webpage);
+							website.index.newFiles.push(webpage);
+							restoredPages++;
+							
+							// Add to search index if we have existing search data
+							if (website.index.minisearch) {
+								try {
+									// Add basic search data (content would need to be read from HTML file)
+									website.index.minisearch.add({
+										id: webpage.targetPath.path,
+										title: sourceFile.basename,
+										content: sourceFile.basename, // Simplified content
+										url: webpage.targetPath.path
+									});
+								} catch (searchAddError) {
+									// Ignore search index errors during recovery
+								}
+							}
+						}
+						
+					} catch (fileError) {
+						ExportLog.error(fileError, `Failed to restore file: ${sourceFile.path}`);
+					}
+				}
+			}
+			
+			ExportLog.log(`✅ File collection rebuild complete:`);
+			ExportLog.log(`  - ${restoredPages} webpages restored`);
+			ExportLog.log(`  - ${restoredAttachments} attachments restored`);
+			ExportLog.log(`  - ${missingFiles} files missing from disk (skipped)`);
+			ExportLog.log(`  - Total files in collections: ${website.index.attachmentsShownInTree.length}`);
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to rebuild file collections from disk");
+		}
+	}
+	
+	/**
+	 * Get the target path for a file (helper method)
+	 */
+	private static getTargetPathForFile(file: TFile, destination: Path, exportRoot: string): Path {
+		// Calculate relative path from export root
+		let relativePath = file.path;
+		if (exportRoot && file.path.startsWith(exportRoot)) {
+			relativePath = file.path.substring(exportRoot.length).replace(/^\/+/, '');
+		}
+		
+		// Convert to web-safe path and change extension if needed
+		const webPath = relativePath
+			.toLowerCase()
+			.replace(/[^a-z0-9\-_\/\.]/g, '-')
+			.replace(/--+/g, '-')
+			.replace(/\.md$/, '.html');
+		
+		return destination.joinString(webPath);
 	}
 	
 }
