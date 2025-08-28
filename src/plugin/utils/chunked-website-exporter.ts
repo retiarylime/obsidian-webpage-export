@@ -342,8 +342,8 @@ EXPORT RESUMED: ${timestamp}
 						await this.generateIncrementalFileTree(finalWebsite, i + 1, chunks.length);
 					}
 					
-					// CRITICAL: Generate site-lib files after each chunk so they're always available
-					// This ensures crash recovery works and partial exports are functional
+					// CRITICAL: Generate COMPLETE site-lib folder after each chunk following IDENTICAL approach to regular exporter
+					// This ensures the complete site-lib folder structure is available after every chunk with incremental data
 					if (finalWebsite) {
 						await this.generateSiteLibFiles(finalWebsite, i + 1, chunks.length);
 					}
@@ -1483,95 +1483,137 @@ EXPORT SESSION END: ${new Date().toISOString()}
 	}
 	
 	/**
-	 * Generate site-lib files (search index, metadata, file tree) after each chunk
-	 * This ensures they're always available for crash recovery and partial exports are functional
+	 * Generate COMPLETE site-lib folder after each chunk following IDENTICAL approach to regular exporter
+	 * This ensures the full site-lib structure is available after every chunk with incremental data updates
 	 */
 	private static async generateSiteLibFiles(website: Website, currentChunk: number, totalChunks: number): Promise<void> {
 		try {
-			ExportLog.log(`📚 Generating site-lib files INCREMENTALLY after chunk ${currentChunk}/${totalChunks}...`);
-			ExportLog.log(`📚 This will include data from ALL ${currentChunk} processed chunks`);
+			ExportLog.log(`📚 Generating COMPLETE site-lib folder after chunk ${currentChunk}/${totalChunks} (following regular exporter approach)...`);
+			ExportLog.log(`📚 Site-lib will include INCREMENTAL data from ALL ${currentChunk} processed chunks`);
+			ExportLog.log(`🏗️ This follows the IDENTICAL approach used by the regular exporter for complete compatibility`);
 			
 			const { Utils } = await import("../utils/utils");
+			const { AssetHandler } = await import("../asset-loaders/asset-handler");
 			
-			// Finalize the website index to prepare for site-lib generation
+			// STEP 1: Finalize the website index to prepare for site-lib generation (same as regular exporter)
 			await website.index.finalize();
+			ExportLog.log(`✅ Step 1: Website index finalized`);
 			
-			// NOTE: File tree is now generated after each chunk merge in exportInChunks()
-			// No need to regenerate here - just use the existing fileTreeAsset
+			// STEP 2: Get ALL AssetHandler downloads - this follows the EXACT same approach as regular exporter
+			// This includes: CSS files, JS files, fonts, media, HTML templates, etc.
+			const assetHandlerDownloads = AssetHandler.getDownloads(website.destination, website.exportOptions);
+			ExportLog.log(`✅ Step 2: AssetHandler provided ${assetHandlerDownloads.length} site-lib assets (CSS/JS/fonts/media/HTML)`);
 			
-			// Generate and save the critical site-lib files
+			// Debug: Log the types of assets being downloaded for transparency
+			const cssAssets = assetHandlerDownloads.filter(a => a.targetPath?.path?.includes('/styles/'));
+			const jsAssets = assetHandlerDownloads.filter(a => a.targetPath?.path?.includes('/scripts/'));
+			const fontAssets = assetHandlerDownloads.filter(a => a.targetPath?.path?.includes('/fonts/'));
+			const mediaAssets = assetHandlerDownloads.filter(a => a.targetPath?.path?.includes('/media/'));
+			const htmlAssets = assetHandlerDownloads.filter(a => a.targetPath?.path?.includes('/html/'));
+			
+			ExportLog.log(`📊 Site-lib assets breakdown: ${cssAssets.length} CSS, ${jsAssets.length} JS, ${fontAssets.length} fonts, ${mediaAssets.length} media, ${htmlAssets.length} HTML`);
+			
+			// STEP 3: Add AssetHandler downloads to website index (same as regular exporter Website.build())
+			website.index.addFiles(assetHandlerDownloads);
+			ExportLog.log(`✅ Step 3: ${assetHandlerDownloads.length} AssetHandler downloads added to website index`);
+			
+			// STEP 4: Collect all files to download (following regular exporter pattern)
 			const filesToDownload = [];
 			
-			// 1. Generate metadata.json INCREMENTALLY (contains ALL chunks)
+			// 4a. Add all NEW site-lib assets (CSS, JS, fonts, media, HTML) 
+			const newSiteLibAssets = website.index.newFiles.filter(f => {
+				if (!f || !f.targetPath) return false;
+				const path = f.targetPath.path;
+				return path.includes('site-lib/');
+			});
+			filesToDownload.push(...newSiteLibAssets);
+			ExportLog.log(`✅ Step 4a: Added ${newSiteLibAssets.length} NEW site-lib assets to download queue`);
+			
+			// 4b. Add all UPDATED site-lib assets
+			const updatedSiteLibAssets = website.index.updatedFiles.filter(f => {
+				if (!f || !f.targetPath) return false;
+				const path = f.targetPath.path;
+				return path.includes('site-lib/');
+			});
+			filesToDownload.push(...updatedSiteLibAssets);
+			ExportLog.log(`✅ Step 4b: Added ${updatedSiteLibAssets.length} UPDATED site-lib assets to download queue`);
+			
+			// STEP 5: Generate INCREMENTAL metadata.json (contains ALL chunks processed so far)
 			try {
 				const websiteDataAttachment = website.index.websiteDataAttachment();
 				if (websiteDataAttachment && websiteDataAttachment.data) {
 					filesToDownload.push(websiteDataAttachment);
-					ExportLog.log(`✅ Generated metadata.json INCREMENTALLY (${websiteDataAttachment.data.length} bytes) - includes ALL ${currentChunk} chunks`);
+					ExportLog.log(`✅ Step 5: Generated metadata.json INCREMENTALLY (${websiteDataAttachment.data.length} bytes) - includes ALL ${currentChunk} chunks`);
 				} else {
-					ExportLog.warning(`⚠️ Failed to generate metadata.json`);
+					ExportLog.warning(`⚠️ Step 5: Failed to generate metadata.json`);
 				}
 			} catch (metadataError) {
-				ExportLog.error(metadataError, "Failed to generate metadata.json");
+				ExportLog.error(metadataError, "Step 5: Failed to generate metadata.json");
 			}
 			
-			// 2. Generate search-index.json INCREMENTALLY (contains ALL chunks)
+			// STEP 6: Generate INCREMENTAL search-index.json (contains ALL chunks processed so far)
 			try {
 				const searchIndexAttachment = website.index.indexDataAttachment();
 				if (searchIndexAttachment && searchIndexAttachment.data) {
 					filesToDownload.push(searchIndexAttachment);
 					const searchDocs = website.index.minisearch?.documentCount || 0;
-					ExportLog.log(`✅ Generated search-index.json INCREMENTALLY (${searchIndexAttachment.data.length} bytes) - includes ${searchDocs} documents from ALL ${currentChunk} chunks`);
+					ExportLog.log(`✅ Step 6: Generated search-index.json INCREMENTALLY (${searchIndexAttachment.data.length} bytes) - includes ${searchDocs} documents from ALL ${currentChunk} chunks`);
 				} else {
-					ExportLog.warning(`⚠️ Failed to generate search-index.json`);
+					ExportLog.warning(`⚠️ Step 6: Failed to generate search-index.json`);
 				}
 			} catch (searchError) {
-				ExportLog.error(searchError, "Failed to generate search-index.json");
+				ExportLog.error(searchError, "Step 6: Failed to generate search-index.json");
 			}
 			
-			// 3. Get file-tree-content.html via AssetHandler system (same as regular exporter)
+			// STEP 7: Ensure file-tree-content.html is included (generated incrementally with all chunks)
 			try {
-				if (website.fileTreeAsset) {
+				if (website.fileTreeAsset && website.fileTreeAsset.data) {
+					// The file tree asset is already set up with the correct target path
+					filesToDownload.push(website.fileTreeAsset);
 					const totalTreeFiles = website.index.attachmentsShownInTree?.length || 0;
-					ExportLog.log(`✅ Generated file-tree-content.html INCREMENTALLY (${website.fileTreeAsset.data?.length || 0} bytes) - includes ${totalTreeFiles} files from ALL ${currentChunk} chunks`);
+					ExportLog.log(`✅ Step 7: Added file-tree-content.html INCREMENTALLY (${website.fileTreeAsset.data.length} bytes) - includes ${totalTreeFiles} files from ALL ${currentChunk} chunks`);
 				} else {
-					ExportLog.warning(`⚠️ File tree asset not available - skipping file-tree-content.html`);
-				}
-				
-				// Get all pending AssetHandler downloads (includes file tree asset)
-				const { AssetHandler } = await import("../asset-loaders/asset-handler");
-				const assetHandlerDownloads = AssetHandler.getDownloads(website.destination, website.exportOptions);
-				const fileTreeDownloads = assetHandlerDownloads.filter((asset: any) => 
-					asset.filename === "file-tree.html" || asset.filename === "file-tree-content.html"
-				);
-				if (fileTreeDownloads.length > 0) {
-					filesToDownload.push(...fileTreeDownloads);
-					ExportLog.log(`📁 Added ${fileTreeDownloads.length} file tree assets from AssetHandler`);
+					ExportLog.warning(`⚠️ Step 7: File tree asset not available - file-tree-content.html will be missing`);
 				}
 			} catch (fileTreeError) {
-				ExportLog.error(fileTreeError, "Failed to add file-tree-content.html to download queue");
+				ExportLog.error(fileTreeError, "Step 7: Failed to add file-tree-content.html to download queue");
 			}
 			
-			// 4. Download/save the site-lib files to disk
+			// STEP 8: Download the COMPLETE site-lib folder (same as regular exporter)
 			if (filesToDownload.length > 0) {
 				await Utils.downloadAttachments(filesToDownload);
-				ExportLog.log(`💾 Saved ${filesToDownload.length} site-lib files to disk`);
+				ExportLog.log(`✅ Step 8: Downloaded COMPLETE site-lib folder: ${filesToDownload.length} files saved to disk`);
+				
+				// Log final site-lib structure summary for transparency
+				const totalCss = filesToDownload.filter(f => f.targetPath?.path?.includes('/styles/')).length;
+				const totalJs = filesToDownload.filter(f => f.targetPath?.path?.includes('/scripts/')).length;
+				const totalFonts = filesToDownload.filter(f => f.targetPath?.path?.includes('/fonts/')).length;
+				const totalMedia = filesToDownload.filter(f => f.targetPath?.path?.includes('/media/')).length;
+				const totalHtml = filesToDownload.filter(f => f.targetPath?.path?.includes('/html/')).length;
+				const dataFiles = filesToDownload.filter(f => f.filename === 'metadata.json' || f.filename === 'search-index.json').length;
+				
+				ExportLog.log(`📁 Complete site-lib contents downloaded: ${totalCss} CSS, ${totalJs} JS, ${totalFonts} fonts, ${totalMedia} media, ${totalHtml} HTML, ${dataFiles} data files`);
+			} else {
+				ExportLog.warning(`⚠️ Step 8: No site-lib files to download - this may indicate an issue with AssetHandler`);
 			}
 			
-			// 5. CRITICAL: Download raw attachment files INCREMENTALLY for every chunk
+			// STEP 9: Download raw attachment files INCREMENTALLY for this chunk
 			// This ensures all embedded files (MP3s, images, etc.) are exported immediately after each chunk
 			await this.downloadIncrementalAttachments(website, currentChunk);
+			ExportLog.log(`✅ Step 9: Raw attachment files downloaded for chunk ${currentChunk}`);
 			
-			// 6. Log current progress for debugging
+			// STEP 10: Log current export status for debugging
 			const searchDocs = website.index.minisearch?.documentCount || 0;
 			const totalFiles = website.index.attachmentsShownInTree?.length || 0;
 			const totalPages = website.index.webpages?.length || 0;
 			const totalAttachments = website.index.attachments?.length || 0;
 			
-			ExportLog.log(`📊 Current export status: ${totalPages} pages, ${totalAttachments} attachments, ${totalFiles} in tree, ${searchDocs} searchable docs`);
+			ExportLog.log(`📊 Export status after chunk ${currentChunk}: ${totalPages} pages, ${totalAttachments} attachments, ${totalFiles} in tree, ${searchDocs} searchable docs`);
+			ExportLog.log(`🎉 COMPLETE site-lib folder generated successfully following regular exporter approach`);
+			ExportLog.log(`🔄 Ready for next chunk or export completion - website is fully functional at this point`);
 			
 		} catch (error) {
-			ExportLog.error(error, `Failed to generate site-lib files after chunk ${currentChunk}`);
+			ExportLog.error(error, `Failed to generate complete site-lib folder after chunk ${currentChunk}`);
 			// Don't throw - we want the chunked export to continue even if site-lib generation fails
 		}
 	}
