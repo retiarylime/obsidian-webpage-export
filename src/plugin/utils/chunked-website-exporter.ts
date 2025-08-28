@@ -772,29 +772,50 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					
 					const headers = headersInfo.map((header) => header.heading);
 					
-					// Create search document with EXACT same structure as regular exporter
+					// Create search document with CORRECT structure for MiniSearch
+					// MiniSearch requires 'id' and 'url' fields, not 'path'
 					const searchDocument = {
-						title: webpage.title,
-						aliases: webpage.outputData.aliases,
-						headers: headers,
-						tags: webpage.outputData.allTags,
-						path: webpagePath,
-						content: webpage.outputData.description + " " + webpage.outputData.searchContent,
+						id: webpagePath,        // MiniSearch requires 'id' field
+						title: webpage.title || 'Untitled',
+						aliases: webpage.outputData.aliases || [],
+						headers: headers || [],
+						tags: webpage.outputData.allTags || [],
+						url: webpagePath,       // MiniSearch expects 'url' field  
+						content: (webpage.outputData.description || "") + " " + (webpage.outputData.searchContent || ""),
 					};
 					
-					// Validate search document completeness
+					// Additional validation to prevent MiniSearch errors
+					if (!searchDocument.id) {
+						ExportLog.warning(`Search document missing ID: ${webpagePath} - skipping`);
+						skippedCount++;
+						continue;
+					}
+					
 					if (!searchDocument.title) {
-						ExportLog.warning(`Search document missing title: ${webpagePath}`);
-					}
-					if (!searchDocument.content || searchDocument.content.trim() === " ") {
-						ExportLog.warning(`Search document missing content: ${webpagePath}`);
+						searchDocument.title = 'Untitled';
+						ExportLog.warning(`Search document missing title: ${webpagePath} - using fallback`);
 					}
 					
-					// Add to final website's search index
-					finalWebsite.index.minisearch.add(searchDocument);
-					mergedCount++;
+					if (!searchDocument.content || searchDocument.content.trim() === "" || searchDocument.content.trim() === " ") {
+						searchDocument.content = searchDocument.title; // Fallback content
+						ExportLog.warning(`Search document missing content: ${webpagePath} - using title as content`);
+					}
 					
-					console.log(`🔍 MERGED: ${webpagePath} (title: "${searchDocument.title}", content: ${searchDocument.content.length} chars, headers: ${headers.length}, tags: ${searchDocument.tags.length})`);
+					// Ensure arrays are properly defined
+					searchDocument.aliases = Array.isArray(searchDocument.aliases) ? searchDocument.aliases : [];
+					searchDocument.headers = Array.isArray(searchDocument.headers) ? searchDocument.headers : [];
+					searchDocument.tags = Array.isArray(searchDocument.tags) ? searchDocument.tags : [];
+					
+					// Add to final website's search index with additional error handling
+					try {
+						finalWebsite.index.minisearch.add(searchDocument);
+						mergedCount++;
+						console.log(`🔍 MERGED: ${webpagePath} (title: "${searchDocument.title}", content: ${searchDocument.content.length} chars, headers: ${searchDocument.headers.length}, tags: ${searchDocument.tags.length})`);
+					} catch (addError) {
+						ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}`);
+						console.log(`🔍 ADD ERROR: ${webpagePath} - ${addError.message}`);
+						errorCount++;
+					}
 					
 				} catch (err) {
 					ExportLog.error(err, `Failed to merge search document for ${webpagePath}`);
