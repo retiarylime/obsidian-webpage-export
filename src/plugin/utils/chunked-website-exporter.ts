@@ -213,10 +213,17 @@ EXPORT RESUMED: ${timestamp}
 				resumeFromExistingState = !!existingProgress.lastChunkWebsiteState;
 				
 				if (resumeFromExistingState) {
-					ExportLog.log(`🔄 CRASH RECOVERY: Resuming from chunk ${startChunk + 1} with preserved website state`);
+					ExportLog.log(`🔄 CRASH RECOVERY: ${existingProgress.completedChunks.length} chunks completed successfully`);
+					ExportLog.log(`🔄 Will restart from chunk ${startChunk + 1} (incomplete chunk will be reprocessed from start)`);
 					ExportLog.log(`🔄 Previous state: ${existingProgress.lastChunkWebsiteState?.webpages?.length || 0} pages, ${existingProgress.lastChunkWebsiteState?.attachments?.length || 0} attachments`);
 				} else {
-					ExportLog.log(`📤 Resuming from chunk ${startChunk + 1} (no preserved state)`);
+					ExportLog.log(`📤 Resuming from chunk ${startChunk + 1} (no preserved state - incomplete chunk restart)`);
+				}
+				
+				// Log completed chunks for clarity
+				if (existingProgress.completedChunks.length > 0) {
+					const completedList = existingProgress.completedChunks.map(c => c + 1).join(', ');
+					ExportLog.log(`✅ Previously completed chunks: ${completedList}`);
 				}
 			}
 			
@@ -329,17 +336,6 @@ EXPORT RESUMED: ${timestamp}
 						finalWebsite = chunkWebsite;
 					}
 					
-					// Save progress with website state for crash recovery
-					progress.completedChunks.push(i);
-					
-					// Enhanced: Save website state for true continuity across restarts
-					if (finalWebsite) {
-						progress.lastChunkWebsiteState = this.serializeWebsiteState(finalWebsite);
-						ExportLog.log(`💾 Saved website state after chunk ${i + 1} (${progress.lastChunkWebsiteState.webpages.length} pages, ${progress.lastChunkWebsiteState.attachments.length} attachments)`);
-					}
-					
-					await this.saveProgress(progress);
-					
 					// CRITICAL: Generate site-lib files after each chunk so they're always available
 					// This ensures crash recovery works and partial exports are functional
 					if (finalWebsite) {
@@ -349,8 +345,25 @@ EXPORT RESUMED: ${timestamp}
 					// Memory cleanup
 					await this.performMemoryCleanup(i + 1, chunks.length);
 					
+					// CRITICAL: Only mark chunk as completed AFTER all processing succeeds
+					// This ensures incomplete chunks are restarted from the beginning on crash recovery
+					progress.completedChunks.push(i);
+					
+					// Enhanced: Save website state for true continuity across restarts
+					if (finalWebsite) {
+						progress.lastChunkWebsiteState = this.serializeWebsiteState(finalWebsite);
+						ExportLog.log(`💾 Chunk ${i + 1} completed successfully - saved website state (${progress.lastChunkWebsiteState.webpages.length} pages, ${progress.lastChunkWebsiteState.attachments.length} attachments)`);
+					}
+					
+					await this.saveProgress(progress);
+					ExportLog.log(`✅ Chunk ${i + 1}/${chunks.length} completed and saved to disk`);
+					
 				} catch (error) {
-					ExportLog.error(error, `Error in chunk ${i + 1}`);
+					ExportLog.error(error, `CHUNK ${i + 1} FAILED - will restart this chunk on next export attempt`);
+					ExportLog.log(`⚠️ Chunk ${i + 1} NOT marked as completed - will be reprocessed from start on recovery`);
+					
+					// Save progress WITHOUT adding this chunk to completedChunks
+					// This ensures the failed chunk will be restarted from the beginning
 					await this.saveProgress(progress);
 					throw error;
 				}
@@ -1469,7 +1482,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 	 */
 	private static async generateSiteLibFiles(website: Website, currentChunk: number, totalChunks: number): Promise<void> {
 		try {
-			ExportLog.log(`📚 Generating site-lib files after chunk ${currentChunk}/${totalChunks}...`);
+			ExportLog.log(`📚 Generating site-lib files INCREMENTALLY after chunk ${currentChunk}/${totalChunks}...`);
+			ExportLog.log(`📚 This will include data from ALL ${currentChunk} processed chunks`);
 			
 			const { Utils } = await import("../utils/utils");
 			
@@ -1482,12 +1496,12 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// Generate and save the critical site-lib files
 			const filesToDownload = [];
 			
-			// 1. Generate metadata.json
+			// 1. Generate metadata.json INCREMENTALLY (contains ALL chunks)
 			try {
 				const websiteDataAttachment = website.index.websiteDataAttachment();
 				if (websiteDataAttachment && websiteDataAttachment.data) {
 					filesToDownload.push(websiteDataAttachment);
-					ExportLog.log(`✅ Generated metadata.json (${websiteDataAttachment.data.length} bytes)`);
+					ExportLog.log(`✅ Generated metadata.json INCREMENTALLY (${websiteDataAttachment.data.length} bytes) - includes ALL ${currentChunk} chunks`);
 				} else {
 					ExportLog.warning(`⚠️ Failed to generate metadata.json`);
 				}
@@ -1495,12 +1509,13 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.error(metadataError, "Failed to generate metadata.json");
 			}
 			
-			// 2. Generate search-index.json
+			// 2. Generate search-index.json INCREMENTALLY (contains ALL chunks)
 			try {
 				const searchIndexAttachment = website.index.indexDataAttachment();
 				if (searchIndexAttachment && searchIndexAttachment.data) {
 					filesToDownload.push(searchIndexAttachment);
-					ExportLog.log(`✅ Generated search-index.json (${searchIndexAttachment.data.length} bytes)`);
+					const searchDocs = website.index.minisearch?.documentCount || 0;
+					ExportLog.log(`✅ Generated search-index.json INCREMENTALLY (${searchIndexAttachment.data.length} bytes) - includes ${searchDocs} documents from ALL ${currentChunk} chunks`);
 				} else {
 					ExportLog.warning(`⚠️ Failed to generate search-index.json`);
 				}
@@ -1508,11 +1523,12 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.error(searchError, "Failed to generate search-index.json");
 			}
 			
-			// 3. Generate file-tree-content.html (file tree HTML)
+			// 3. Generate file-tree-content.html INCREMENTALLY (contains ALL chunks)
 			try {
 				if (website.fileTreeAsset) {
 					filesToDownload.push(website.fileTreeAsset);
-					ExportLog.log(`✅ Generated file-tree-content.html (${website.fileTreeAsset.data?.length || 0} bytes)`);
+					const totalTreeFiles = website.index.attachmentsShownInTree?.length || 0;
+					ExportLog.log(`✅ Generated file-tree-content.html INCREMENTALLY (${website.fileTreeAsset.data?.length || 0} bytes) - includes ${totalTreeFiles} files from ALL ${currentChunk} chunks`);
 				} else {
 					ExportLog.warning(`⚠️ File tree asset not available - skipping file-tree-content.html`);
 				}
@@ -1526,8 +1542,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.log(`💾 Saved ${filesToDownload.length} site-lib files to disk`);
 			}
 			
-			// 5. CRITICAL: Download raw attachment files incrementally
-			// This ensures all embedded files (MP3s, images, etc.) are exported after each chunk
+			// 5. CRITICAL: Download raw attachment files INCREMENTALLY for every chunk
+			// This ensures all embedded files (MP3s, images, etc.) are exported immediately after each chunk
 			await this.downloadIncrementalAttachments(website, currentChunk);
 			
 			// 6. Log current progress for debugging
@@ -1550,7 +1566,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 	 */
 	private static async downloadIncrementalAttachments(website: Website, currentChunk: number): Promise<void> {
 		try {
-			ExportLog.log(`📎 Downloading raw attachment files after chunk ${currentChunk}...`);
+			ExportLog.log(`📎 Downloading raw attachment files INCREMENTALLY after chunk ${currentChunk}...`);
+			ExportLog.log(`📎 Processing new files from current chunk processing`);
 			
 			const { Utils } = await import("../utils/utils");
 			const { Webpage } = await import("../website/webpage");
