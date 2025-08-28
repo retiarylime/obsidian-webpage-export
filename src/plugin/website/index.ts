@@ -26,9 +26,8 @@ export class Index
 	private stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
 	private minisearchOptions = 
 	{
-		idField: 'path',
-		fields: ['title', 'aliases', 'headers', 'tags', 'path', 'content'],
-		storeFields: ['title', 'aliases', 'headers', 'tags', 'path'],
+		fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+		storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
 		processTerm: (term:any, _fieldName:any) =>
 			this.stopWords.includes(term) ? null : term.toLowerCase()
 	}
@@ -521,12 +520,13 @@ export class Index
 			const headers = headersInfo.map((header) => header.heading);
 
 			this.minisearch.add({
-				title: webpage.title,
-				aliases: webpage.outputData.aliases,
-				headers: headers,
-				tags: webpage.outputData.allTags,
-				path: webpagePath,
-				content: webpage.outputData.description + " " + webpage.outputData.searchContent,
+				id: webpagePath,
+				title: webpage.title || 'Untitled',
+				aliases: webpage.outputData.aliases || [],
+				headers: headers || [],
+				tags: webpage.outputData.allTags || [],
+				url: webpagePath,
+				content: (webpage.outputData.description || '') + " " + (webpage.outputData.searchContent || ''),
 			});
 		}
 	}
