@@ -1723,10 +1723,34 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			tempContainer.remove();
 
 			// Create the file tree asset (generated content needs proper path setup)
-			// CRITICAL: Initialize AssetHandler properly before creating AssetLoaders (same as regular website)
-			const { AssetHandler } = await import("../asset-loaders/asset-handler");
-			await AssetHandler.reloadAssets(website.exportOptions);
-			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+			// CRITICAL: Manually construct proper relative path to avoid AssetLoader path issues
+			const { Path } = await import("../utils/path");
+			const { Attachment } = await import("../utils/downloadable");
+			const { LoadMethod } = await import("../asset-loaders/asset-types");
+			
+			// Create proper relative path with working directory set (same structure as regular website)
+			const fileTreeRelativePath = new Path("site-lib/html/file-tree.html");
+			fileTreeRelativePath.setWorkingDirectory(website.destination.path);
+			
+			// Create attachment with proper path (bypassing AssetLoader constructor issues)
+			const fileTreeAttachment = new Attachment(htmlData, fileTreeRelativePath, null, website.exportOptions);
+			// Add AssetLoader properties for compatibility with existing code
+			(fileTreeAttachment as any).type = AssetType.HTML;
+			(fileTreeAttachment as any).inlinePolicy = InlinePolicy.Auto;
+			(fileTreeAttachment as any).mutability = Mutability.Temporary;
+			(fileTreeAttachment as any).minify = true;
+			(fileTreeAttachment as any).loadMethod = LoadMethod.Async;
+			(fileTreeAttachment as any).loadPriority = 100;
+			(fileTreeAttachment as any).onlineURL = undefined;
+			(fileTreeAttachment as any).childAssets = [];
+			// Add the required methods
+			(fileTreeAttachment as any).load = async () => {};
+			(fileTreeAttachment as any).minifyAsset = async () => {};
+			(fileTreeAttachment as any).isInlineFormat = () => false;
+			(fileTreeAttachment as any).getHTML = () => htmlData;
+			
+			// Cast to AssetLoader to satisfy TypeScript
+			website.fileTreeAsset = fileTreeAttachment as any;
 
 			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
