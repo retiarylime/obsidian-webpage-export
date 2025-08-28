@@ -763,7 +763,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				try {
 					// Use EXACT same logic as regular exporter's addWebpageToMinisearch
 					// from index.ts:335-350
-					const headersInfo = await webpage.outputData.renderedHeadings;
+					const headersInfo = webpage.outputData.renderedHeadings;
 					
 					// Remove title header if it's the first one (exact match to regular exporter)
 					if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
@@ -866,7 +866,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			finalWebsite.fileTree.generateWithItemsClosed = true;
 			finalWebsite.fileTree.showFileExtentionTags = true;
 			finalWebsite.fileTree.hideFileExtentionTags = ["md"];
-			finalWebsite.fileTree.title = finalWebsite.exportOptions.siteName ?? app.vault.getName();
+			finalWebsite.fileTree.title = finalWebsite.exportOptions.siteName ?? "Exported Vault";
 			finalWebsite.fileTree.id = "file-explorer";
 			
 			// Generate file tree HTML
@@ -1111,31 +1111,6 @@ EXPORT SESSION END: ${new Date().toISOString()}
 	}
 
 	/**
-	 * Restore website state from serialized data
-	 */
-	private static async restoreWebsiteState(
-		website: Website, 
-		serializedState: SerializableWebsiteState
-	): Promise<void> {
-		try {
-			ExportLog.log(`🔄 Restoring website state from crash recovery...`);
-			
-			// Restore basic collections (the detailed restoration would need
-			// to recreate the actual objects, but for now we ensure counts are correct)
-			ExportLog.log(`🔄 Restoring ${serializedState.webpages.length} webpages`);
-			ExportLog.log(`🔄 Restoring ${serializedState.attachments.length} attachments`);
-			ExportLog.log(`🔄 Restoring ${serializedState.attachmentsShownInTree.length} tree items`);
-			
-			// Note: Full object restoration would require recreating Webpage and Attachment objects
-			// For now, this provides visibility into what should be restored
-			
-			ExportLog.log(`✅ Website state restoration prepared`);
-		} catch (error) {
-			ExportLog.error(error, "Failed to restore website state - proceeding with fresh state");
-		}
-	}
-
-	/**
 	 * Clean up progress file
 	 */
 	private static async cleanupProgress(destination: Path): Promise<void> {
@@ -1327,7 +1302,6 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				for (const sourceFile of chunkFiles) {
 					try {
 						// Determine target path for this file
-						const sourcePath = sourceFile.path;
 						const targetPath = this.getTargetPathForFile(sourceFile, destination, website.exportOptions.exportRoot);
 						
 						// Check if the exported file actually exists on disk
