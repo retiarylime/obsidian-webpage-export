@@ -1472,7 +1472,11 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.log(`💾 Saved ${filesToDownload.length} site-lib files to disk`);
 			}
 			
-			// 4. Log current progress for debugging
+			// 4. CRITICAL: Download raw attachment files incrementally
+			// This ensures all embedded files (MP3s, images, etc.) are exported after each chunk
+			await this.downloadIncrementalAttachments(website, currentChunk);
+			
+			// 5. Log current progress for debugging
 			const searchDocs = website.index.minisearch?.documentCount || 0;
 			const totalFiles = website.index.attachmentsShownInTree?.length || 0;
 			const totalPages = website.index.webpages?.length || 0;
@@ -1483,6 +1487,95 @@ EXPORT SESSION END: ${new Date().toISOString()}
 		} catch (error) {
 			ExportLog.error(error, `Failed to generate site-lib files after chunk ${currentChunk}`);
 			// Don't throw - we want the chunked export to continue even if site-lib generation fails
+		}
+	}
+	
+	/**
+	 * Download raw attachment files incrementally after each chunk
+	 * This ensures embedded files (MP3s, images, etc.) are exported immediately
+	 */
+	private static async downloadIncrementalAttachments(website: Website, currentChunk: number): Promise<void> {
+		try {
+			ExportLog.log(`📎 Downloading raw attachment files after chunk ${currentChunk}...`);
+			
+			const { Utils } = await import("../utils/utils");
+			const { Webpage } = await import("../website/webpage");
+			
+			// Get files that need to be downloaded (from newFiles and updatedFiles)
+			// These are the attachment files that were added/updated in recent chunks
+			const newAttachments = website.index.newFiles.filter((f) => !(f instanceof Webpage));
+			const updatedAttachments = website.index.updatedFiles.filter((f) => !(f instanceof Webpage));
+			
+			const allAttachmentsToDownload = [...newAttachments, ...updatedAttachments];
+			
+			// Filter for actual raw attachment files (exclude HTML pages and site-lib files)
+			const rawAttachments = allAttachmentsToDownload.filter(f => {
+				if (!f || !f.targetPath) return false;
+				
+				const targetPath = f.targetPath.path;
+				const sourcePath = f.sourcePath || "";
+				
+				// Exclude HTML files (these are webpages, not raw attachments)
+				if (targetPath.endsWith('.html')) return false;
+				
+				// Exclude site-lib files (these are handled separately)
+				if (targetPath.includes('site-lib/')) return false;
+				
+				// Include raw files: MP3s, images, PDFs, etc.
+				const extension = sourcePath.split('.').pop()?.toLowerCase() || "";
+				const rawExtensions = [
+					'mp3', 'wav', 'ogg', 'aac', 'm4a', 'flac', // Audio
+					'png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', // Images
+					'pdf', 'doc', 'docx', 'txt', 'zip', 'rar', // Documents
+					'mp4', 'avi', 'mov', 'wmv', 'flv', // Video
+					'css', 'js', 'json', 'xml' // Web assets (but not site-lib)
+				];
+				
+				return rawExtensions.includes(extension);
+			});
+			
+			if (rawAttachments.length > 0) {
+				ExportLog.log(`📎 Found ${rawAttachments.length} raw attachment files to download...`);
+				
+				// Debug: Log some sample files being downloaded
+				const sampleFiles = rawAttachments.slice(0, 5);
+				sampleFiles.forEach(f => {
+					ExportLog.log(`  📎 Downloading: ${f.sourcePath} -> ${f.targetPath.path}`);
+				});
+				
+				if (rawAttachments.length > 5) {
+					ExportLog.log(`  📎 ... and ${rawAttachments.length - 5} more files`);
+				}
+				
+				// Download the raw attachment files
+				await Utils.downloadAttachments(rawAttachments);
+				
+				ExportLog.log(`✅ Downloaded ${rawAttachments.length} raw attachment files`);
+				
+				// Count MP3 files specifically for debugging
+				const mp3Files = rawAttachments.filter(f => 
+					f.sourcePath && f.sourcePath.toLowerCase().endsWith('.mp3'));
+				if (mp3Files.length > 0) {
+					ExportLog.log(`🎵 Downloaded ${mp3Files.length} MP3 files in this chunk`);
+				}
+				
+				// Clear the download queues to prevent re-downloading in subsequent chunks
+				// Only remove the files we just downloaded
+				const downloadedPaths = new Set(rawAttachments.map(f => f.targetPath.path));
+				website.index.newFiles = website.index.newFiles.filter(f => 
+					!f.targetPath || !downloadedPaths.has(f.targetPath.path));
+				website.index.updatedFiles = website.index.updatedFiles.filter(f => 
+					!f.targetPath || !downloadedPaths.has(f.targetPath.path));
+					
+				ExportLog.log(`🧹 Cleared ${rawAttachments.length} downloaded files from future download queues`);
+				
+			} else {
+				ExportLog.log(`ℹ️ No new raw attachment files to download after chunk ${currentChunk}`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, `Failed to download incremental attachments after chunk ${currentChunk}`);
+			// Don't throw - we want the chunked export to continue even if some downloads fail
 		}
 	}
 	
