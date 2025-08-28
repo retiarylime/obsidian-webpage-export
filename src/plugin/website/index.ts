@@ -541,7 +541,15 @@ export class Index
 			// Only discard if we confirmed the document exists
 			if (needsDiscard) {
 				try {
-					this.minisearch.discard(webpagePath);
+					// CRITICAL: Additional safety check before discard
+					if (!this.minisearch || typeof this.minisearch.discard !== 'function') {
+						ExportLog.warning(`MiniSearch instance corrupted before discard, rebuilding`);
+						await this.rebuildMinisearch();
+						if (!this.minisearch) return;
+						needsDiscard = false; // Skip discard after rebuild
+					} else {
+						this.minisearch.discard(webpagePath);
+					}
 				} catch (discardError) {
 					// MiniSearch TreeIterator error - index is corrupted, rebuild it
 					ExportLog.warning(`MiniSearch discard failed for ${webpagePath}, rebuilding index: ${discardError.message}`);
@@ -586,6 +594,13 @@ export class Index
 		// CRITICAL: Safe add operation with error recovery
 		try {
 			if (!this.minisearch) return; // Safety check
+			
+			// Additional safety check before add operation
+			if (typeof this.minisearch.add !== 'function') {
+				ExportLog.warning(`MiniSearch instance corrupted before add, creating fresh index`);
+				this.minisearch = new Minisearch(this.minisearchOptions);
+			}
+			
 			this.minisearch.add(searchDocument);
 		} catch (addError) {
 			ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}, attempting final recovery`);
