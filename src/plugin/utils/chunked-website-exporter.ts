@@ -336,6 +336,12 @@ EXPORT RESUMED: ${timestamp}
 						finalWebsite = chunkWebsite;
 					}
 					
+					// CRITICAL: Generate file tree after each chunk (following regular exporter approach)
+					// This ensures file tree is built incrementally with ALL files from ALL processed chunks
+					if (finalWebsite) {
+						await this.generateIncrementalFileTree(finalWebsite, i + 1, chunks.length);
+					}
+					
 					// CRITICAL: Generate site-lib files after each chunk so they're always available
 					// This ensures crash recovery works and partial exports are functional
 					if (finalWebsite) {
@@ -1490,8 +1496,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// Finalize the website index to prepare for site-lib generation
 			await website.index.finalize();
 			
-			// Regenerate file tree with current data INCREMENTALLY
-			await this.generateIncrementalFileTree(website, currentChunk, totalChunks);
+			// NOTE: File tree is now generated after each chunk merge in exportInChunks()
+			// No need to regenerate here - just use the existing fileTreeAsset
 			
 			// Generate and save the critical site-lib files
 			const filesToDownload = [];
