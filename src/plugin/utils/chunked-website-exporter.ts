@@ -812,17 +812,70 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				
 				const webpagePath = webpage.targetPath.path;
 				
-				// Check if the webpage is already in the final index to avoid duplicates
-				if (finalWebsite.index.minisearch.has(webpagePath)) {
-					console.log(`🔍 SKIP: Search document already exists: ${webpagePath}`);
-					skippedCount++;
-					continue;
-				}
-				
+				// CRITICAL: Use the same robust MiniSearch handling as the regular website index
+				// This prevents TreeIterator corruption by properly handling MiniSearch state
 				try {
-					// Use EXACT same logic as regular exporter's addWebpageToMinisearch
-					// from index.ts:335-350
-					const headersInfo = webpage.outputData.renderedHeadings;
+					// First, validate the minisearch instance is healthy (same as regular index)
+					if (!finalWebsite.index.minisearch || typeof finalWebsite.index.minisearch.has !== 'function') {
+						ExportLog.warning(`Final website MiniSearch instance invalid, rebuilding from scratch`);
+						await this.rebuildMinisearchForWebsite(finalWebsite);
+						if (!finalWebsite.index.minisearch) {
+							ExportLog.error(new Error("Failed to rebuild MiniSearch"), "Skipping search index merge");
+							return;
+						}
+					}
+
+					// CRITICAL: Safe has() check with comprehensive error handling (same as regular index)
+					let needsDiscard = false;
+					try {
+						needsDiscard = finalWebsite.index.minisearch.has(webpagePath);
+					} catch (hasError) {
+						ExportLog.warning(`MiniSearch has() check failed for ${webpagePath}, rebuilding index: ${hasError.message}`);
+						await this.rebuildMinisearchForWebsite(finalWebsite);
+						if (!finalWebsite.index.minisearch) {
+							ExportLog.error(new Error("Rebuild failed"), "Skipping search index merge");
+							return;
+						}
+						
+						// Try has() again after rebuild
+						try {
+							needsDiscard = finalWebsite.index.minisearch.has(webpagePath);
+						} catch (secondHasError) {
+							ExportLog.error(secondHasError, `MiniSearch still broken after rebuild, skipping ${webpagePath}`);
+							skippedCount++;
+							continue; // Skip this document
+						}
+					}
+
+					// Only discard if we confirmed the document exists (same as regular index)
+					if (needsDiscard) {
+						try {
+							// CRITICAL: Additional safety check before discard (same as regular index)
+							if (!finalWebsite.index.minisearch || typeof finalWebsite.index.minisearch.discard !== 'function') {
+								ExportLog.warning(`MiniSearch instance corrupted before discard, rebuilding`);
+								await this.rebuildMinisearchForWebsite(finalWebsite);
+								if (!finalWebsite.index.minisearch) {
+									ExportLog.error(new Error("Rebuild failed"), "Skipping search index merge");
+									return;
+								}
+								needsDiscard = false; // Skip discard after rebuild
+							} else {
+								finalWebsite.index.minisearch.discard(webpagePath);
+								console.log(`🔍 DISCARDED: Existing document ${webpagePath}`);
+							}
+						} catch (discardError) {
+							ExportLog.warning(`Discard failed for ${webpagePath}, rebuilding: ${discardError.message}`);
+							await this.rebuildMinisearchForWebsite(finalWebsite);
+							if (!finalWebsite.index.minisearch) {
+								ExportLog.error(new Error("Rebuild failed"), "Skipping search index merge");
+								return;
+							}
+							needsDiscard = false; // Skip discard after rebuild
+						}
+					}
+				
+					// Build the search document with the same logic as regular exporter
+					const headersInfo = webpage.outputData.renderedHeadings || [];
 					
 					// Remove title header if it's the first one (exact match to regular exporter)
 					if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
@@ -832,85 +885,46 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					const headers = headersInfo.map((header) => header.heading);
 					
 					// Create search document with CORRECT structure for MiniSearch
-					// MiniSearch requires 'id' and 'url' fields, not 'path'
 					const searchDocument = {
 						id: webpagePath,        // MiniSearch requires 'id' field
-						title: webpage.title || 'Untitled',
-						aliases: webpage.outputData.aliases || [],
-						headers: headers || [],
-						tags: webpage.outputData.allTags || [],
+						title: webpage.title || webpage.source?.basename || 'Untitled',
+						aliases: Array.isArray(webpage.outputData.aliases) ? webpage.outputData.aliases : [],
+						headers: Array.isArray(headers) ? headers : [],
+						tags: Array.isArray(webpage.outputData.allTags) ? webpage.outputData.allTags : [],
 						url: webpagePath,       // MiniSearch expects 'url' field  
-						content: (webpage.outputData.description || "") + " " + (webpage.outputData.searchContent || ""),
+						content: ((webpage.outputData.description || "") + " " + (webpage.outputData.searchContent || "")).trim() || webpage.title || 'No content',
 					};
 					
-					// Additional validation to prevent MiniSearch errors
-					if (!searchDocument.id) {
-						ExportLog.warning(`Search document missing ID: ${webpagePath} - skipping`);
-						skippedCount++;
-						continue;
-					}
-					
-					if (!searchDocument.title) {
-						searchDocument.title = 'Untitled';
-						ExportLog.warning(`Search document missing title: ${webpagePath} - using fallback`);
-					}
-					
-					if (!searchDocument.content || searchDocument.content.trim() === "" || searchDocument.content.trim() === " ") {
-						searchDocument.content = searchDocument.title; // Fallback content
-						ExportLog.warning(`Search document missing content: ${webpagePath} - using title as content`);
-					}
-					
-					// Ensure arrays are properly defined
-					searchDocument.aliases = Array.isArray(searchDocument.aliases) ? searchDocument.aliases : [];
-					searchDocument.headers = Array.isArray(searchDocument.headers) ? searchDocument.headers : [];
-					searchDocument.tags = Array.isArray(searchDocument.tags) ? searchDocument.tags : [];
-					
-					// Add to final website's search index with additional error handling
+					// CRITICAL: Safe add operation with comprehensive error handling (same as regular index)
 					try {
-						// CRITICAL: Validate the MiniSearch object before adding to prevent corruption
 						if (!finalWebsite.index.minisearch || typeof finalWebsite.index.minisearch.add !== 'function') {
-							ExportLog.error(new Error("MiniSearch object is corrupted"), `Cannot add document ${webpagePath}`);
-							errorCount++;
-							continue;
+							ExportLog.warning(`MiniSearch instance corrupted before add, rebuilding`);
+							await this.rebuildMinisearchForWebsite(finalWebsite);
+							if (!finalWebsite.index.minisearch) {
+								ExportLog.error(new Error("Rebuild failed"), "Skipping search index merge");
+								return;
+							}
 						}
-						
-						// Double-check the search document is valid before adding
-						if (!searchDocument.id || !searchDocument.title) {
-							ExportLog.error(new Error("Invalid search document structure"), `Document ${webpagePath} missing required fields`);
-							errorCount++;
-							continue;
-						}
-						
+
 						finalWebsite.index.minisearch.add(searchDocument);
 						mergedCount++;
-						console.log(`🔍 MERGED: ${webpagePath} (title: "${searchDocument.title}", content: ${searchDocument.content.length} chars, headers: ${searchDocument.headers.length}, tags: ${searchDocument.tags.length})`);
-					} catch (addError) {
-						ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}`);
-						console.log(`🔍 ADD ERROR: ${webpagePath} - ${addError.message}`);
+						console.log(`🔍 MERGED: ${webpagePath} (title: "${searchDocument.title}", content: ${searchDocument.content.length} chars)`);
 						
-						// If the error suggests MiniSearch corruption, try to recreate it
-						if (addError.message && (addError.message.includes('keys') || addError.message.includes('TreeIterator'))) {
-							ExportLog.warning("Detected MiniSearch corruption - attempting to recreate search index");
-							try {
-								const { default: MiniSearch } = await import('minisearch');
-								const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
-								const minisearchOptions = {
-									fields: ['title', 'aliases', 'headers', 'tags', 'content'],
-									storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
-									processTerm: (term: any, _fieldName: any) =>
-										stopWords.includes(term) ? null : term.toLowerCase()
-								};
-								finalWebsite.index.minisearch = new MiniSearch(minisearchOptions);
-								
-								// Try adding the document again
+					} catch (addError) {
+						ExportLog.warning(`Add failed for ${webpagePath}, attempting recovery: ${addError.message}`);
+						
+						// Attempt recovery by rebuilding (same as regular index)
+						try {
+							await this.rebuildMinisearchForWebsite(finalWebsite);
+							if (finalWebsite.index.minisearch) {
 								finalWebsite.index.minisearch.add(searchDocument);
 								mergedCount++;
-								ExportLog.log(`🔍 RECOVERED: Successfully added ${webpagePath} after recreating MiniSearch`);
-							} catch (recoveryError) {
-								ExportLog.error(recoveryError, `Failed to recover from MiniSearch corruption for ${webpagePath}`);
-								errorCount++;
+								ExportLog.log(`🔍 RECOVERED: Successfully added ${webpagePath} after rebuilding MiniSearch`);
+							} else {
+								throw new Error("Rebuild failed");
 							}
-						} else {
+						} catch (recoveryError) {
+							ExportLog.error(recoveryError, `Failed to recover from MiniSearch error for ${webpagePath}`);
 							errorCount++;
 						}
 					}
@@ -931,6 +945,83 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			
 		} catch (error) {
 			ExportLog.error(error, "Critical failure in search index merging");
+		}
+	}
+	
+	/**
+	 * Rebuild the MiniSearch index for a website from scratch when corruption is detected
+	 * This mirrors the rebuildMinisearch method from the regular website index
+	 */
+	private static async rebuildMinisearchForWebsite(website: Website): Promise<void> {
+		try {
+			ExportLog.log("Rebuilding corrupted MiniSearch index for website...");
+			
+			// Get the same MiniSearch options as regular website index
+			const { default: MiniSearch } = await import('minisearch');
+			const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
+			const minisearchOptions = {
+				fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+				storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+				processTerm: (term: any, _fieldName: any) =>
+					stopWords.includes(term) ? null : term.toLowerCase()
+			};
+			
+			// Create fresh MiniSearch instance
+			website.index.minisearch = new MiniSearch(minisearchOptions);
+			
+			// Re-add all existing webpages to the fresh index
+			let rebuiltCount = 0;
+			for (const existingWebpage of website.index.webpages) {
+				try {
+					if (!existingWebpage.targetPath) continue;
+					
+					const webpagePath = existingWebpage.targetPath.path;
+					
+					// Get headers safely (same logic as regular website index)
+					let headers: string[] = [];
+					try {
+						const headersInfo = existingWebpage.outputData?.renderedHeadings || [];
+						if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == existingWebpage.title) {
+							headersInfo.shift();
+						}
+						headers = headersInfo.map((header) => header.heading);
+					} catch {
+						headers = [];
+					}
+
+					// Create validated document for rebuilding (same structure as regular website index)
+					const rebuildDocument = {
+						id: webpagePath,
+						title: existingWebpage.title || existingWebpage.source?.basename || 'Untitled',
+						aliases: Array.isArray(existingWebpage.outputData?.aliases) ? existingWebpage.outputData.aliases : [],
+						headers: Array.isArray(headers) ? headers : [],
+						tags: Array.isArray(existingWebpage.outputData?.allTags) ? existingWebpage.outputData.allTags : [],
+						url: webpagePath,
+						content: ((existingWebpage.outputData?.description || '') + " " + (existingWebpage.outputData?.searchContent || '')).trim() || existingWebpage.title || 'No content',
+					};
+
+					website.index.minisearch.add(rebuildDocument);
+					rebuiltCount++;
+				} catch (rebuildError) {
+					// Skip problematic documents during rebuild (same as regular website index)
+					ExportLog.warning(`Skipped webpage during index rebuild: ${existingWebpage.source?.path} - ${rebuildError.message}`);
+				}
+			}
+			
+			ExportLog.log(`MiniSearch index rebuilt successfully with ${rebuiltCount} documents`);
+		} catch (rebuildError) {
+			ExportLog.error(rebuildError, "Failed to rebuild MiniSearch index");
+			
+			// Create minimal working index (same fallback as regular website index)
+			const { default: MiniSearch } = await import('minisearch');
+			const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
+			const minisearchOptions = {
+				fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+				storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+				processTerm: (term: any, _fieldName: any) =>
+					stopWords.includes(term) ? null : term.toLowerCase()
+			};
+			website.index.minisearch = new MiniSearch(minisearchOptions);
 		}
 	}
 	
