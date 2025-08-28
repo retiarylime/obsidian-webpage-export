@@ -580,6 +580,22 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				return undefined;
 			}
 			
+			// CRITICAL: Validate MiniSearch object is properly initialized to prevent corruption
+			if (builtWebsite.index.minisearch) {
+				try {
+					const testDocCount = builtWebsite.index.minisearch.documentCount;
+					const hasRequiredMethods = typeof builtWebsite.index.minisearch.add === 'function' && 
+												typeof builtWebsite.index.minisearch.has === 'function';
+					if (!hasRequiredMethods) {
+						throw new Error("MiniSearch object missing required methods");
+					}
+					console.log(`🔍 CHUNK VALIDATION: Built website search index has ${testDocCount} documents and required methods`);
+				} catch (validationError) {
+					ExportLog.error(validationError, "Chunk website MiniSearch object is corrupted - this may cause merge failures");
+					// Don't fail the chunk, but warn about potential issues
+				}
+			}
+			
 			// For the first chunk, ensure it has the complete website infrastructure
 			// This includes CSS, JS, search index, metadata, and all core assets
 			if (isFirstChunk) {
@@ -758,6 +774,30 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				return;
 			}
 			
+			// CRITICAL: Validate MiniSearch objects are properly initialized
+			try {
+				const testDocCount = finalWebsite.index.minisearch.documentCount;
+				const hasRequiredMethods = typeof finalWebsite.index.minisearch.add === 'function' && 
+											typeof finalWebsite.index.minisearch.has === 'function';
+				if (!hasRequiredMethods) {
+					throw new Error("MiniSearch object missing required methods");
+				}
+				console.log(`🔍 VALIDATION: Final website search index has ${testDocCount} documents and required methods`);
+			} catch (validationError) {
+				ExportLog.error(validationError, "Final website MiniSearch object is corrupted - recreating");
+				// Recreate the MiniSearch object with proper options
+				const { default: MiniSearch } = await import('minisearch');
+				const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
+				const minisearchOptions = {
+					fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+					storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+					processTerm: (term: any, _fieldName: any) =>
+						stopWords.includes(term) ? null : term.toLowerCase()
+				};
+				finalWebsite.index.minisearch = new MiniSearch(minisearchOptions);
+				ExportLog.log("🔍 Recreated corrupted MiniSearch object");
+			}
+			
 			ExportLog.log(`🔍 Merging search index: ${chunkWebsite.index.webpages.length} webpages from chunk`);
 			
 			let mergedCount = 0;
@@ -827,13 +867,52 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					
 					// Add to final website's search index with additional error handling
 					try {
+						// CRITICAL: Validate the MiniSearch object before adding to prevent corruption
+						if (!finalWebsite.index.minisearch || typeof finalWebsite.index.minisearch.add !== 'function') {
+							ExportLog.error(new Error("MiniSearch object is corrupted"), `Cannot add document ${webpagePath}`);
+							errorCount++;
+							continue;
+						}
+						
+						// Double-check the search document is valid before adding
+						if (!searchDocument.id || !searchDocument.title) {
+							ExportLog.error(new Error("Invalid search document structure"), `Document ${webpagePath} missing required fields`);
+							errorCount++;
+							continue;
+						}
+						
 						finalWebsite.index.minisearch.add(searchDocument);
 						mergedCount++;
 						console.log(`🔍 MERGED: ${webpagePath} (title: "${searchDocument.title}", content: ${searchDocument.content.length} chars, headers: ${searchDocument.headers.length}, tags: ${searchDocument.tags.length})`);
 					} catch (addError) {
 						ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}`);
 						console.log(`🔍 ADD ERROR: ${webpagePath} - ${addError.message}`);
-						errorCount++;
+						
+						// If the error suggests MiniSearch corruption, try to recreate it
+						if (addError.message && (addError.message.includes('keys') || addError.message.includes('TreeIterator'))) {
+							ExportLog.warning("Detected MiniSearch corruption - attempting to recreate search index");
+							try {
+								const { default: MiniSearch } = await import('minisearch');
+								const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
+								const minisearchOptions = {
+									fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+									storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+									processTerm: (term: any, _fieldName: any) =>
+										stopWords.includes(term) ? null : term.toLowerCase()
+								};
+								finalWebsite.index.minisearch = new MiniSearch(minisearchOptions);
+								
+								// Try adding the document again
+								finalWebsite.index.minisearch.add(searchDocument);
+								mergedCount++;
+								ExportLog.log(`🔍 RECOVERED: Successfully added ${webpagePath} after recreating MiniSearch`);
+							} catch (recoveryError) {
+								ExportLog.error(recoveryError, `Failed to recover from MiniSearch corruption for ${webpagePath}`);
+								errorCount++;
+							}
+						} else {
+							errorCount++;
+						}
 					}
 					
 				} catch (err) {
@@ -1266,13 +1345,16 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				// Restore search index if it exists and has data
 				if (searchIndex && Array.isArray(searchIndex) && searchIndex.length > 0) {
 					try {
-						// Rebuild minisearch from the data with robust error handling
+						// Rebuild minisearch from the data using EXACT same options as regular website index
 						const { default: MiniSearch } = await import('minisearch');
-						website.index.minisearch = new MiniSearch({
-							fields: ['title', 'content'],
-							storeFields: ['title', 'content', 'url'],
-							searchOptions: { fuzzy: 0.2, prefix: true }
-						});
+						const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
+						const minisearchOptions = {
+							fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+							storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+							processTerm: (term: any, _fieldName: any) =>
+								stopWords.includes(term) ? null : term.toLowerCase()
+						};
+						website.index.minisearch = new MiniSearch(minisearchOptions);
 						
 						// Add documents one by one with validation to avoid MiniSearch errors
 						let addedCount = 0;
@@ -1286,16 +1368,19 @@ EXPORT SESSION END: ${new Date().toISOString()}
 									continue;
 								}
 								
-								// Ensure required fields exist
+								// Ensure required fields exist with correct structure for MiniSearch
 								const validDoc = {
 									id: doc.id || doc.url || `doc_${addedCount}`,
 									title: doc.title || 'Untitled',
+									aliases: Array.isArray(doc.aliases) ? doc.aliases : [],
+									headers: Array.isArray(doc.headers) ? doc.headers : [],
+									tags: Array.isArray(doc.tags) ? doc.tags : [],
 									content: doc.content || '',
 									url: doc.url || doc.id || `doc_${addedCount}`
 								};
 								
-								// Only add if we have an ID
-								if (validDoc.id) {
+								// Only add if we have an ID and the document is valid
+								if (validDoc.id && validDoc.title) {
 									website.index.minisearch.add(validDoc);
 									addedCount++;
 								} else {
