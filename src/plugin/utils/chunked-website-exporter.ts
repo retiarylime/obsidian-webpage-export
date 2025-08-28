@@ -1103,7 +1103,13 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			});
 			
 			tempContainer.remove();
+			
+			// Create target path with correct working directory (export destination)
+			const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(finalWebsite.destination.path);
+			
 			finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, finalWebsite.exportOptions);
+			// Override the target path to ensure correct working directory
+			finalWebsite.fileTreeAsset.targetPath = targetPath;
 			
 			ExportLog.log(`✅ File tree regenerated with ${paths.length} files`);
 			
@@ -1548,8 +1554,13 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					const { AssetLoader } = await import("../asset-loaders/base-asset");
 					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 					
+					// Create target path with correct working directory (export destination)
+					const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(website.destination.path);
+					
 					// Restore the file tree asset from existing file on disk
 					website.fileTreeAsset = new AssetLoader("file-tree.html", fileTreeData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, website.exportOptions);
+					// Override the target path to ensure correct working directory
+					website.fileTreeAsset.targetPath = targetPath;
 					ExportLog.log(`✅ CRASH RECOVERY: Restored file tree asset from disk (${fileTreeData.length} bytes) - will be preserved`);
 				} else {
 					ExportLog.log(`⚠️ File tree file exists but is empty`);
@@ -2069,7 +2080,13 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					// Update the file tree asset with the incremented HTML
 					const { AssetLoader } = await import("../asset-loaders/base-asset");
 					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+					
+					// Create target path with correct working directory (export destination)
+					const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(website.destination.path);
+					
 					website.fileTreeAsset = new AssetLoader("file-tree.html", updatedTreeHtml, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, website.exportOptions);
+					// Override the target path to ensure correct working directory
+					website.fileTreeAsset.targetPath = targetPath;
 					
 					// Still need to create full tree structure for tree order calculations
 					const allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
@@ -2146,7 +2163,12 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// CRITICAL: Ensure AssetHandler is initialized with final website's options
 			const { AssetHandler } = await import("../asset-loaders/asset-handler");
 			await AssetHandler.reloadAssets(website.exportOptions);
+			// Create target path with correct working directory (export destination)
+			const targetPath = new Path("site-lib/html/file-tree.html").setWorkingDirectory(website.destination.path);
+			
 			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary, undefined, undefined, undefined, website.exportOptions);
+			// Override the target path to ensure correct working directory
+			website.fileTreeAsset.targetPath = targetPath;
 
 			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
