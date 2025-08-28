@@ -1722,7 +1722,10 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 			tempContainer.remove();
 
-			// Create the file tree asset (null source since this is generated content)
+			// Create the file tree asset (generated content needs proper path setup)
+			// CRITICAL: Initialize AssetHandler properly before creating AssetLoaders (same as regular website)
+			const { AssetHandler } = await import("../asset-loaders/asset-handler");
+			await AssetHandler.reloadAssets(website.exportOptions);
 			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
 			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
