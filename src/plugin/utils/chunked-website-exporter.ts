@@ -349,6 +349,13 @@ EXPORT RESUMED: ${timestamp}
 					// CRITICAL: Generate file tree after each chunk (following regular exporter approach)
 					// This ensures file tree is built incrementally with ALL files from ALL processed chunks
 					if (finalWebsite) {
+						// CRITICAL: Ensure file navigation is enabled for final website
+						// (It might have been disabled during chunk building)
+						if (!finalWebsite.exportOptions.fileNavigationOptions.enabled) {
+							finalWebsite.exportOptions.fileNavigationOptions.enabled = true;
+							ExportLog.log(`🌲 Re-enabled file navigation for final website incremental file tree`);
+						}
+						
 						await this.generateIncrementalFileTree(finalWebsite, i + 1, chunks.length);
 					}
 					
@@ -576,7 +583,18 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				console.log(`   Output: ${finalPath}`);
 			}			let builtWebsite: Website | undefined;
 			try {
+				// CRITICAL: Disable file tree creation for chunk websites to prevent overwriting
+				// Only the final merged website should have the incremental file tree
+				const originalFileNavEnabled = website.exportOptions.fileNavigationOptions.enabled;
+				website.exportOptions.fileNavigationOptions.enabled = false;
+				
+				ExportLog.log(`🏗️ Building chunk website (file tree creation disabled for chunk)`);
+				
 				builtWebsite = await website.build();
+				
+				// Restore original setting (though it won't be used again)
+				website.exportOptions.fileNavigationOptions.enabled = originalFileNavEnabled;
+				
 			} catch (buildError) {
 				ExportLog.error(buildError, `Error building chunk website - search index issue?`);
 				// Try to recover by rebuilding without problematic components
