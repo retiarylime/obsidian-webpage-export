@@ -370,6 +370,10 @@ EXPORT RESUMED: ${timestamp}
 			if (finalWebsite) {
 				ExportLog.log("🎯 Finalizing website - identical to original exporter");
 				
+				// CRITICAL: Ensure all attachment files are properly queued for download
+				// This is essential for crash recovery where attachments may not be in newFiles/updatedFiles
+				await this.ensureAttachmentsAreQueued(finalWebsite);
+				
 				// CRITICAL: Regenerate file tree with ALL merged files
 				await this.regenerateFileTree(finalWebsite);
 				
@@ -1151,6 +1155,88 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			ExportLog.log(`🧹 Cleaned up progress file: ${progressFile}`);
 		} catch (error) {
 			// Ignore cleanup errors
+		}
+	}
+	
+	/**
+	 * Ensure all attachment files are properly queued for download
+	 * This is critical for crash recovery scenarios where merged attachments may not be in download queues
+	 */
+	private static async ensureAttachmentsAreQueued(finalWebsite: Website): Promise<void> {
+		try {
+			ExportLog.log(`📁 Ensuring all attachment files are queued for download...`);
+			
+			// Count files before processing
+			const beforeNewFiles = finalWebsite.index.newFiles.length;
+			const beforeUpdatedFiles = finalWebsite.index.updatedFiles.length;
+			
+			let addedToNew = 0;
+			let addedToUpdated = 0;
+			let skippedExisting = 0;
+			
+			// Process all attachments to ensure they're in download queues
+			for (const attachment of finalWebsite.index.attachments) {
+				if (!attachment || !attachment.targetPath) continue;
+				
+				const targetPath = attachment.targetPath.path;
+				
+				// Check if this attachment is already in download queues
+				const inNewFiles = finalWebsite.index.newFiles.some(f => 
+					f && f.targetPath && f.targetPath.path === targetPath);
+				const inUpdatedFiles = finalWebsite.index.updatedFiles.some(f => 
+					f && f.targetPath && f.targetPath.path === targetPath);
+				
+				if (inNewFiles || inUpdatedFiles) {
+					skippedExisting++;
+					continue; // Already queued for download
+				}
+				
+				// This attachment is not queued for download - add it
+				// Determine if it should go in newFiles or updatedFiles
+				// For crash recovery, we'll add all missing attachments to newFiles
+				finalWebsite.index.newFiles.push(attachment);
+				addedToNew++;
+				
+				// Debug: Log a few sample files being added
+				if (addedToNew <= 5) {
+					console.log(`📁 QUEUEING: ${attachment.sourcePath} -> ${targetPath} (${attachment.constructor.name})`);
+				}
+			}
+			
+			// Log summary
+			const afterNewFiles = finalWebsite.index.newFiles.length;
+			const afterUpdatedFiles = finalWebsite.index.updatedFiles.length;
+			
+			ExportLog.log(`📁 Attachment queue check complete:`);
+			ExportLog.log(`  - newFiles: ${beforeNewFiles} -> ${afterNewFiles} (+${addedToNew})`);
+			ExportLog.log(`  - updatedFiles: ${beforeUpdatedFiles} -> ${afterUpdatedFiles} (+${addedToUpdated})`);
+			ExportLog.log(`  - skipped (already queued): ${skippedExisting}`);
+			ExportLog.log(`  - total attachments in index: ${finalWebsite.index.attachments.length}`);
+			
+			// Verify MP3 files specifically (since this was the reported issue)
+			const allMP3Attachments = finalWebsite.index.attachments.filter(f => 
+				f.sourcePath && f.sourcePath.toLowerCase().endsWith('.mp3'));
+			const queuedMP3s = finalWebsite.index.newFiles.concat(finalWebsite.index.updatedFiles)
+				.filter(f => f.sourcePath && f.sourcePath.toLowerCase().endsWith('.mp3'));
+				
+			ExportLog.log(`🎵 MP3 file check: ${allMP3Attachments.length} total MP3s in index, ${queuedMP3s.length} queued for download`);
+			
+			if (allMP3Attachments.length !== queuedMP3s.length) {
+				ExportLog.warning(`⚠️ MP3 download queue mismatch: ${allMP3Attachments.length} in index vs ${queuedMP3s.length} queued`);
+				
+				// Debug: Show which MP3s are missing from queue
+				const queuedPaths = new Set(queuedMP3s.map(f => f.targetPath?.path));
+				const missingMP3s = allMP3Attachments.filter(f => !queuedPaths.has(f.targetPath?.path));
+				console.log(`🎵 Missing MP3s from download queue:`);
+				missingMP3s.slice(0, 10).forEach(f => {
+					console.log(`  - ${f.sourcePath} -> ${f.targetPath?.path}`);
+				});
+			} else {
+				ExportLog.log(`✅ All MP3 files are properly queued for download`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to ensure attachments are queued for download");
 		}
 	}
 	
