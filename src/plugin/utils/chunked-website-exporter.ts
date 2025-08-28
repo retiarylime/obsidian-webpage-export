@@ -383,8 +383,9 @@ EXPORT RESUMED: ${timestamp}
 				// This is essential for crash recovery where attachments may not be in newFiles/updatedFiles
 				await this.ensureAttachmentsAreQueued(finalWebsite);
 				
-				// CRITICAL: Regenerate file tree with ALL merged files
-				await this.regenerateFileTree(finalWebsite);
+				// CRITICAL: Preserve incremental file tree - do NOT regenerate from scratch
+				// The file tree has been built incrementally through each chunk and should be preserved
+				await this.preserveIncrementalFileTree(finalWebsite);
 				
 				await finalWebsite.index.finalize();
 				
@@ -1102,6 +1103,71 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			
 		} catch (error) {
 			ExportLog.error(error, "Failed to regenerate file tree for merged website");
+		}
+	}
+	
+	/**
+	 * Preserve incremental file tree that was built during chunk processing
+	 * This ensures file-tree-content.html is NEVER recreated, only extended incrementally
+	 */
+	private static async preserveIncrementalFileTree(finalWebsite: Website): Promise<void> {
+		try {
+			if (!finalWebsite.exportOptions.fileNavigationOptions.enabled) {
+				ExportLog.log(`🌲 File navigation disabled - skipping file tree preservation`);
+				return;
+			}
+			
+			ExportLog.log(`🌲 Preserving incremental file tree built during chunk processing...`);
+			
+			// The file tree should already exist from incremental generation during chunks
+			if (finalWebsite.fileTreeAsset && finalWebsite.fileTreeAsset.data) {
+				ExportLog.log(`✅ Incremental file tree already exists (${finalWebsite.fileTreeAsset.data.length} bytes) - preserving as-is`);
+				ExportLog.log(`🌲 File tree built incrementally across chunks - NO recreation needed`);
+				
+				// Just ensure attachmentsShownInTree is properly maintained for tree order
+				if (finalWebsite.fileTree) {
+					finalWebsite.index.attachmentsShownInTree.forEach((file) => {
+						if (!file.sourcePathRootRelative) return;
+						const fileTreeItem = finalWebsite.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
+						file.treeOrder = fileTreeItem?.treeOrder ?? 0;
+					});
+					
+					ExportLog.log(`🌲 Updated tree order for ${finalWebsite.index.attachmentsShownInTree.length} files`);
+				}
+				
+				return;
+			}
+			
+			// Fallback: If no incremental tree exists (shouldn't happen), load from existing disk file
+			ExportLog.log(`⚠️ No incremental file tree found - attempting to preserve existing file from disk...`);
+			
+			const fs = require('fs').promises;
+			const path = require('path');
+			const fileTreePath = path.join(finalWebsite.destination.path, 'site-lib', 'file-tree-content.html');
+			
+			try {
+				const existingContent = await fs.readFile(fileTreePath, 'utf8');
+				if (existingContent && existingContent.length > 0) {
+					// Create AssetLoader for existing file tree HTML
+					const { AssetLoader } = await import("../asset-loaders/base-asset");
+					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+					
+					finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", existingContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+					
+					ExportLog.log(`✅ Preserved existing file tree from disk (${existingContent.length} bytes)`);
+					ExportLog.log(`🌲 Existing file tree content preserved - NO recreation performed`);
+				} else {
+					ExportLog.warning(`⚠️ Existing file tree is empty - this should not happen in incremental mode`);
+				}
+			} catch (readError) {
+				// This should not happen if chunks were processed correctly
+				ExportLog.warning(`⚠️ No existing file tree found on disk - incremental generation may have failed`);
+				ExportLog.log(`🌲 Will rely on incremental generation during next chunk processing`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to preserve incremental file tree");
+			// Don't throw - continue with export
 		}
 	}
 	
