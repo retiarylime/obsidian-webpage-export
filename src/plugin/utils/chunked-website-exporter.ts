@@ -326,6 +326,16 @@ EXPORT RESUMED: ${timestamp}
 						// First chunk (or recovery failed) - becomes the base
 						finalWebsite = chunkWebsite;
 						ExportLog.log(`🏗️ ${i === 0 ? 'First' : 'Base'} chunk set: ${finalWebsite.index?.attachmentsShownInTree?.length || 0} files in tree`);
+						
+						// CRITICAL: Even for "fresh" exports, preserve existing file tree if it exists
+						// This ensures file trees are never lost across different Obsidian sessions
+						try {
+							await this.loadExistingWebsiteDataFromDisk(finalWebsite, destination);
+							ExportLog.log(`🌲 PRESERVATION: Loaded existing file tree data from previous sessions`);
+						} catch (preservationError) {
+							ExportLog.log(`🌲 No existing file tree found - will create new one incrementally`);
+						}
+						
 					} else if (finalWebsite.index) {
 						// Merge subsequent chunk into existing website
 						await this.mergeWebsites(chunkWebsite, finalWebsite);
@@ -2006,10 +2016,34 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			ExportLog.log(`🌲 Current chunk: ${currentPaths.length} paths, ${newPaths.length} are new`);
 
 			if (newPaths.length === 0) {
-				ExportLog.log(`🌲 No new files to add to existing tree - using existing file-tree-content.html`);
+				ExportLog.log(`🌲 No new files to add to existing tree - preserving existing file-tree-content.html`);
 				
-				// Still create the fileTree object with existing paths for consistency
+				// CRITICAL: Preserve existing HTML content instead of regenerating
+				// This ensures the file tree is NEVER recreated, only the existing HTML is reused
+				const fs = require('fs').promises;
+				const path = require('path');
+				const fileTreePath = path.join(website.destination.path, 'site-lib', 'file-tree-content.html');
+				
+				try {
+					const existingContent = await fs.readFile(fileTreePath, 'utf8');
+					if (existingContent && existingContent.length > 0) {
+						// Create AssetLoader with the EXACT existing HTML content
+						const { AssetLoader } = await import("../asset-loaders/base-asset");
+						const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+						
+						website.fileTreeAsset = new AssetLoader("file-tree.html", existingContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+						
+						ExportLog.log(`✅ Preserved existing file tree HTML content (${existingContent.length} bytes) - NO regeneration performed`);
+						ExportLog.log(`🌲 Existing file-tree-content.html preserved EXACTLY as-is`);
+						return;
+					}
+				} catch (readError) {
+					ExportLog.warning(`⚠️ Could not read existing file tree - will regenerate from paths`);
+				}
+				
+				// Fallback: If we can't read existing HTML, regenerate from paths
 				if (existingPaths.length > 0) {
+					ExportLog.log(`🌲 Fallback: Regenerating file tree from ${existingPaths.length} existing paths`);
 					await this.createFileTreeAssetFromPaths(website, existingPaths);
 				}
 				return;
