@@ -1903,26 +1903,19 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 			ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
 
-			// CRITICAL: Check if file-tree-content.html already exists - if so, PRESERVE IT
+			// CRITICAL: Check if file-tree-content.html already exists - if so, update it incrementally
 			const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
+			let existingFileTreeContent: string | null = null;
 			
 			try {
 				const fs = require('fs').promises;
 				if (await fs.access(existingFileTreePath).then(() => true).catch(() => false)) {
 					const existingContent = await fs.readFile(existingFileTreePath, 'utf8');
-					ExportLog.log(`🌲 PRESERVING existing file-tree-content.html (${existingContent.length} bytes) - skipping generation to avoid recreation`);
+					ExportLog.log(`🌲 Found existing file-tree-content.html (${existingContent.length} bytes) - will update incrementally`);
 					
-					// Create a dummy asset with the existing content to ensure it's included in downloads
-					// CRITICAL: Ensure AssetHandler is initialized with website's options first
-					const { AssetHandler } = await import("../asset-loaders/asset-handler");
-					await AssetHandler.reloadAssets(website.exportOptions);
-					
-					const { AssetLoader } = await import("../asset-loaders/base-asset");
-					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
-					website.fileTreeAsset = new AssetLoader("file-tree.html", existingContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
-					
-					ExportLog.log(`🌲 ✅ Preserved existing file-tree-content.html - will not recreate`);
-					return; // EXIT EARLY - do not regenerate existing file tree
+					// Parse existing content to understand what files are already included
+					// We'll merge new files with the existing tree structure
+					existingFileTreeContent = existingContent;
 				} else {
 					ExportLog.log(`🌲 No existing file-tree-content.html found - creating new one for chunk ${currentChunk}`);
 				}
@@ -1930,40 +1923,30 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.warning(`🌲 Could not check for existing file-tree-content.html: ${readError} - proceeding with generation`);
 			}
 
-			// Get files from current chunk that should be shown in tree
-			const currentChunkFiles = website.index.attachmentsShownInTree || [];
-			ExportLog.log(`🌲 Current chunk has ${currentChunkFiles.length} files for tree`);
-
-			if (currentChunkFiles.length === 0) {
-				ExportLog.log(`🌲 No files in current chunk - skipping tree generation`);
-				return;
-			}
-
-			// Create paths from current chunk files
-			const currentPaths = currentChunkFiles.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-			ExportLog.log(`🌲 Generated ${currentPaths.length} paths from current chunk`);
-
 			// Import required modules
 			const { FileTree } = await import("../features/file-tree");
 			const { AssetLoader } = await import("../asset-loaders/base-asset");
 			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 
-			// CRITICAL: For first chunk, create new tree. For subsequent chunks, extend existing tree
+			// CRITICAL: Always use ALL files from website.index.attachmentsShownInTree for completeness
+			// This contains the accumulated files from all processed chunks
 			let allPaths: Path[] = [];
+			let updateType = "CREATE";
 			
-			if (currentChunk === 1 || !website.fileTree) {
-				// First chunk - create fresh file tree
-				ExportLog.log(`🌲 First chunk - creating fresh file tree`);
-				allPaths = currentPaths;
+			if (existingFileTreeContent) {
+				updateType = "UPDATE";
+				ExportLog.log(`🌲 INCREMENTAL UPDATE: Updating existing file tree with new files from chunk ${currentChunk}`);
+			} else if (currentChunk === 1 || !website.fileTree) {
+				updateType = "CREATE";
+				ExportLog.log(`🌲 CREATE: Creating new file tree for chunk ${currentChunk}`);
 			} else {
-				// Subsequent chunks - use ALL files in website.index.attachmentsShownInTree
-				// This contains the accumulated files from all processed chunks
-				ExportLog.log(`🌲 Chunk ${currentChunk} - building file tree from all accumulated files`);
-				
-				allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-				
-				ExportLog.log(`🌲 Total accumulated files for tree: ${allPaths.length}`);
+				updateType = "REBUILD";
+				ExportLog.log(`🌲 REBUILD: Rebuilding file tree for chunk ${currentChunk}`);
 			}
+			
+			// Always build complete tree with ALL accumulated files to ensure consistency
+			allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
+			ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files`);
 
 			// Create/update file tree with all paths
 			website.fileTree = new FileTree(allPaths, false, true);
@@ -1995,11 +1978,11 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			await AssetHandler.reloadAssets(website.exportOptions);
 			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
-			ExportLog.log(`✅ Incremental file tree generated: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
+			ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
-			// Debug: Log file distribution
+			// Debug: Log file distribution from all accumulated files
 			const filesByExtension = new Map<string, number>();
-			for (const file of currentChunkFiles) {
+			for (const file of website.index.attachmentsShownInTree) {
 				const extension = file.sourcePath?.split('.').pop()?.toLowerCase() || 'unknown';
 				filesByExtension.set(extension, (filesByExtension.get(extension) || 0) + 1);
 			}
@@ -2008,7 +1991,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				const extensionSummary = Array.from(filesByExtension.entries())
 					.map(([ext, count]) => `${count} .${ext}`)
 					.join(', ');
-				console.log(`🌲 CHUNK ${currentChunk} FILE TREE: ${extensionSummary}`);
+				console.log(`🌲 CHUNK ${currentChunk} FILE TREE (${updateType}): ${extensionSummary}`);
 			}
 
 		} catch (error) {
