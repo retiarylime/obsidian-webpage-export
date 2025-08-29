@@ -1904,8 +1904,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
 
 			// CRITICAL: Check if file-tree-content.html already exists - if so, PRESERVE IT
-			const path = await import('path');
-			const existingFileTreePath = path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html');
+			const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
 			let existingFileTreeContent: string | null = null;
 			
 			try {
