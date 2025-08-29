@@ -1921,8 +1921,15 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			}
 
 			ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
+			
+			// CRITICAL: Check if website already has a fileTreeAsset from crash recovery
+			if (website.fileTreeAsset && website.fileTreeAsset.data) {
+				ExportLog.log(`🌲 CRASH RECOVERY: File tree asset already exists in memory (${website.fileTreeAsset.data.length} bytes) - preserving it`);
+				ExportLog.log(`🌲 ✅ File tree preservation successful - skipping regeneration during resume`);
+				return; // EXIT EARLY - preserve existing asset from crash recovery
+			}
 
-			// CRITICAL: Check if file-tree-content.html already exists - if so, update it incrementally
+			// CRITICAL: Check if file-tree-content.html already exists on disk - if so, update it incrementally
 			const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
 			let existingFileTreeContent: string | null = null;
 			
