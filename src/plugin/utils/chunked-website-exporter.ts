@@ -1915,6 +1915,22 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			}
 
 			ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
+			
+			// CRITICAL: Debug the directory structure and export destination
+			ExportLog.log(`🌲 DEBUG: destination.path = ${destination.path}`);
+			ExportLog.log(`🌲 DEBUG: Checking site-lib structure...`);
+			
+			const fs = require('fs').promises;
+			const siteLibPath = new Path(destination.path).joinString('site-lib').path;
+			const siteLibHtmlPath = new Path(destination.path).joinString('site-lib', 'html').path;
+			
+			try {
+				const siteLibExists = await fs.access(siteLibPath).then(() => true).catch(() => false);
+				const siteLibHtmlExists = await fs.access(siteLibHtmlPath).then(() => true).catch(() => false);
+				ExportLog.log(`🌲 DEBUG: site-lib exists: ${siteLibExists}, site-lib/html exists: ${siteLibHtmlExists}`);
+			} catch (debugError) {
+				ExportLog.log(`🌲 DEBUG: Error checking directory structure: ${debugError}`);
+			}
 
 			// CRITICAL: Check if file-tree-content.html already exists on disk - if so, update it incrementally
 			const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
@@ -1929,11 +1945,17 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					// Parse existing content to understand what files are already included
 					// We'll merge new files with the existing tree structure
 					existingFileTreeContent = existingContent;
+					
+					// CRITICAL: Log the detection for debugging interrupted exports
+					ExportLog.log(`🌲 RESUME DETECTION: Existing file tree detected during chunk ${currentChunk} processing`);
+					ExportLog.log(`🌲 FILE EXISTS: ${existingFileTreePath}`);
 				} else {
 					ExportLog.log(`🌲 No existing file-tree-content.html found - creating new one for chunk ${currentChunk}`);
+					ExportLog.log(`🌲 CHECKED PATH: ${existingFileTreePath}`);
 				}
 			} catch (readError) {
 				ExportLog.warning(`🌲 Could not check for existing file-tree-content.html: ${readError} - proceeding with generation`);
+				ExportLog.log(`🌲 ERROR CHECKING PATH: ${existingFileTreePath}`);
 			}
 
 			// Import required modules
