@@ -1913,6 +1913,10 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					ExportLog.log(`🌲 PRESERVING existing file-tree-content.html (${existingContent.length} bytes) - skipping generation to avoid recreation`);
 					
 					// Create a dummy asset with the existing content to ensure it's included in downloads
+					// CRITICAL: Ensure AssetHandler is initialized with website's options first
+					const { AssetHandler } = await import("../asset-loaders/asset-handler");
+					await AssetHandler.reloadAssets(website.exportOptions);
+					
 					const { AssetLoader } = await import("../asset-loaders/base-asset");
 					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 					website.fileTreeAsset = new AssetLoader("file-tree.html", existingContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
