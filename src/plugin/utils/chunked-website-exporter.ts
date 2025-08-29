@@ -1538,14 +1538,30 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				const fileTreeContent = await fs.readFile(fileTreePath, 'utf8');
 				if (fileTreeContent && fileTreeContent.length > 0) {
 					// Restore file tree asset to prevent recreation
+					// CRITICAL: Ensure AssetHandler is properly initialized with correct working directory
 					const { AssetHandler } = await import("../asset-loaders/asset-handler");
 					await AssetHandler.reloadAssets(website.exportOptions);
 					
 					const { AssetLoader } = await import("../asset-loaders/base-asset");
 					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
-					website.fileTreeAsset = new AssetLoader("file-tree.html", fileTreeContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+					
+					// Pass the website's exportOptions to ensure proper path resolution
+					website.fileTreeAsset = new AssetLoader(
+						"file-tree.html", 
+						fileTreeContent, 
+						null, 
+						AssetType.HTML, 
+						InlinePolicy.Auto, 
+						true, 
+						Mutability.Temporary,
+						undefined, // loadMethod - use default
+						100, // loadPriority - use default
+						undefined, // cdnPath
+						website.exportOptions // CRITICAL: Pass export options for correct path resolution
+					);
 					
 					ExportLog.log(`✅ Restored existing file tree asset (${fileTreeContent.length} bytes) - will preserve during crash recovery`);
+					ExportLog.log(`🔧 Asset target path: ${website.fileTreeAsset.targetPath?.path || 'undefined'}`);
 				}
 			} catch (fileTreeError) {
 				ExportLog.log(`ℹ️ No existing file tree found (will create new one during chunk processing)`);
