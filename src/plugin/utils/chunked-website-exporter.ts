@@ -1041,7 +1041,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			
 			ExportLog.log(`🌲 Regenerating file tree for merged website...`);
 			
-			// CRITICAL: Rebuild attachmentsShownInTree to include ALL files from ALL chunks
+			// CRITICAL: Rebuild attachmentsShownInTree to include ALL files from ALL merged chunks
 			// The regular exporter builds this during normal processing, but chunked export
 			// needs to explicitly rebuild it after merging
 			await this.rebuildAttachmentsShownInTree(finalWebsite);
@@ -1975,84 +1975,103 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			let updateType = "CREATE";
 
 			// Always parse and merge disk contents with new files
-			if (existingFileTreeContent) {
-				updateType = "UPDATE";
-				ExportLog.log(`🌲 INCREMENTAL UPDATE: Merging disk file-tree-content.html with new files from chunk ${currentChunk}`);
-				// Parse the existing file tree HTML to extract already included files
-				// (Assume file paths are present in data-file-path attributes)
-				const existingPaths = [];
-				const regex = /data-file-path="([^"]+)"/g;
-				let match;
-				while ((match = regex.exec(existingFileTreeContent)) !== null) {
-					existingPaths.push(match[1]);
+			try {
+				if (!website.exportOptions.fileNavigationOptions.enabled) return;
+
+				ExportLog.log(`🌲 Generating incremental file tree for chunk ${currentChunk}/${totalChunks}...`);
+				ExportLog.log(`🌲 DEBUG: destination.path = ${destination.path}`);
+				ExportLog.log(`🌲 DEBUG: Checking site-lib structure...`);
+
+				const fs = require('fs').promises;
+				const path = require('path');
+				const siteLibHtmlPath = new Path(destination.path).joinString('site-lib', 'html').path;
+				const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
+				let existingFileTreeContent: string | null = null;
+				let diskPaths: Set<string> = new Set();
+
+				// Step 1: Read existing file-tree-content.html from disk if it exists
+				try {
+					existingFileTreeContent = await fs.readFile(existingFileTreePath, 'utf8');
+					ExportLog.log(`🌲 Existing file-tree-content.html found on disk, parsing for merge.`);
+				} catch (readError) {
+					ExportLog.log(`🌲 No existing file-tree-content.html found on disk, will create new.`);
 				}
-				ExportLog.log(`🌲 DEBUG: Existing file tree contains ${existingPaths.length} files`);
-				// Merge with new files from website.index.attachmentsShownInTree
-				const newPaths = website.index.attachmentsShownInTree.map(f => f.targetPath.path);
-				allPaths = Array.from(new Set([...existingPaths, ...newPaths])).map(p => new Path(p));
-				ExportLog.log(`🌲 DEBUG: Merged file tree will contain ${allPaths.length} files (existing + new)`);
-			} else if (currentChunk === 1 || !website.fileTree) {
-				updateType = "CREATE";
-				ExportLog.log(`🌲 CREATE: Creating new file tree for chunk ${currentChunk}`);
-			} else {
-				updateType = "REBUILD";
-				ExportLog.log(`🌲 REBUILD: Rebuilding file tree for chunk ${currentChunk}`);
+
+				// Step 2: Parse disk file-tree-content.html for file entries (sourcePathRootRelative)
+				if (existingFileTreeContent) {
+					// Use a regex to extract all data-source-path attributes (robust for Obsidian file tree HTML)
+					const regex = /data-source-path-root-relative="([^"]+)"/g;
+					let match;
+					while ((match = regex.exec(existingFileTreeContent)) !== null) {
+						diskPaths.add(match[1]);
+					}
+					ExportLog.log(`🌲 Parsed ${diskPaths.size} file entries from disk file-tree-content.html.`);
+				}
+
+				// Step 3: Collect all current session file paths
+				const memoryPaths = new Set<string>(website.index.attachmentsShownInTree.map(f => f.sourcePathRootRelative ?? ""));
+				ExportLog.log(`🌲 Current session has ${memoryPaths.size} file entries.`);
+
+				// Step 4: Merge disk and memory file paths, ensuring no duplicates
+				const mergedPaths = new Set<string>([...diskPaths, ...memoryPaths]);
+				ExportLog.log(`🌲 Merged file tree will contain ${mergedPaths.size} unique file entries.`);
+
+				// Step 5: Build the file tree from merged paths
+				const { FileTree } = await import("../features/file-tree");
+				const { AssetLoader } = await import("../asset-loaders/base-asset");
+				const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+
+				let allPaths: Path[] = Array.from(mergedPaths).map(p => new Path(p));
+				let updateType = existingFileTreeContent ? "MERGE" : "CREATE";
+				ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files.`);
+
+				website.fileTree = new FileTree(allPaths, false, true);
+				website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
+				website.fileTree.showNestingIndicator = true;
+				website.fileTree.generateWithItemsClosed = true;
+				website.fileTree.showFileExtentionTags = true;
+				website.fileTree.hideFileExtentionTags = ["md"];
+				website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
+				website.fileTree.id = "file-explorer";
+
+				// Generate the HTML
+				const tempContainer = document.createElement("div");
+				await website.fileTree.generate(tempContainer);
+				const htmlData = tempContainer.innerHTML;
+
+				// Update tree order for all attachments shown in tree
+				website.index.attachmentsShownInTree.forEach((file) => {
+					if (!file.sourcePathRootRelative) return;
+					const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
+					file.treeOrder = fileTreeItem?.treeOrder ?? 0;
+				});
+
+				tempContainer.remove();
+
+				// Create the file tree asset (use EXACT same approach as regular website)
+				const { AssetHandler } = await import("../asset-loaders/asset-handler");
+				await AssetHandler.reloadAssets(website.exportOptions);
+				website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+
+				ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
+
+				// Debug: Log file distribution from all accumulated files
+				const filesByExtension = new Map<string, number>();
+				for (const file of allPaths) {
+					const ext = file.path.split('.').pop() ?? '';
+					filesByExtension.set(ext, (filesByExtension.get(ext) ?? 0) + 1);
+				}
+				if (filesByExtension.size > 0) {
+					ExportLog.log(`🌲 FILE TREE: File distribution - ` + Array.from(filesByExtension.entries()).map(([ext, count]) => `${count} .${ext}`).join(', '));
+				}
+
+			} catch (error) {
+				ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
+				// Don't throw - continue with export even if file tree generation fails
 			}
-			
-			// Always build complete tree with ALL accumulated files to ensure consistency
-			allPaths = website.index.attachmentsShownInTree.map((file) => new Path(file.sourcePathRootRelative ?? ""));
-			ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files`);
-
-			// Create/update file tree with all paths
-			website.fileTree = new FileTree(allPaths, false, true);
-			website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
-			website.fileTree.showNestingIndicator = true;
-			website.fileTree.generateWithItemsClosed = true;
-			website.fileTree.showFileExtentionTags = true;
-			website.fileTree.hideFileExtentionTags = ["md"];
-			website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
-			website.fileTree.id = "file-explorer";
-
-			// Generate the HTML
-			const tempContainer = document.createElement("div");
-			await website.fileTree.generate(tempContainer);
-			const htmlData = tempContainer.innerHTML;
-
-			// Update tree order for all attachments shown in tree
-			website.index.attachmentsShownInTree.forEach((file) => {
-				if (!file.sourcePathRootRelative) return;
-				const fileTreeItem = website.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
-				file.treeOrder = fileTreeItem?.treeOrder ?? 0;
-			});
-
-			tempContainer.remove();
-
-			// Create the file tree asset (use EXACT same approach as regular website)
-			// CRITICAL: Ensure AssetHandler is initialized with final website's options
-			const { AssetHandler } = await import("../asset-loaders/asset-handler");
-			await AssetHandler.reloadAssets(website.exportOptions);
-			website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
-
-			ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
-
-			// Debug: Log file distribution from all accumulated files
-			const filesByExtension = new Map<string, number>();
-			for (const file of website.index.attachmentsShownInTree) {
-				const extension = file.sourcePath?.split('.').pop()?.toLowerCase() || 'unknown';
-				filesByExtension.set(extension, (filesByExtension.get(extension) || 0) + 1);
-			}
-
-			if (filesByExtension.size > 0) {
-				const extensionSummary = Array.from(filesByExtension.entries())
-					.map(([ext, count]) => `${count} .${ext}`)
-					.join(', ');
-				console.log(`🌲 CHUNK ${currentChunk} FILE TREE (${updateType}): ${extensionSummary}`);
-			}
-
 		} catch (error) {
 			ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
 			// Don't throw - continue with export even if file tree generation fails
 		}
 	}
-	
 }
