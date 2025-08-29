@@ -1905,18 +1905,17 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 			// CRITICAL: Check if file-tree-content.html already exists - if so, PRESERVE IT
 			const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
-			let existingFileTreeContent: string | null = null;
 			
 			try {
-				const fs = (await import('fs')).promises;
+				const fs = require('fs').promises;
 				if (await fs.access(existingFileTreePath).then(() => true).catch(() => false)) {
-					existingFileTreeContent = await fs.readFile(existingFileTreePath, 'utf8');
-					ExportLog.log(`🌲 PRESERVING existing file-tree-content.html (${existingFileTreeContent.length} bytes) - skipping generation to avoid recreation`);
+					const existingContent = await fs.readFile(existingFileTreePath, 'utf8');
+					ExportLog.log(`🌲 PRESERVING existing file-tree-content.html (${existingContent.length} bytes) - skipping generation to avoid recreation`);
 					
 					// Create a dummy asset with the existing content to ensure it's included in downloads
 					const { AssetLoader } = await import("../asset-loaders/base-asset");
 					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
-					website.fileTreeAsset = new AssetLoader("file-tree.html", existingFileTreeContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+					website.fileTreeAsset = new AssetLoader("file-tree.html", existingContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 					
 					ExportLog.log(`🌲 ✅ Preserved existing file-tree-content.html - will not recreate`);
 					return; // EXIT EARLY - do not regenerate existing file tree
