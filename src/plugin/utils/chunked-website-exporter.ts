@@ -1775,19 +1775,9 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.error(searchError, "Step 6: Failed to generate search-index.json");
 			}
 			
-			// STEP 7: Ensure file-tree-content.html is included (generated incrementally with all chunks)
-			try {
-				if (website.fileTreeAsset && website.fileTreeAsset.data) {
-					// The file tree asset is already set up with the correct target path
-					filesToDownload.push(website.fileTreeAsset);
-					const totalTreeFiles = website.index.attachmentsShownInTree?.length || 0;
-					ExportLog.log(`✅ Step 7: Added file-tree-content.html INCREMENTALLY (${website.fileTreeAsset.data.length} bytes) - includes ${totalTreeFiles} files from ALL ${currentChunk} chunks`);
-				} else {
-					ExportLog.warning(`⚠️ Step 7: File tree asset not available - file-tree-content.html will be missing`);
-				}
-			} catch (fileTreeError) {
-				ExportLog.error(fileTreeError, "Step 7: Failed to add file-tree-content.html to download queue");
-			}
+			// STEP 7: SKIP file-tree-content.html generation here!
+			// This file is ONLY updated by generateIncrementalFileTree to ensure true preservation and incremental updates.
+			ExportLog.log(`🚫 Skipping file-tree-content.html generation in generateSiteLibFiles. It will be updated incrementally only.`);
 			
 			// STEP 8: Download the COMPLETE site-lib folder (same as regular exporter)
 			if (filesToDownload.length > 0) {
@@ -1983,10 +1973,24 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// This contains the accumulated files from all processed chunks
 			let allPaths: Path[] = [];
 			let updateType = "CREATE";
-			
+
+			// Always parse and merge disk contents with new files
 			if (existingFileTreeContent) {
 				updateType = "UPDATE";
-				ExportLog.log(`🌲 INCREMENTAL UPDATE: Updating existing file tree with new files from chunk ${currentChunk}`);
+				ExportLog.log(`🌲 INCREMENTAL UPDATE: Merging disk file-tree-content.html with new files from chunk ${currentChunk}`);
+				// Parse the existing file tree HTML to extract already included files
+				// (Assume file paths are present in data-file-path attributes)
+				const existingPaths = [];
+				const regex = /data-file-path="([^"]+)"/g;
+				let match;
+				while ((match = regex.exec(existingFileTreeContent)) !== null) {
+					existingPaths.push(match[1]);
+				}
+				ExportLog.log(`🌲 DEBUG: Existing file tree contains ${existingPaths.length} files`);
+				// Merge with new files from website.index.attachmentsShownInTree
+				const newPaths = website.index.attachmentsShownInTree.map(f => f.targetPath.path);
+				allPaths = Array.from(new Set([...existingPaths, ...newPaths])).map(p => new Path(p));
+				ExportLog.log(`🌲 DEBUG: Merged file tree will contain ${allPaths.length} files (existing + new)`);
 			} else if (currentChunk === 1 || !website.fileTree) {
 				updateType = "CREATE";
 				ExportLog.log(`🌲 CREATE: Creating new file tree for chunk ${currentChunk}`);
