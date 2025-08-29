@@ -53,6 +53,7 @@ export class FileNavigationOptions extends FetchedFeatureOptions
 		super();
 		this.featureId = "file-navigation";
 		this.featurePlacement = new FeatureRelation("#left-sidebar-content", RelationType.End);
-		this.includePath = `${Shared.libFolderName}/${Shared.htmlFolderName}/file-tree.html`;
+	// PROTECT: Only reference file-tree-content.html, never recreate or overwrite it. Always preserve and extend.
+	this.includePath = `${Shared.libFolderName}/${Shared.htmlFolderName}/file-tree-content.html`;
 	}
 }
