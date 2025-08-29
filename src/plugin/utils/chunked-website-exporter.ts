@@ -51,7 +51,7 @@ export class ChunkedWebsiteExporter {
 		try {
 			const fs = require('fs').promises;
 			const path = require('path');
-			const logFilePath = path.join(destination.path, 'file-tree-content.html');
+			this.logFilePath = path.join(destination.path, this.LOG_FILE);
 			
 			// Intercept ExportLog methods to also write to file
 			this.interceptExportLogMethods();
@@ -73,7 +73,9 @@ Export Path: ${destination.path}
 				// Resuming export - append continuation marker
 				const timestamp = new Date().toISOString();
 				const continuation = `
+-----------------------------------------------------------------------------
 EXPORT RESUMED: ${timestamp}
+-----------------------------------------------------------------------------
 
 `;
 				await fs.appendFile(this.logFilePath, continuation);
@@ -1085,18 +1087,17 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			const tempContainer = document.createElement("div");
 			await finalWebsite.fileTree.generate(tempContainer);
 			const data = tempContainer.innerHTML;
-
+			
 			// Update tree order for all attachments (exact same logic as regular exporter)
 			finalWebsite.index.attachmentsShownInTree.forEach((file) => {
 				if (!file.sourcePathRootRelative) return;
 				const fileTreeItem = finalWebsite.fileTree?.getItemBySourcePath(file.sourcePathRootRelative);
 				file.treeOrder = fileTreeItem?.treeOrder ?? 0;
 			});
-
+			
 			tempContainer.remove();
-			// Only generate file-tree-content.html, not file-tree.html
-			finalWebsite.fileTreeAsset = new AssetLoader("file-tree-content.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
-
+			finalWebsite.fileTreeAsset = new AssetLoader("file-tree.html", data, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+			
 			ExportLog.log(`✅ File tree regenerated with ${paths.length} files`);
 			
 		} catch (error) {
@@ -1922,30 +1923,42 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 				const fs = require('fs').promises;
 				const path = require('path');
-
-
 				const siteLibHtmlPath = new Path(destination.path).joinString('site-lib', 'html').path;
-				// REMOVED: fileTreeHtmlPath logic (no file-tree.html used)
+				const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
 				let existingFileTreeContent: string | null = null;
 				let diskPaths: Set<string> = new Set();
 
-				// REMOVED: file-tree.html disk read logic
+				// Step 1: Read existing file-tree-content.html from disk if it exists
+				try {
+					existingFileTreeContent = await fs.readFile(existingFileTreePath, 'utf8');
+					ExportLog.log(`🌲 Existing file-tree-content.html found on disk, parsing for merge.`);
+					ExportLog.log(`🌲 Disk file-tree-content.html raw content (first 500 chars): ${existingFileTreeContent?.slice(0,500)}`);
+				} catch (readError) {
+					ExportLog.log(`🌲 No existing file-tree-content.html found on disk, will create new.`);
+				}
 
-				// REMOVED: file-tree.html parsing logic
+				// Step 2: Parse disk file-tree-content.html for file entries (sourcePathRootRelative)
+				let diskMatchCount = 0;
+				if (existingFileTreeContent) {
+					const regex = /data-source-path-root-relative="([^"]+)"/g;
+					let match;
+					while ((match = regex.exec(existingFileTreeContent)) !== null) {
+						diskPaths.add(match[1]);
+						diskMatchCount++;
+					}
+					ExportLog.log(`🌲 Parsed ${diskMatchCount} file entries from disk file-tree-content.html.`);
+					ExportLog.log(`🌲 Disk file paths: ${Array.from(diskPaths).slice(0,10).join(', ')}${diskPaths.size > 10 ? ', ...' : ''}`);
+				}
 
 				// Step 3: Collect all current session file paths
 				const memoryPaths = new Set<string>(website.index.attachmentsShownInTree.map(f => f.sourcePathRootRelative ?? ""));
 				ExportLog.log(`🌲 Current session has ${memoryPaths.size} file entries.`);
 				ExportLog.log(`🌲 Memory file paths: ${Array.from(memoryPaths).slice(0,10).join(', ')}${memoryPaths.size > 10 ? ', ...' : ''}`);
 
-
 				// Step 4: Merge disk and memory file paths, ensuring no duplicates
-				// PROTECT: Always preserve diskPaths, only add new memoryPaths
 				const mergedPaths = new Set<string>([...diskPaths, ...memoryPaths]);
-				ExportLog.log(`🌲 Merged file tree will contain ${mergedPaths.size} unique file entries. Disk entries are always preserved.`);
+				ExportLog.log(`🌲 Merged file tree will contain ${mergedPaths.size} unique file entries.`);
 				ExportLog.log(`🌲 Merged file paths: ${Array.from(mergedPaths).slice(0,10).join(', ')}${mergedPaths.size > 10 ? ', ...' : ''}`);
-
-
 
 				// Step 5: Build the file tree from merged paths
 				const { FileTree } = await import("../features/file-tree");
@@ -1954,7 +1967,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 				let allPaths: Path[] = Array.from(mergedPaths).map(p => new Path(p));
 				let updateType = existingFileTreeContent ? "MERGE" : "CREATE";
-				ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files. Disk entries are protected.`);
+				ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files.`);
 
 				website.fileTree = new FileTree(allPaths, false, true);
 				website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
@@ -1982,9 +1995,9 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				// Create the file tree asset (use EXACT same approach as regular website)
 				const { AssetHandler } = await import("../asset-loaders/asset-handler");
 				await AssetHandler.reloadAssets(website.exportOptions);
-				website.fileTreeAsset = new AssetLoader("file-tree-content.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+				website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
-				ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML. Disk entries are protected.`);
+				ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
 				// Debug: Log file distribution from all accumulated files
 				const filesByExtension = new Map<string, number>();
@@ -2076,13 +2089,11 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				let diskPaths: Set<string> = new Set();
 
 				// Step 1: Read existing file-tree-content.html from disk if it exists
-				let fileTreeExists = false;
 				try {
 					existingFileTreeContent = await fs.readFile(existingFileTreePath, 'utf8');
-					fileTreeExists = true;
-					ExportLog.log(`🌲 Existing file-tree-content.html found on disk, parsing for merge. PROTECTED: Will never be recreated or overwritten.`);
+					ExportLog.log(`🌲 Existing file-tree-content.html found on disk, parsing for merge.`);
 				} catch (readError) {
-					ExportLog.log(`🌲 No existing file-tree-content.html found on disk, will create new. PROTECTED: Will only be created once.`);
+					ExportLog.log(`🌲 No existing file-tree-content.html found on disk, will create new.`);
 				}
 
 				// Step 2: Parse disk file-tree-content.html for file entries (sourcePathRootRelative)
@@ -2110,8 +2121,8 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
 
 				let allPaths: Path[] = Array.from(mergedPaths).map(p => new Path(p));
-				let updateType = fileTreeExists ? "MERGE" : "CREATE";
-				ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files. PROTECTED: file-tree-content.html will never be recreated or overwritten.`);
+				let updateType = existingFileTreeContent ? "MERGE" : "CREATE";
+				ExportLog.log(`🌲 Building ${updateType} file tree with ${allPaths.length} total files.`);
 
 				website.fileTree = new FileTree(allPaths, false, true);
 				website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
@@ -2139,9 +2150,9 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				// Create the file tree asset (use EXACT same approach as regular website)
 				const { AssetHandler } = await import("../asset-loaders/asset-handler");
 				await AssetHandler.reloadAssets(website.exportOptions);
-				website.fileTreeAsset = new AssetLoader("file-tree-content.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+				website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
-				ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML. PROTECTED: file-tree-content.html was only merged/extended, never recreated.`);
+				ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
 				// Debug: Log file distribution from all accumulated files
 				const filesByExtension = new Map<string, number>();
