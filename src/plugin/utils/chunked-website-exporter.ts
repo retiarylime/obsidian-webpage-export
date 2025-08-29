@@ -1532,6 +1532,25 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				ExportLog.log(`ℹ️ No existing metadata found (will create new one)`);
 			}
 			
+			// CRITICAL: Try to restore existing file tree asset from disk during crash recovery
+			const fileTreePath = path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html');
+			try {
+				const fileTreeContent = await fs.readFile(fileTreePath, 'utf8');
+				if (fileTreeContent && fileTreeContent.length > 0) {
+					// Restore file tree asset to prevent recreation
+					const { AssetHandler } = await import("../asset-loaders/asset-handler");
+					await AssetHandler.reloadAssets(website.exportOptions);
+					
+					const { AssetLoader } = await import("../asset-loaders/base-asset");
+					const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+					website.fileTreeAsset = new AssetLoader("file-tree.html", fileTreeContent, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+					
+					ExportLog.log(`✅ Restored existing file tree asset (${fileTreeContent.length} bytes) - will preserve during crash recovery`);
+				}
+			} catch (fileTreeError) {
+				ExportLog.log(`ℹ️ No existing file tree found (will create new one during chunk processing)`);
+			}
+			
 		} catch (error) {
 			ExportLog.error(error, "Failed to load existing website data from disk");
 		}
