@@ -1914,6 +1914,69 @@ EXPORT SESSION END: ${new Date().toISOString()}
 	 * NEVER recreates existing file-tree-content.html - always preserves and extends it
 	 */
 	private static async generateIncrementalFileTree(website: Website, currentChunk: number, totalChunks: number, destination: Path): Promise<void> {
+		// DEBUG: Log contents of file-tree-content.html before merging
+		let diskPaths: Set<string> = new Set();
+		let memoryPaths: Set<string> = new Set();
+		let mergedPaths: Set<string> = new Set();
+		let htmlData: string = "";
+		try {
+			const fs = require('fs').promises;
+			const fileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
+			let diskContent = "";
+			try {
+				diskContent = await fs.readFile(fileTreePath, 'utf8');
+				ExportLog.log(`DEBUG: file-tree-content.html BEFORE export (first 500 chars): ${diskContent.slice(0,500)}`);
+				// Step 2: Parse disk file-tree-content.html for file entries (sourcePathRootRelative)
+				const regex = /data-path="([^"]+)"/g;
+				let match;
+				while ((match = regex.exec(diskContent)) !== null) {
+					diskPaths.add(match[1]);
+				}
+			} catch (e) {
+				ExportLog.log(`DEBUG: file-tree-content.html BEFORE export not found or unreadable.`);
+			}
+			// Step 3: Collect all current session file paths
+			memoryPaths = new Set<string>(website.index.attachmentsShownInTree.map(f => f.sourcePathRootRelative ?? ""));
+			// Step 4: Merge disk and memory file paths, ensuring no duplicates
+			mergedPaths = new Set<string>([...diskPaths, ...memoryPaths]);
+			// Step 5: Build the file tree from merged paths
+			const { FileTree } = await import("../features/file-tree");
+			const { AssetLoader } = await import("../asset-loaders/base-asset");
+			const { AssetType, InlinePolicy, Mutability } = await import("../asset-loaders/asset-types");
+			let allPaths: Path[] = Array.from(mergedPaths).map(p => new Path(p));
+			let updateType = diskPaths.size > 0 ? "MERGE" : "CREATE";
+			website.fileTree = new FileTree(allPaths, false, true);
+			website.fileTree.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
+			website.fileTree.showNestingIndicator = true;
+			website.fileTree.generateWithItemsClosed = true;
+			website.fileTree.showFileExtentionTags = true;
+			website.fileTree.hideFileExtentionTags = ["md"];
+			website.fileTree.title = website.exportOptions.siteName ?? "Exported Vault";
+			website.fileTree.id = "file-explorer";
+			// Generate the HTML
+			const tempContainer = document.createElement("div");
+			await website.fileTree.generate(tempContainer);
+			htmlData = tempContainer.innerHTML;
+			ExportLog.log(`DEBUG: Disk file paths FULL LIST: ${Array.from(diskPaths).join(', ')}`);
+			ExportLog.log(`DEBUG: Memory file paths FULL LIST: ${Array.from(memoryPaths).join(', ')}`);
+			ExportLog.log(`DEBUG: Merged file paths FULL LIST: ${Array.from(mergedPaths).join(', ')}`);
+			ExportLog.log(`DEBUG: file-tree-content.html AFTER MERGE (first 500 chars): ${htmlData.slice(0,500)}`);
+			// Update tree order for all attachments shown in tree
+			website.index.attachmentsShownInTree.forEach((file) => {/* ...existing code... */});
+			tempContainer.remove();
+			// Create the file tree asset (use EXACT same approach as regular website)
+			const { AssetHandler } = await import("../asset-loaders/asset-handler");
+			await AssetHandler.reloadAssets(website.exportOptions);
+			website.fileTreeAsset = new AssetLoader("file-tree-content.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+			ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
+			// Debug: Log file distribution from all accumulated files
+			const filesByExtension = new Map<string, number>();
+			for (const file of allPaths) {/* ...existing code... */}
+			if (filesByExtension.size > 0) {/* ...existing code... */}
+		} catch (error) {
+			ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
+			// Don't throw - continue with export even if file tree generation fails
+		}
 			try {
 				if (!website.exportOptions.fileNavigationOptions.enabled) return;
 
@@ -1981,6 +2044,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				const tempContainer = document.createElement("div");
 				await website.fileTree.generate(tempContainer);
 				const htmlData = tempContainer.innerHTML;
+				ExportLog.log(`DEBUG: file-tree-content.html AFTER MERGE (first 500 chars): ${htmlData.slice(0,500)}`);
 
 				// Update tree order for all attachments shown in tree
 				website.index.attachmentsShownInTree.forEach((file) => {
