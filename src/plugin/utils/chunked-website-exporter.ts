@@ -1923,7 +1923,6 @@ EXPORT SESSION END: ${new Date().toISOString()}
 
 				const fs = require('fs').promises;
 				const path = require('path');
-				const siteLibHtmlPath = new Path(destination.path).joinString('site-lib', 'html').path;
 				const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
 				let existingFileTreeContent: string | null = null;
 				let diskPaths: Set<string> = new Set();
@@ -1995,7 +1994,7 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				// Create the file tree asset (use EXACT same approach as regular website)
 				const { AssetHandler } = await import("../asset-loaders/asset-handler");
 				await AssetHandler.reloadAssets(website.exportOptions);
-				website.fileTreeAsset = new AssetLoader("file-tree.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
+				website.fileTreeAsset = new AssetLoader("file-tree-content.html", htmlData, null, AssetType.HTML, InlinePolicy.Auto, true, Mutability.Temporary);
 
 				ExportLog.log(`✅ ${updateType} file tree completed: ${allPaths.length} total files, ${htmlData.length} bytes HTML`);
 
