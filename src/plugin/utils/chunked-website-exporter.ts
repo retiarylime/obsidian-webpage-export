@@ -2076,52 +2076,42 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					}
 
 					// --- FILE NAVIGATION LOGIC ---
-					// Only copy file-tree-content.html to file-navigation.html after first chunk
-					if (currentChunk === 0) {
-						// Only copy if file-navigation.html does not exist
-						const fileNavExists = await fs.access(fileNavigationPath).then(() => true).catch(() => false);
-						if (!fileNavExists) {
-							await fs.writeFile(fileNavigationPath, htmlData, 'utf8');
-							ExportLog.log(`🌲 Copied file-tree-content.html to file-navigation.html after first chunk.`);
-						} else {
-							ExportLog.log(`🌲 file-navigation.html already exists, skipping copy.`);
-						}
-					} else {
-						// For subsequent chunks, incrementally update file-navigation.html
-						// Merge disk and memory paths for file-navigation.html
-						let existingFileNavigationContent: string | null = null;
-						let diskNavPaths: Set<string> = new Set();
-						try {
-							existingFileNavigationContent = await fs.readFile(fileNavigationPath, 'utf8');
-						} catch (navReadError) {
-							// If not found, treat as new
-						}
-						if (existingFileNavigationContent) {
-							const regexNav = /data-source-path-root-relative="([^"]+)"/g;
-							let matchNav;
-							while ((matchNav = regexNav.exec(existingFileNavigationContent)) !== null) {
-								diskNavPaths.add(matchNav[1]);
-							}
-						}
-						// Merge diskNavPaths and memoryPaths
-						const mergedNavPaths = new Set<string>([...diskNavPaths, ...memoryPaths]);
-						let allNavPaths: Path[] = Array.from(mergedNavPaths).map(p => new Path(p));
-						// Build file tree for navigation
-						const fileTreeNav = new FileTree(allNavPaths, false, true);
-						fileTreeNav.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
-						fileTreeNav.showNestingIndicator = true;
-						fileTreeNav.generateWithItemsClosed = true;
-						fileTreeNav.showFileExtentionTags = true;
-						fileTreeNav.hideFileExtentionTags = ["md"];
-						fileTreeNav.title = website.exportOptions.siteName ?? "Exported Vault";
-						fileTreeNav.id = "file-explorer";
-						const tempNavContainer = document.createElement("div");
-						await fileTreeNav.generate(tempNavContainer);
-						const navHtmlData = tempNavContainer.innerHTML;
-						tempNavContainer.remove();
-						await fs.writeFile(fileNavigationPath, navHtmlData, 'utf8');
-						ExportLog.log(`🌲 Incrementally updated file-navigation.html for chunk ${currentChunk}.`);
+					// Always incrementally merge file-navigation.html, never copy or recreate
+					let existingFileNavigationContent: string | null = null;
+					let diskNavPaths: Set<string> = new Set();
+					try {
+						existingFileNavigationContent = await fs.readFile(fileNavigationPath, 'utf8');
+						ExportLog.log(`🌲 Existing file-navigation.html found on disk, parsing for merge.`);
+					} catch (navReadError) {
+						ExportLog.log(`🌲 No existing file-navigation.html found on disk, will create new.`);
 					}
+					if (existingFileNavigationContent) {
+						const regexNav = /data-source-path-root-relative="([^"]+)"/g;
+						let matchNav;
+						while ((matchNav = regexNav.exec(existingFileNavigationContent)) !== null) {
+							diskNavPaths.add(matchNav[1]);
+						}
+						ExportLog.log(`🌲 Parsed ${diskNavPaths.size} file entries from disk file-navigation.html.`);
+					}
+					// Merge diskNavPaths and memoryPaths
+					const mergedNavPaths = new Set<string>([...diskNavPaths, ...memoryPaths]);
+					ExportLog.log(`🌲 Merged file-navigation.html will contain ${mergedNavPaths.size} unique file entries.`);
+					let allNavPaths: Path[] = Array.from(mergedNavPaths).map(p => new Path(p));
+					// Build file tree for navigation
+					const fileTreeNav = new FileTree(allNavPaths, false, true);
+					fileTreeNav.makeLinksWebStyle = website.exportOptions.slugifyPaths ?? true;
+					fileTreeNav.showNestingIndicator = true;
+					fileTreeNav.generateWithItemsClosed = true;
+					fileTreeNav.showFileExtentionTags = true;
+					fileTreeNav.hideFileExtentionTags = ["md"];
+					fileTreeNav.title = website.exportOptions.siteName ?? "Exported Vault";
+					fileTreeNav.id = "file-explorer";
+					const tempNavContainer = document.createElement("div");
+					await fileTreeNav.generate(tempNavContainer);
+					const navHtmlData = tempNavContainer.innerHTML;
+					tempNavContainer.remove();
+					await fs.writeFile(fileNavigationPath, navHtmlData, 'utf8');
+					ExportLog.log(`🌲 Incrementally updated file-navigation.html for chunk ${currentChunk}.`);
 				} catch (error: unknown) {
 					ExportLog.error(error, `Failed to generate incremental file tree for chunk ${currentChunk}`);
 					// Don't throw - continue with export even if file tree generation fails
