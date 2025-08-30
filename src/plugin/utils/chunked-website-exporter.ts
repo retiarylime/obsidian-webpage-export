@@ -1701,7 +1701,10 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			const fs = require('fs').promises;
 			const path = require('path');
 			const siteLibPath = new Path(website.destination.path).joinString('site-lib').path;
+			ExportLog.log(`🔍 [DEBUG] Checking site-lib generation for chunk ${currentChunk}`);
+			ExportLog.log(`🔍 [DEBUG] siteLibPath: ${siteLibPath}`);
 			const siteLibExists = await fs.access(siteLibPath).then(() => true).catch(() => false);
+			ExportLog.log(`🔍 [DEBUG] site-lib exists: ${siteLibExists}`);
 
 			if (currentChunk !== 0 || siteLibExists) {
 				ExportLog.log(`🚫 Skipping site-lib generation: currentChunk=${currentChunk}, site-lib exists=${siteLibExists}`);
