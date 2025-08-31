@@ -1999,12 +1999,18 @@ EXPORT SESSION END: ${new Date().toISOString()}
 					ExportLog.log(`🌲 No existing file-tree-content.html found on disk, will create new.`);
 				}
 
-				// Step 2: Parse disk file-tree-content.html for file entries (sourcePathRootRelative)
+				// Step 2: Parse disk file-tree-content.html for file entries (sourcePathRootRelative and data-path)
 				let diskMatchCount = 0;
 				if (existingFileTreeContent) {
-					const regex = /data-source-path-root-relative="([^"]+)"/g;
+					// Match both data-source-path-root-relative and data-path attributes
+					const regexRoot = /data-source-path-root-relative="([^"]+)"/g;
+					const regexPath = /data-path="([^"]+)"/g;
 					let match;
-					while ((match = regex.exec(existingFileTreeContent)) !== null) {
+					while ((match = regexRoot.exec(existingFileTreeContent)) !== null) {
+						diskPaths.add(match[1]);
+						diskMatchCount++;
+					}
+					while ((match = regexPath.exec(existingFileTreeContent)) !== null) {
 						diskPaths.add(match[1]);
 						diskMatchCount++;
 					}
