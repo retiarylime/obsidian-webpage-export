@@ -1422,6 +1422,57 @@ EXPORT SESSION END: ${new Date().toISOString()}
 	}
 	
 	/**
+	 * Detect and recover from corrupted files during crash recovery
+	 */
+	private static async detectAndRecoverCorruptedFiles(destination: Path, fs: any, fsSync: any, path: any): Promise<void> {
+		try {
+			ExportLog.log(`🔍 Checking for file corruption after crash...`);
+			
+			const siteLibPath = path.join(destination.path, 'site-lib');
+			const filesToCheck = [
+				{ file: path.join(siteLibPath, 'search-index.json'), minSize: 1000, description: 'search index' },
+				{ file: path.join(siteLibPath, 'html', 'file-tree-content.html'), minSize: 100, description: 'file tree base' },
+				{ file: path.join(siteLibPath, 'html', 'file-tree-content-content.html'), minSize: 1000, description: 'file tree content' }
+			];
+			
+			let corruptedFiles = 0;
+			let recoveredFiles = 0;
+			
+			for (const { file, minSize, description } of filesToCheck) {
+				try {
+					const stats = fsSync.statSync(file);
+					if (stats.size < minSize) {
+						ExportLog.warning(`⚠️ ${description} corrupted: ${stats.size} bytes (expected >${minSize})`);
+						corruptedFiles++;
+						
+						// Try to recover from backup
+						const backupFile = file + '.backup';
+						if (fsSync.existsSync(backupFile)) {
+							const backupStats = fsSync.statSync(backupFile);
+							if (backupStats.size > minSize) {
+								ExportLog.log(`🔄 Recovering ${description} from backup (${backupStats.size} bytes)`);
+								await fs.copyFile(backupFile, file);
+								recoveredFiles++;
+							}
+						}
+					} else {
+						ExportLog.log(`✅ ${description} intact: ${stats.size} bytes`);
+					}
+				} catch (fileError) {
+					ExportLog.log(`ℹ️ ${description} not found - will be created fresh`);
+				}
+			}
+			
+			if (corruptedFiles > 0) {
+				ExportLog.warning(`⚠️ File corruption detected: ${corruptedFiles} files corrupted, ${recoveredFiles} recovered from backup`);
+			}
+			
+		} catch (error) {
+			ExportLog.error(error, "Failed to check for file corruption - continuing with standard recovery");
+		}
+	}
+	
+	/**
 	 * Load existing website data (search index, metadata) from disk to restore state
 	 */
 	private static async loadExistingWebsiteDataFromDisk(website: Website, destination: Path): Promise<void> {
@@ -1429,16 +1480,45 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			ExportLog.log(`📂 Loading existing website data from disk...`);
 			
 			const fs = require('fs').promises;
+			const fsSync = require('fs');
 			const path = require('path');
+			
+			// CORRUPTION DETECTION: Check for corrupted files and attempt recovery
+			await this.detectAndRecoverCorruptedFiles(destination, fs, fsSync, path);
 			
 			// Try to load existing search-index.json
 			const searchIndexPath = path.join(destination.path, 'site-lib', 'search-index.json');
 			try {
-				const searchIndexData = await fs.readFile(searchIndexPath, 'utf8');
+				let searchIndexData = await fs.readFile(searchIndexPath, 'utf8');
+				
+				// CORRUPTION CHECK: Verify file is not empty or truncated
+				if (!searchIndexData || searchIndexData.length < 100) {
+					ExportLog.warning(`⚠️ Search index appears corrupted (${searchIndexData?.length || 0} bytes) - attempting backup recovery`);
+					
+					// Try backup files
+					const backupPath = searchIndexPath + '.backup';
+					try {
+						const backupData = await fs.readFile(backupPath, 'utf8');
+						if (backupData && backupData.length > 1000) {
+							ExportLog.log(`🔄 Recovered search index from backup (${backupData.length} bytes)`);
+							await fs.writeFile(searchIndexPath, backupData);
+							searchIndexData = backupData; // Use recovered data
+						} else {
+							throw new Error("Backup also corrupted or too small");
+						}
+					} catch (backupError) {
+						ExportLog.error(backupError, "Failed to recover search index from backup");
+						throw new Error("Search index corrupted and no valid backup available");
+					}
+				} else {
+					ExportLog.log(`✅ Search index valid: ${searchIndexData.length} bytes`);
+				}
+				
 				const searchIndex = JSON.parse(searchIndexData);
 				
 				// Restore search index if it exists and has data
 				if (searchIndex && Array.isArray(searchIndex) && searchIndex.length > 0) {
+					ExportLog.log(`📋 Found search index data: ${searchIndex.length} documents`);
 					try {
 						// Rebuild minisearch from the data using EXACT same options as regular website index
 						const { default: MiniSearch } = await import('minisearch');
@@ -1493,6 +1573,20 @@ EXPORT SESSION END: ${new Date().toISOString()}
 						if (addedCount === 0) {
 							ExportLog.warning(`⚠️ No valid search documents could be restored - creating fresh index`);
 							website.index.minisearch = undefined; // Will be recreated fresh
+						} else {
+							ExportLog.log(`🔍 MiniSearch index restored with ${website.index.minisearch?.documentCount || 0} documents total`);
+							
+							// Additional validation: Check if key documents like "PC방" are present
+							try {
+								const searchResults = website.index.minisearch.search('PC방');
+								if (searchResults.length > 0) {
+									ExportLog.log(`✅ Validation: Found "PC방" in restored search index`);
+								} else {
+									ExportLog.warning(`⚠️ Validation: "PC방" not found in restored search index - may indicate incomplete recovery`);
+								}
+							} catch (validationError) {
+								ExportLog.warning(`⚠️ Search index validation failed: ${validationError}`);
+							}
 						}
 						
 					} catch (minisearchError) {
