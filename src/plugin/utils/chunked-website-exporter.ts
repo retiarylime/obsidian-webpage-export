@@ -1924,22 +1924,65 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			ExportLog.log(`🌲 DEBUG: destination.path = ${destination.path}`);
 
 			const fs = require('fs').promises;
-			const existingFileTreePath = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
+			
+			// Check for both possible file-tree filenames
+			const fileTreePath1 = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content.html').path;
+			const fileTreePath2 = new Path(destination.path).joinString('site-lib', 'html', 'file-tree-content-content.html').path;
+			
 			let existingFileTreeContent: string | null = null;
 			let diskPaths: Set<string> = new Set();
+			let selectedFilePath = fileTreePath1; // Default to the standard name
 
-			// Step 1: Read existing file-tree-content.html from disk if it exists
+			// Step 1: Read existing file-tree content from disk - read BOTH files and merge them
+			let contentFromFile1: string | null = null;
+			let contentFromFile2: string | null = null;
+			
+			// Read file-tree-content.html (the standard one)
 			try {
-				existingFileTreeContent = await fs.readFile(existingFileTreePath, 'utf8');
-				ExportLog.log(`🌲 Existing file-tree-content.html found on disk, parsing for merge.`);
-				ExportLog.log(`🌲 Disk file-tree-content.html raw content (first 500 chars): ${existingFileTreeContent?.slice(0,500)}`);
-			} catch (readError) {
-				ExportLog.log(`🌲 No existing file-tree-content.html found on disk, will create new.`);
+				contentFromFile1 = await fs.readFile(fileTreePath1, 'utf8');
+				ExportLog.log(`🌲 Found file-tree-content.html on disk (${contentFromFile1?.length} bytes)`);
+			} catch (err) {
+				ExportLog.log(`🌲 No file-tree-content.html found on disk`);
+			}
+			
+			// Read file-tree-content-content.html (the variant one)  
+			try {
+				contentFromFile2 = await fs.readFile(fileTreePath2, 'utf8');
+				ExportLog.log(`🌲 Found file-tree-content-content.html on disk (${contentFromFile2?.length} bytes)`);
+			} catch (err) {
+				ExportLog.log(`🌲 No file-tree-content-content.html found on disk`);
+			}
+			
+			// Merge both file contents - prioritize file-tree-content-content.html but include both
+			if (contentFromFile2 && contentFromFile1) {
+				// Both files exist - merge them with content-content.html taking priority
+				existingFileTreeContent = contentFromFile2 + '\n<!-- MERGED FROM file-tree-content.html -->\n' + contentFromFile1;
+				selectedFilePath = fileTreePath2; // Use the -content.html variant as primary
+				ExportLog.log(`🌲 Merging content from both files: ${contentFromFile2.length} + ${contentFromFile1.length} = ${existingFileTreeContent.length} bytes`);
+			} else if (contentFromFile2) {
+				// Only -content.html exists
+				existingFileTreeContent = contentFromFile2;
+				selectedFilePath = fileTreePath2;
+				ExportLog.log(`🌲 Using only file-tree-content-content.html (${contentFromFile2.length} bytes)`);
+			} else if (contentFromFile1) {
+				// Only standard file exists
+				existingFileTreeContent = contentFromFile1;
+				selectedFilePath = fileTreePath1;
+				ExportLog.log(`🌲 Using only file-tree-content.html (${contentFromFile1.length} bytes)`);
+			} else {
+				// No files found
+				ExportLog.log(`🌲 No existing file-tree content found on disk, will create new.`);
+			}
+			
+			if (existingFileTreeContent) {
+				ExportLog.log(`🌲 Using merged file content for: ${selectedFilePath}`);
+				ExportLog.log(`🌲 Merged content (first 500 chars): ${existingFileTreeContent.slice(0,500)}`);
 			}
 
 			// Step 2: Parse disk file-tree-content.html for file entries - try multiple attribute patterns
 			let diskMatchCount = 0;
-			if (existingFileTreeContent) {
+				// Only process existing content if we successfully read it
+				if (existingFileTreeContent) {
 				// Match multiple possible data attributes that could contain file paths
 				const regexPatterns = [
 					/data-source-path-root-relative="([^"]+)"/g,
