@@ -347,8 +347,36 @@ EXPORT RESUMED: ${timestamp}
 					if (finalWebsite) {
 						await this.generateSiteLibFiles(finalWebsite, i + 1, chunks.length);
 						
-						// BACKUP: Create additional backup of file tree content files after successful site-lib generation
-						await this.createFileTreeBackups(destination);
+						// BACKUP: Create backup of file tree content files after successful site-lib generation
+						try {
+							const fs = require('fs').promises;
+							const fsSync = require('fs');
+							const path = require('path');
+							
+							// Check both possible file tree file locations
+							const fileTreePath1 = path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html');
+							const fileTreePath2 = path.join(destination.path, 'site-lib', 'html', 'file-tree-content-content.html');
+							
+							// Backup first file if it exists and is substantial
+							if (fsSync.existsSync(fileTreePath1)) {
+								const stats1 = fsSync.statSync(fileTreePath1);
+								if (stats1.size > 1000) {
+									await fs.copyFile(fileTreePath1, fileTreePath1 + '.backup');
+									ExportLog.log(`💾 Created backup: file-tree-content.html.backup (${stats1.size} bytes)`);
+								}
+							}
+							
+							// Backup second file if it exists and is substantial
+							if (fsSync.existsSync(fileTreePath2)) {
+								const stats2 = fsSync.statSync(fileTreePath2);
+								if (stats2.size > 1000) {
+									await fs.copyFile(fileTreePath2, fileTreePath2 + '.backup');
+									ExportLog.log(`💾 Created backup: file-tree-content-content.html.backup (${stats2.size} bytes)`);
+								}
+							}
+						} catch (backupError) {
+							ExportLog.warning(`⚠️ Failed to create file tree backup:`, backupError);
+						}
 					}
 					
 					// Memory cleanup
@@ -1450,48 +1478,25 @@ EXPORT SESSION END: ${new Date().toISOString()}
 						
 						// Try to recover from backup
 						const backupFile = file + '.backup';
-						const backupPattern = file + '.backup.*';
-						
-						// Try regular backup first
 						if (fsSync.existsSync(backupFile)) {
 							const backupStats = fsSync.statSync(backupFile);
 							if (backupStats.size > minSize) {
 								ExportLog.log(`🔄 Recovering ${description} from backup (${backupStats.size} bytes)`);
 								await fs.copyFile(backupFile, file);
-								recoveredFiles++;
-								continue;
-							}
-						}
-						
-						// Try timestamped backups if regular backup failed
-						try {
-							const dirPath = path.dirname(file);
-							const baseName = path.basename(file);
-							const files = fsSync.readdirSync(dirPath);
-							
-							// Find all timestamped backup files
-							const timestampedBackups = files
-								.filter((f: string) => f.startsWith(baseName + '.backup.'))
-								.map((f: string) => path.join(dirPath, f))
-								.sort((a: string, b: string) => fsSync.statSync(b).mtime.getTime() - fsSync.statSync(a).mtime.getTime()); // Most recent first
-							
-							let recoveredFromTimestamped = false;
-							for (const timestampedBackup of timestampedBackups) {
-								const timestampedStats = fsSync.statSync(timestampedBackup);
-								if (timestampedStats.size > minSize) {
-									ExportLog.log(`🔄 Recovering ${description} from timestamped backup (${timestampedStats.size} bytes): ${path.basename(timestampedBackup)}`);
-									await fs.copyFile(timestampedBackup, file);
+								
+								// Verify recovery was successful
+								const verifyStats = fsSync.statSync(file);
+								if (verifyStats.size > minSize) {
+									ExportLog.log(`✅ ${description} recovery verified: ${verifyStats.size} bytes`);
 									recoveredFiles++;
-									recoveredFromTimestamped = true;
-									break;
+								} else {
+									ExportLog.warning(`⚠️ ${description} recovery failed: file still ${verifyStats.size} bytes`);
 								}
+							} else {
+								ExportLog.warning(`⚠️ ${description} backup too small: ${backupStats.size} bytes (expected >${minSize})`);
 							}
-							
-							if (!recoveredFromTimestamped) {
-								ExportLog.warning(`⚠️ No valid backup found for ${description} - will be recreated`);
-							}
-						} catch (timestampError) {
-							ExportLog.warning(`⚠️ Failed to search for timestamped backups for ${description}`);
+						} else {
+							ExportLog.log(`ℹ️ No backup found for ${description}: ${backupFile}`);
 						}
 					} else {
 						ExportLog.log(`✅ ${description} intact: ${stats.size} bytes`);
@@ -1503,126 +1508,16 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			
 			if (corruptedFiles > 0) {
 				ExportLog.warning(`⚠️ File corruption detected: ${corruptedFiles} files corrupted, ${recoveredFiles} recovered from backup`);
+				
+				// Small delay to ensure file system operations are completed
+				if (recoveredFiles > 0) {
+					ExportLog.log(`⏳ Waiting for file recovery to complete...`);
+					await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay
+				}
 			}
 			
 		} catch (error) {
 			ExportLog.error(error, "Failed to check for file corruption - continuing with standard recovery");
-		}
-	}
-	
-	/**
-	 * Create immediate backups of critical files after successful generation
-	 */
-	private static async createImmediateBackups(destination: Path): Promise<void> {
-		try {
-			const fs = require('fs').promises;
-			const fsSync = require('fs');
-			const path = require('path');
-			
-			// Create timestamped backups for better recovery options
-			const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
-			
-			const filesToBackup = [
-				{ 
-					source: path.join(destination.path, 'site-lib', 'search-index.json'), 
-					minSize: 1000, 
-					description: 'search-index.json' 
-				},
-				{ 
-					source: path.join(destination.path, 'site-lib', 'metadata.json'), 
-					minSize: 100, 
-					description: 'metadata.json' 
-				}
-			];
-			
-			let backupCount = 0;
-			
-			for (const { source, minSize, description } of filesToBackup) {
-				if (fsSync.existsSync(source)) {
-					const stats = fsSync.statSync(source);
-					if (stats.size >= minSize) {
-						// Create regular backup
-						const backupPath = source + '.backup';
-						await fs.copyFile(source, backupPath);
-						
-						// Create timestamped backup for additional recovery options
-						const timestampedBackupPath = source + '.backup.' + timestamp;
-						await fs.copyFile(source, timestampedBackupPath);
-						
-						ExportLog.log(`💾 Created backups for ${description}: ${stats.size} bytes`);
-						backupCount++;
-					} else {
-						ExportLog.warning(`⚠️ Skipping backup for ${description}: file too small (${stats.size} bytes)`);
-					}
-				} else {
-					ExportLog.log(`ℹ️ ${description} not found - no backup needed`);
-				}
-			}
-			
-			if (backupCount > 0) {
-				ExportLog.log(`💾 Created ${backupCount * 2} backup files (regular + timestamped)`);
-			}
-			
-		} catch (backupError) {
-			ExportLog.warning(`⚠️ Failed to create immediate backups:`, backupError);
-		}
-	}
-	
-	/**
-	 * Create immediate backups of file tree content files
-	 */
-	private static async createFileTreeBackups(destination: Path): Promise<void> {
-		try {
-			const fs = require('fs').promises;
-			const fsSync = require('fs');
-			const path = require('path');
-			
-			// Create timestamped backups for better recovery options
-			const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
-			
-			const fileTreeFiles = [
-				{
-					source: path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html'),
-					minSize: 100,
-					description: 'file-tree-content.html'
-				},
-				{
-					source: path.join(destination.path, 'site-lib', 'html', 'file-tree-content-content.html'),
-					minSize: 1000,
-					description: 'file-tree-content-content.html'
-				}
-			];
-			
-			let backupCount = 0;
-			
-			for (const { source, minSize, description } of fileTreeFiles) {
-				if (fsSync.existsSync(source)) {
-					const stats = fsSync.statSync(source);
-					if (stats.size >= minSize) {
-						// Create regular backup
-						const backupPath = source + '.backup';
-						await fs.copyFile(source, backupPath);
-						
-						// Create timestamped backup for additional recovery options
-						const timestampedBackupPath = source + '.backup.' + timestamp;
-						await fs.copyFile(source, timestampedBackupPath);
-						
-						ExportLog.log(`💾 Created backups for ${description}: ${stats.size} bytes`);
-						backupCount++;
-					} else {
-						ExportLog.warning(`⚠️ Skipping backup for ${description}: file too small (${stats.size} bytes)`);
-					}
-				} else {
-					ExportLog.log(`ℹ️ ${description} not found - no backup needed`);
-				}
-			}
-			
-			if (backupCount > 0) {
-				ExportLog.log(`💾 Created ${backupCount * 2} file tree backup files (regular + timestamped)`);
-			}
-			
-		} catch (backupError) {
-			ExportLog.warning(`⚠️ Failed to create file tree backups:`, backupError);
 		}
 	}
 	
@@ -1649,47 +1544,19 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				if (!searchIndexData || searchIndexData.length < 100) {
 					ExportLog.warning(`⚠️ Search index appears corrupted (${searchIndexData?.length || 0} bytes) - attempting backup recovery`);
 					
-					// Try backup files with multiple naming patterns and timestamped backups
+					// Try backup files
 					const backupPath = searchIndexPath + '.backup';
-					const allBackupPaths = [backupPath];
-					
-					// Find timestamped backups
 					try {
-						const searchIndexDir = path.dirname(searchIndexPath);
-						const searchIndexBaseName = path.basename(searchIndexPath);
-						const dirFiles = fsSync.readdirSync(searchIndexDir);
-						
-						const timestampedBackups = dirFiles
-							.filter((f: string) => f.startsWith(searchIndexBaseName + '.backup.'))
-							.map((f: string) => path.join(searchIndexDir, f))
-							.sort((a: string, b: string) => fsSync.statSync(b).mtime.getTime() - fsSync.statSync(a).mtime.getTime()); // Most recent first
-						
-						allBackupPaths.push(...timestampedBackups);
-					} catch (timestampError) {
-						// Continue with regular backup only
-					}
-					
-					let recoverySuccessful = false;
-					
-					for (const backupFile of allBackupPaths) {
-						try {
-							if (fsSync.existsSync(backupFile)) {
-								const backupData = await fs.readFile(backupFile, 'utf8');
-								if (backupData && backupData.length > 1000) {
-									ExportLog.log(`🔄 Recovered search index from backup (${backupData.length} bytes): ${path.basename(backupFile)}`);
-									await fs.writeFile(searchIndexPath, backupData);
-									searchIndexData = backupData; // Use recovered data
-									recoverySuccessful = true;
-									break;
-								}
-							}
-						} catch (backupError) {
-							// Try next backup file
-							continue;
+						const backupData = await fs.readFile(backupPath, 'utf8');
+						if (backupData && backupData.length > 1000) {
+							ExportLog.log(`🔄 Recovered search index from backup (${backupData.length} bytes)`);
+							await fs.writeFile(searchIndexPath, backupData);
+							searchIndexData = backupData; // Use recovered data
+						} else {
+							ExportLog.warning(`⚠️ Backup file exists but is too small (${backupData?.length || 0} bytes) - will create fresh search index`);
+							throw new Error("Backup corrupted");
 						}
-					}
-					
-					if (!recoverySuccessful) {
+					} catch (backupError) {
 						ExportLog.log(`ℹ️ No valid backup found for search index - will create new one`);
 						// Don't throw error - allow fresh creation
 						searchIndexData = null;
@@ -1793,10 +1660,38 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			// Try to load existing metadata.json
 			const metadataPath = path.join(destination.path, 'site-lib', 'metadata.json');
 			try {
-				const metadataData = await fs.readFile(metadataPath, 'utf8');
-				const metadata = JSON.parse(metadataData);
+				let metadataData = await fs.readFile(metadataPath, 'utf8');
 				
-				if (metadata && metadata.webpages && metadata.attachments) {
+				// CORRUPTION CHECK: Verify file is not empty or truncated
+				if (!metadataData || metadataData.length < 50) {
+					ExportLog.warning(`⚠️ Metadata appears corrupted (${metadataData?.length || 0} bytes) - attempting backup recovery`);
+					
+					// Try backup files
+					const backupPath = metadataPath + '.backup';
+					try {
+						const backupData = await fs.readFile(backupPath, 'utf8');
+						if (backupData && backupData.length > 100) {
+							ExportLog.log(`🔄 Recovered metadata from backup (${backupData.length} bytes)`);
+							await fs.writeFile(metadataPath, backupData);
+							metadataData = backupData; // Use recovered data
+						} else {
+							ExportLog.warning(`⚠️ Backup file exists but is too small (${backupData?.length || 0} bytes) - will create fresh metadata`);
+							throw new Error("Backup corrupted");
+						}
+					} catch (backupError) {
+						ExportLog.log(`ℹ️ No valid backup found for metadata - will create new one`);
+						// Don't throw error - allow fresh creation
+						metadataData = null;
+					}
+				} else {
+					ExportLog.log(`✅ Metadata valid: ${metadataData.length} bytes`);
+				}
+				
+				// Only process if we have valid metadata data
+				if (metadataData && metadataData.trim()) {
+					const metadata = JSON.parse(metadataData);
+					
+					if (metadata && metadata.webpages && metadata.attachments) {
 					// Initialize website data with existing metadata using the correct WebsiteData structure
 					if (!website.index.websiteData) {
 						const { WebsiteData } = await import("../../shared/website-data");
@@ -1812,6 +1707,10 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				} else {
 					ExportLog.log(`⚠️ Metadata exists but is invalid structure`);
 				}
+				
+			} else {
+				ExportLog.log(`ℹ️ Metadata data was corrupted/empty - will create fresh one`);
+			}
 			} catch (metadataError) {
 				ExportLog.log(`ℹ️ No existing metadata found (will create new one)`);
 			}
@@ -2068,8 +1967,33 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				await Utils.downloadAttachments(filesToDownload);
 				ExportLog.log(`✅ Step 8: Downloaded COMPLETE site-lib folder: ${filesToDownload.length} files saved to disk`);
 				
-				// STEP 8.1: Create immediate backups of critical files after successful download
-				await this.createImmediateBackups(website.destination);
+				// STEP 8.1: Create backup copies of critical files after successful download
+				try {
+					const fs = require('fs').promises;
+					const fsSync = require('fs');
+					const path = require('path');
+					
+					const searchIndexPath = path.join(website.destination.path, 'site-lib', 'search-index.json');
+					const metadataPath = path.join(website.destination.path, 'site-lib', 'metadata.json');
+					
+					if (fsSync.existsSync(searchIndexPath)) {
+						const searchIndexStats = fsSync.statSync(searchIndexPath);
+						if (searchIndexStats.size > 1000) { // Only backup if file is substantial
+							await fs.copyFile(searchIndexPath, searchIndexPath + '.backup');
+							ExportLog.log(`💾 Created backup: search-index.json.backup (${searchIndexStats.size} bytes)`);
+						}
+					}
+					
+					if (fsSync.existsSync(metadataPath)) {
+						const metadataStats = fsSync.statSync(metadataPath);
+						if (metadataStats.size > 100) { // Only backup if file is substantial
+							await fs.copyFile(metadataPath, metadataPath + '.backup');
+							ExportLog.log(`💾 Created backup: metadata.json.backup (${metadataStats.size} bytes)`);
+						}
+					}
+				} catch (backupError) {
+					ExportLog.warning(`⚠️ Failed to create backup files:`, backupError);
+				}
 				
 				// Log final site-lib structure summary for transparency
 				const totalCss = filesToDownload.filter(f => f.targetPath?.path?.includes('/styles/')).length;
