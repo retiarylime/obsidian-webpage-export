@@ -1819,21 +1819,31 @@ EXPORT SESSION END: ${new Date().toISOString()}
 							// Add to search index if we have existing search data
 							if (website.index.minisearch) {
 								try {
-									// Add basic search data with robust error handling
-									const searchDoc = {
-										id: webpage.targetPath.path,
-										title: sourceFile.basename,
-										content: sourceFile.basename, // Simplified content
-										url: webpage.targetPath.path
-									};
+									// CRITICAL FIX: Check if document already exists before adding
+									// This prevents MiniSearch errors when crash recovery reloads existing documents
+									const docId = webpage.targetPath.path;
+									const existsInIndex = website.index.minisearch.has(docId);
 									
-									// Validate document before adding
-									if (searchDoc.id && searchDoc.title) {
-										website.index.minisearch.add(searchDoc);
+									if (!existsInIndex) {
+										// Add basic search data with robust error handling
+										const searchDoc = {
+											id: docId,
+											title: sourceFile.basename,
+											content: sourceFile.basename, // Simplified content
+											url: webpage.targetPath.path
+										};
+										
+										// Validate document before adding
+										if (searchDoc.id && searchDoc.title) {
+											website.index.minisearch.add(searchDoc);
+											ExportLog.log(`🔍 Added new document to search index: ${docId}`);
+										}
+									} else {
+										ExportLog.log(`🔍 Document already exists in search index: ${docId}`);
 									}
 								} catch (searchAddError) {
 									// Ignore search index errors during recovery - don't fail the entire process
-									console.log(`Search index error for ${sourceFile.path}: ${searchAddError.message}`);
+									ExportLog.warning(`Search index error for ${sourceFile.path}: ${searchAddError.message}`);
 								}
 							}
 						}
@@ -1849,6 +1859,21 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			ExportLog.log(`  - ${restoredAttachments} attachments restored`);
 			ExportLog.log(`  - ${missingFiles} files missing from disk (skipped)`);
 			ExportLog.log(`  - Total files in collections: ${website.index.attachmentsShownInTree.length}`);
+			ExportLog.log(`  - Search index documents after rebuild: ${website.index.minisearch?.documentCount || 0}`);
+			
+			// DEBUGGING: Verify that key documents still exist after rebuild
+			if (website.index.minisearch && website.index.minisearch.documentCount > 0) {
+				try {
+					const searchResults = website.index.minisearch.search('PC방');
+					if (searchResults.length > 0) {
+						ExportLog.log(`✅ Post-rebuild validation: "PC방" found in search index (${searchResults.length} results)`);
+					} else {
+						ExportLog.warning(`⚠️ Post-rebuild validation: "PC방" not found in search index - may indicate data loss during rebuild`);
+					}
+				} catch (validationError) {
+					ExportLog.warning(`⚠️ Post-rebuild search validation failed: ${validationError}`);
+				}
+			}
 			
 		} catch (error) {
 			ExportLog.error(error, "Failed to rebuild file collections from disk");
