@@ -45,9 +45,6 @@ export class Settings
 	public static exportPreset: ExportPreset = ExportPreset.Online;
 	public static openAfterExport: boolean = true;
 
-	// Latest selected files for convenience
-	public static lastSelectedFiles: string[] = [];
-
 	// Graph View Settings
 	public static filePickerBlacklist: string[] = ["(^|\\/)node_modules\\/","(^|\\/)dist\\/","(^|\\/)dist-ssr\\/","(^|\\/)\\.vscode\\/"]; // ignore node_modules, dist, and .vscode
 	public static filePickerWhitelist: string[] = ["\\.\\w+$"]; // only include files with extensions

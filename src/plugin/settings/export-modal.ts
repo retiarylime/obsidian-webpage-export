@@ -85,83 +85,23 @@ export class ExportModal extends Modal
 			this.filePicker.class = "file-picker";
 			await this.filePicker.generate(scrollArea);
 			
-			// Priority order for file selection:
-			// 1. Files passed via overridePickedFiles (highest priority)
-			// 2. Latest selected files from previous exports
-			// 3. Persistent saved files (lowest priority)
-			let filesToPick: string[] = [];
-			let selectionSource = '';
-			
-			if (this.pickedFiles && this.pickedFiles.length > 0) {
-				// Use overridden files (highest priority)
-				filesToPick = this.pickedFiles.map(file => file.path);
-				selectionSource = ' (predefined)';
-			} else if (Settings.lastSelectedFiles.length > 0) {
-				// Use latest selected files from previous exports
-				filesToPick = Settings.lastSelectedFiles;
-				selectionSource = ` (${Settings.lastSelectedFiles.length} files from last export)`;
-			} else if (Settings.exportOptions.filesToExport.length > 0) {
-				// Fallback to persistent saved files
-				filesToPick = Settings.exportOptions.filesToExport;
-				selectionSource = ` (${Settings.exportOptions.filesToExport.length} saved files)`;
-			}
-			
-			if (filesToPick.length > 0) {
+			if((this.pickedFiles?.length ?? 0 > 0) || Settings.exportOptions.filesToExport.length > 0) 
+			{
+				const filesToPick = this.pickedFiles?.map(file => file.path) ?? Settings.exportOptions.filesToExport;
 				this.filePicker.setSelectedFiles(filesToPick);
-				// Update title to show selection source
-				const titleElement = scrollArea.querySelector('.tree-title');
-				if (titleElement) {
-					titleElement.textContent = lang.filePicker.title + selectionSource;
-					
-					// Add styling to indicate auto-selected files
-					if (selectionSource.includes('last export')) {
-						titleElement.setAttribute('style', 'color: var(--interactive-accent); font-weight: 500;');
-					}
-				}
 			}
 
 			const saveFiles = new Setting(this.filePickerModalEl).addButton((button) => 
 			{
-				button.setButtonText(lang.filePicker.save)
-					.setTooltip("Save current selection as persistent files")
-					.onClick(async () =>
+				button.setButtonText(lang.filePicker.save).onClick(async () =>
 				{
 					Settings.exportOptions.filesToExport = this.filePicker.getSelectedFilesSavePaths();
 					await SettingsPage.saveSettings();
 				});
 			});
 
-			// Add button to clear latest selection
-			const clearLatestButton = new Setting(this.filePickerModalEl).addButton((button) => 
-			{
-				button.setButtonText("Clear Latest")
-					.setTooltip("Clear the latest selection from previous export")
-					.onClick(async () =>
-				{
-					Settings.lastSelectedFiles = [];
-					await SettingsPage.saveSettings();
-					
-					// Update title to remove selection source indicator
-					const titleElement = scrollArea.querySelector('.tree-title');
-					if (titleElement) {
-						titleElement.textContent = lang.filePicker.title;
-					}
-					
-					// Clear current file selection to show the change
-					this.filePicker.setSelectedFiles([]);
-					
-					// Show feedback to user
-					button.setButtonText("Cleared ✓");
-					setTimeout(() => {
-						button.setButtonText("Clear Latest");
-					}, 1500);
-				});
-			});
-
 			saveFiles.settingEl.style.border = "none";
 			saveFiles.settingEl.style.marginRight = "1em";
-			clearLatestButton.settingEl.style.border = "none";
-			clearLatestButton.settingEl.style.marginLeft = "0.5em";
 		}
 
 
@@ -200,23 +140,6 @@ export class ExportModal extends Modal
 			display: block;
 			width: fit-content;
 			white-space: pre-wrap;`)
-		}
-		
-		// Show notice if files were auto-loaded from latest selection
-		if (Settings.lastSelectedFiles.length > 0 && (!this.pickedFiles || this.pickedFiles.length === 0)) {
-			const latestSelectionNotice = contentEl.createEl('div', { text: `📁 Loaded ${Settings.lastSelectedFiles.length} files from your last export selection` });
-			latestSelectionNotice.setAttribute("style",
-				`margin-block-start: calc(var(--h3-size)/2);
-			background-color: var(--interactive-accent-hover);
-			padding: 4px;
-			padding-left: 1em;
-			padding-right: 1em;
-			color: var(--text-normal);
-			font-size: var(--font-ui-smaller);
-			border-radius: 5px;
-			display: block;
-			width: fit-content;
-			opacity: 0.8;`);
 		}
 
 		const modeDescriptions = 
@@ -371,11 +294,6 @@ export class ExportModal extends Modal
 			setExportDisabled(!this.validPath);
 			button.setButtonText(lang.exportButton).onClick(async () => 
 			{
-				// Save the currently selected files as the latest selection
-				const selectedFiles = this.filePicker.getSelectedFiles();
-				Settings.lastSelectedFiles = selectedFiles.map(file => file.path);
-				await SettingsPage.saveSettings();
-				
 				this.canceled = false;
 				this.close();
 			});
