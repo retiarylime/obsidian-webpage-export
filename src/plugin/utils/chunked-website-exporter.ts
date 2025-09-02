@@ -275,6 +275,10 @@ EXPORT RESUMED: ${timestamp}
 				// Override the export options after creation
 				finalWebsite.exportOptions.exportRoot = globalExportRoot;
 				finalWebsite.exportOptions.flattenExportPaths = false;
+				
+				// CRITICAL FIX: Set crash recovery flag to prevent search index creation during load
+				(finalWebsite.exportOptions as any)._crashRecoveryMode = true;
+				
 				await finalWebsite.load([]);
 				
 				// CRITICAL: Load existing search index and website data from disk
@@ -1655,6 +1659,23 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			}
 			} catch (searchError) {
 				ExportLog.log(`ℹ️ No existing search index found (will create new one)`);
+			}
+			
+			// CRITICAL FIX: Ensure we have a MiniSearch instance after crash recovery
+			// If no search index was restored, create a fresh one
+			if (!website.index.minisearch) {
+				ExportLog.log(`🔍 Creating fresh search index for crash recovery...`);
+				const { default: MiniSearch } = await import('minisearch');
+				const stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
+				const minisearchOptions = {
+					fields: ['title', 'aliases', 'headers', 'tags', 'content'],
+					storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+					processTerm: (term: any, _fieldName: any) =>
+						stopWords.includes(term) ? null : term.toLowerCase(),
+					autoVacuum: false  // Disable auto-vacuum to prevent TreeIterator corruption
+				};
+				website.index.minisearch = new MiniSearch(minisearchOptions);
+				ExportLog.log(`✅ Fresh search index created for crash recovery`);
 			}
 			
 			// Try to load existing metadata.json

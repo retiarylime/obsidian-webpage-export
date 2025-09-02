@@ -57,33 +57,85 @@ export class Index
 		this.website = website;
 		this.exportOptions = options;
 
-		try
-		{
-			// try to load website data
-			const metadataPath = this.website.destination.join(AssetHandler.libraryPath).joinString(Shared.metadataFileName);
-	
-			const metadata = await metadataPath.readAsString();
-			if (metadata) 
+		// CRITICAL FIX: Skip metadata loading during crash recovery - let crash recovery handle restoration
+		if ((this.exportOptions as any)._crashRecoveryMode) {
+			ExportLog.log("🔄 Crash recovery mode: Skipping metadata loading (will be restored by crash recovery)");
+			// Create minimal websiteData structure that crash recovery can populate
+			this.websiteData = {} as WebsiteData;
+			this.websiteData.createdTime = Date.now();
+		} else {
+			try
 			{
-				this.oldWebsiteData = JSON.parse(metadata) as WebsiteData;
-				this.websiteData = JSON.parse(metadata) as WebsiteData;
+				// try to load website data
+				const metadataPath = this.website.destination.join(AssetHandler.libraryPath).joinString(Shared.metadataFileName);
+		
+				const metadata = await metadataPath.readAsString();
+				if (metadata) 
+				{
+					this.oldWebsiteData = JSON.parse(metadata) as WebsiteData;
+					this.websiteData = JSON.parse(metadata) as WebsiteData;
 
-				this.deletedFiles = this.oldWebsiteData.allFiles ?? [];
+					this.deletedFiles = this.oldWebsiteData.allFiles ?? [];
+				}
+				else
+				{
+					console.log("No metadata found. Creating new metadata.");
+					this.websiteData = {} as WebsiteData;
+					this.websiteData.createdTime = Date.now();
+				}
+				
+				// default values
+				if (!this.websiteData.shownInTree) this.websiteData.shownInTree = [];
+				if (!this.websiteData.attachments) this.websiteData.attachments = [];
+				if (!this.websiteData.allFiles) this.websiteData.allFiles = [];
+				if (!this.websiteData.webpages) this.websiteData.webpages = {};
+				if (!this.websiteData.fileInfo) this.websiteData.fileInfo = {};
+				if (!this.websiteData.sourceToTarget) this.websiteData.sourceToTarget = {};
+				this.websiteData.featureOptions = 
+				{
+					backlinks: options.backlinkOptions,
+					tags: options.tagOptions,
+					alias: options.aliasOptions,
+					properties: options.propertiesOptions,
+					fileNavigation: options.fileNavigationOptions,
+					search: options.searchOptions,
+					outline: options.outlineOptions,
+					themeToggle: options.themeToggleOptions,
+					graphView: options.graphViewOptions,
+					sidebar: options.sidebarOptions,
+					customHead: options.customHeadOptions,
+					document: options.documentOptions,
+					rss: options.rssOptions,
+					linkPreview: options.linkPreviewOptions,
+				};
+				
+				// set global values
+				this.websiteData.modifiedTime = Date.now();
+				this.websiteData.siteName = this.website.exportOptions.siteName ?? "";
+				this.websiteData.vaultName = app.vault.getName();
+				this.websiteData.exportRoot = this.website.exportOptions.exportRoot ?? "";
+				this.websiteData.baseURL = this.website.exportOptions.rssOptions.siteUrl ?? "";
+				this.websiteData.pluginVersion = HTMLExportPlugin.pluginVersion;
+				this.websiteData.themeName = this.website.exportOptions.themeName ?? "Default";
+				this.websiteData.bodyClasses = await WebpageTemplate.getValidBodyClasses() ?? "";
+				this.websiteData.hasFavicon = this.exportOptions.faviconPath != "";
 			}
-			else
+			catch (e)
 			{
-				console.log("No metadata found. Creating new metadata.");
-				this.websiteData = {} as WebsiteData;
-				this.websiteData.createdTime = Date.now();
+				ExportLog.warning(e, "Failed to load metadata.json. Recreating metadata.");
 			}
-			
-			// default values
-			if (!this.websiteData.shownInTree) this.websiteData.shownInTree = [];
-			if (!this.websiteData.attachments) this.websiteData.attachments = [];
-			if (!this.websiteData.allFiles) this.websiteData.allFiles = [];
-			if (!this.websiteData.webpages) this.websiteData.webpages = {};
-			if (!this.websiteData.fileInfo) this.websiteData.fileInfo = {};
-			if (!this.websiteData.sourceToTarget) this.websiteData.sourceToTarget = {};
+		}
+		
+		// Ensure default values are set regardless of crash recovery or normal loading
+		if (!this.websiteData.shownInTree) this.websiteData.shownInTree = [];
+		if (!this.websiteData.attachments) this.websiteData.attachments = [];
+		if (!this.websiteData.allFiles) this.websiteData.allFiles = [];
+		if (!this.websiteData.webpages) this.websiteData.webpages = {};
+		if (!this.websiteData.fileInfo) this.websiteData.fileInfo = {};
+		if (!this.websiteData.sourceToTarget) this.websiteData.sourceToTarget = {};
+		
+		// Set feature options (crash recovery will use these defaults, regular loading already set them above)
+		if (!this.websiteData.featureOptions) {
 			this.websiteData.featureOptions = 
 			{
 				backlinks: options.backlinkOptions,
@@ -101,8 +153,10 @@ export class Index
 				rss: options.rssOptions,
 				linkPreview: options.linkPreviewOptions,
 			};
-			
-			// set global values
+		}
+		
+		// Set global values (crash recovery will use these defaults, regular loading already set them above) 
+		if (!this.websiteData.modifiedTime) {
 			this.websiteData.modifiedTime = Date.now();
 			this.websiteData.siteName = this.website.exportOptions.siteName ?? "";
 			this.websiteData.vaultName = app.vault.getName();
@@ -112,10 +166,6 @@ export class Index
 			this.websiteData.themeName = this.website.exportOptions.themeName ?? "Default";
 			this.websiteData.bodyClasses = await WebpageTemplate.getValidBodyClasses() ?? "";
 			this.websiteData.hasFavicon = this.exportOptions.faviconPath != "";
-		}
-		catch (e)
-		{
-			ExportLog.warning(e, "Failed to load metadata.json. Recreating metadata.");
 		}
 
 		// load current index or create a new one if it doesn't exist
