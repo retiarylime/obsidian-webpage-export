@@ -346,6 +346,37 @@ EXPORT RESUMED: ${timestamp}
 					// This ensures the complete site-lib folder structure is available after every chunk with incremental data
 					if (finalWebsite) {
 						await this.generateSiteLibFiles(finalWebsite, i + 1, chunks.length);
+						
+						// BACKUP: Create backup of file tree content files after successful site-lib generation
+						try {
+							const fs = require('fs').promises;
+							const fsSync = require('fs');
+							const path = require('path');
+							
+							// Check both possible file tree file locations
+							const fileTreePath1 = path.join(destination.path, 'site-lib', 'html', 'file-tree-content.html');
+							const fileTreePath2 = path.join(destination.path, 'site-lib', 'html', 'file-tree-content-content.html');
+							
+							// Backup first file if it exists and is substantial
+							if (fsSync.existsSync(fileTreePath1)) {
+								const stats1 = fsSync.statSync(fileTreePath1);
+								if (stats1.size > 1000) {
+									await fs.copyFile(fileTreePath1, fileTreePath1 + '.backup');
+									ExportLog.log(`💾 Created backup: file-tree-content.html.backup (${stats1.size} bytes)`);
+								}
+							}
+							
+							// Backup second file if it exists and is substantial
+							if (fsSync.existsSync(fileTreePath2)) {
+								const stats2 = fsSync.statSync(fileTreePath2);
+								if (stats2.size > 1000) {
+									await fs.copyFile(fileTreePath2, fileTreePath2 + '.backup');
+									ExportLog.log(`💾 Created backup: file-tree-content-content.html.backup (${stats2.size} bytes)`);
+								}
+							}
+						} catch (backupError) {
+							ExportLog.warning(`⚠️ Failed to create file tree backup:`, backupError);
+						}
 					}
 					
 					// Memory cleanup
@@ -1504,20 +1535,24 @@ EXPORT SESSION END: ${new Date().toISOString()}
 							await fs.writeFile(searchIndexPath, backupData);
 							searchIndexData = backupData; // Use recovered data
 						} else {
-							throw new Error("Backup also corrupted or too small");
+							ExportLog.warning(`⚠️ Backup file exists but is too small (${backupData?.length || 0} bytes) - will create fresh search index`);
+							throw new Error("Backup corrupted");
 						}
 					} catch (backupError) {
-						ExportLog.error(backupError, "Failed to recover search index from backup");
-						throw new Error("Search index corrupted and no valid backup available");
+						ExportLog.log(`ℹ️ No valid backup found for search index - will create new one`);
+						// Don't throw error - allow fresh creation
+						searchIndexData = null;
 					}
 				} else {
 					ExportLog.log(`✅ Search index valid: ${searchIndexData.length} bytes`);
 				}
 				
-				const searchIndex = JSON.parse(searchIndexData);
-				
-				// Restore search index if it exists and has data
-				if (searchIndex && Array.isArray(searchIndex) && searchIndex.length > 0) {
+				// Only process if we have valid search index data
+				if (searchIndexData && searchIndexData.trim()) {
+					const searchIndex = JSON.parse(searchIndexData);
+					
+					// Restore search index if it exists and has data
+					if (searchIndex && Array.isArray(searchIndex) && searchIndex.length > 0) {
 					ExportLog.log(`📋 Found search index data: ${searchIndex.length} documents`);
 					try {
 						// Rebuild minisearch from the data using EXACT same options as regular website index
@@ -1594,8 +1629,12 @@ EXPORT SESSION END: ${new Date().toISOString()}
 						website.index.minisearch = undefined; // Will be recreated fresh
 					}
 				} else {
-					ExportLog.log(`⚠️ Search index exists but is empty`);
+					ExportLog.log(`ℹ️ Search index data was corrupted/empty - will create fresh one`);
 				}
+				
+			} else {
+				ExportLog.log(`ℹ️ No valid search index data - will create fresh one`);
+			}
 			} catch (searchError) {
 				ExportLog.log(`ℹ️ No existing search index found (will create new one)`);
 			}
@@ -1877,6 +1916,34 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			if (filesToDownload.length > 0) {
 				await Utils.downloadAttachments(filesToDownload);
 				ExportLog.log(`✅ Step 8: Downloaded COMPLETE site-lib folder: ${filesToDownload.length} files saved to disk`);
+				
+				// STEP 8.1: Create backup copies of critical files after successful download
+				try {
+					const fs = require('fs').promises;
+					const fsSync = require('fs');
+					const path = require('path');
+					
+					const searchIndexPath = path.join(website.destination.path, 'site-lib', 'search-index.json');
+					const metadataPath = path.join(website.destination.path, 'site-lib', 'metadata.json');
+					
+					if (fsSync.existsSync(searchIndexPath)) {
+						const searchIndexStats = fsSync.statSync(searchIndexPath);
+						if (searchIndexStats.size > 1000) { // Only backup if file is substantial
+							await fs.copyFile(searchIndexPath, searchIndexPath + '.backup');
+							ExportLog.log(`💾 Created backup: search-index.json.backup (${searchIndexStats.size} bytes)`);
+						}
+					}
+					
+					if (fsSync.existsSync(metadataPath)) {
+						const metadataStats = fsSync.statSync(metadataPath);
+						if (metadataStats.size > 100) { // Only backup if file is substantial
+							await fs.copyFile(metadataPath, metadataPath + '.backup');
+							ExportLog.log(`💾 Created backup: metadata.json.backup (${metadataStats.size} bytes)`);
+						}
+					}
+				} catch (backupError) {
+					ExportLog.warning(`⚠️ Failed to create backup files:`, backupError);
+				}
 				
 				// Log final site-lib structure summary for transparency
 				const totalCss = filesToDownload.filter(f => f.targetPath?.path?.includes('/styles/')).length;
