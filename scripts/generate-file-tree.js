@@ -237,51 +237,31 @@ class FileTreeGenerator {
             // "-다-왔어요_-덜-왔어요_1404746307380" -> "- 다 왔어요_ - 덜 왔어요_1404746307380"
             const parts = nameWithoutExt.split('_');
             if (parts.length >= 2) {
-                // Check if we have a real two-part structure (both parts start with "-")
-                // vs. a single part with ID (like "-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840")
-                if (parts[1].startsWith('-')) {
-                    // True two-part structure: "-다-왔어요_-덜-왔어요_1404746307380"
-                    const firstPart = parts[0];  // "-다-왔어요"
-                    const secondPart = parts[1]; // "-덜-왔어요" 
-                    const idPart = parts.slice(2).join('_'); // "1404746307380"
-                    
-                    // Convert kebab-case to spaced Korean text, keeping the "- " prefix
-                    // "-다-왔어요" -> "- 다 왔어요" (replace first dash with "- " and remaining with spaces)
-                    const convertedFirst = firstPart.substring(1).replace(/-/g, ' '); // Remove first dash and replace rest
-                    const convertedSecond = secondPart.substring(1).replace(/-/g, ' '); // Remove first dash and replace rest
-                    const finalFirst = `- ${convertedFirst}`;
-                    const finalSecond = `- ${convertedSecond}`;
-                    
-                    const combined = idPart ? 
-                        `${finalFirst}_ ${finalSecond}_${idPart}` :
-                        `${finalFirst}_ ${finalSecond}`;
-                    
-                    return combined;
-                } else {
-                    // Single part with ID: "-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840"
-                    let mainPart;
-                    if (parts[0].includes('.-')) {
-                        // Special case: this had ". - " in the original
-                        const withoutFirstDash = parts[0].substring(1); // Remove first dash
-                        const converted = withoutFirstDash.replace(/-/g, ' '); // Convert remaining dashes to spaces
-                        mainPart = `- ${converted.replace('. ', '. - ')}`; // Add leading "- " and convert ". " to ". - "
-                    } else {
-                        mainPart = `- ${parts[0].substring(1).replace(/-/g, ' ')}`; 
-                    }
-                    const idPart = parts.slice(1).join('_');
-                    const result = idPart ? `${mainPart}_${idPart}` : mainPart;
-                    return result;
-                }
+                const firstPart = parts[0];  // "-다-왔어요"
+                const secondPart = parts[1]; // "-덜-왔어요" 
+                const idPart = parts.slice(2).join('_'); // "1404746307380"
+                
+                // Convert kebab-case to spaced Korean text, keeping the "- " prefix
+                // "-다-왔어요" -> "- 다 왔어요" (replace first dash with "- " and remaining with spaces)
+                const convertedFirst = firstPart.substring(1).replace(/-/g, ' '); // Remove first dash and replace rest
+                const convertedSecond = secondPart.substring(1).replace(/-/g, ' '); // Remove first dash and replace rest
+                const finalFirst = `- ${convertedFirst}`;
+                const finalSecond = `- ${convertedSecond}`;
+                
+                const combined = idPart ? 
+                    `${finalFirst}_ ${finalSecond}_${idPart}` :
+                    `${finalFirst}_ ${finalSecond}`;
+                
+                return combined;
             } else {
                 // Single part starting with "-", like "-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요_1382222777840"
                 // Check if this contains ".-" which indicates ". - " in the original
                 let mainPart;
                 if (parts[0].includes('.-')) {
                     // Special case: this had ". - " in the original
-                    // "-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요" -> "- 목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요"
-                    const withoutFirstDash = parts[0].substring(1); // Remove first dash
-                    const converted = withoutFirstDash.replace(/-/g, ' '); // Convert remaining dashes to spaces
-                    mainPart = `- ${converted.replace('. ', '. - ')}`; // Add leading "- " and convert ". " to ". - "
+                    // "-목이-아파요.-그럼-생강차를-마시거나-사탕을-드세요" -> "목이 아파요. - 그럼 생강차를 마시거나 사탕을 드세요"
+                    const converted = parts[0].substring(1).replace(/-/g, ' '); // Remove first dash, convert rest to spaces
+                    mainPart = converted.replace('. ', '. - '); // Convert ". " to ". - "
                 } else {
                     mainPart = `- ${parts[0].substring(1).replace(/-/g, ' ')}`; // "- 목이 아파요. 그럼 생강차를 마시거나 사탕을 드세요"
                 }
