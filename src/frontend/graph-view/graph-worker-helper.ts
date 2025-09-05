@@ -105,7 +105,9 @@ export class GraphRenderWorker
 			console.log("Failed to transfer control to offscreen canvas");
 		}
 
-		var workerPath = `${ObsidianSite.document.info.pathToRoot}/${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`;
+		// Defensive check for pathToRoot - use fallback if document.info is undefined
+		const pathToRoot = ObsidianSite.document?.info?.pathToRoot ?? '.';
+		var workerPath = `${pathToRoot}/${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`;
 
 		if (window.location.protocol === 'file:')
 		{
