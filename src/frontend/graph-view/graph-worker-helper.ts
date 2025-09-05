@@ -216,7 +216,7 @@ export class GraphRenderWorker
 		const alpha = parseFloat(opacity);
 		const result = 
 		{
-			a: (alpha * (color?.alpha ?? 1)) ?? 1,
+			a: color ? alpha * color.alpha : alpha,
 			rgb: (color?.red ?? 0x880000) << 16 | (color?.green ?? 0x008800)  << 8 | (color?.blue ?? 0x000088)
 		};
 
