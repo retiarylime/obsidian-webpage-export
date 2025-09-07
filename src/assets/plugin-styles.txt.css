@@ -494,7 +494,6 @@ body .canvas-wrapper {
 body.is-phone .sidebar {
 	font-size: 1.15em;
 	--tree-vertical-spacing: 1.8em;
-	--sidebar-width: 85vw !important;
 }
 
 body.is-phone {

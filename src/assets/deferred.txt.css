@@ -477,6 +477,80 @@ body #center-content>.obsidian-document>.markdown-preview-sizer
 
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
+/* Define Ubuntu font family with comprehensive mobile-friendly fallbacks */
+/* Includes Android system fonts (Roboto, Droid Sans) and iOS/other system fonts */
+:root {
+    --font-family-ubuntu: 'Ubuntu', 'Roboto', 'Droid Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-family-ubuntu-mono: 'Ubuntu Mono', 'Roboto Mono', 'Droid Sans Mono', 'SF Mono', Monaco, Inconsolata, 'Liberation Mono', 'Courier New', monospace;
+}
+
+/* Custom font-face declarations with mobile optimization */
+@font-face {
+    font-family: 'Ubuntu-Optimized';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap; /* Critical for mobile performance - shows fallback text immediately */
+    src: url('https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgo6eAT3v02QFg.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Ubuntu-Optimized';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/ubuntu/v20/4iCs6KVjbNBYlgo6eAT3v02QFg.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Ubuntu-Optimized';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('https://fonts.gstatic.com/s/ubuntu/v20/4iCv6KVjbNBYlgoCxCvjsGyN.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Apply optimized Ubuntu fonts globally with mobile-friendly fallbacks */
+body {
+    font-family: var(--font-family-ubuntu);
+}
+
+/* Ensure critical elements use optimized fonts */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-ubuntu);
+}
+
+/* Navigation elements with mobile optimization */
+.nav-file-title, .nav-folder-title, .tree-item-inner {
+    font-family: var(--font-family-ubuntu);
+}
+
+/* Mobile-specific font optimizations */
+@media (max-width: 768px) {
+    body {
+        line-height: 1.6;
+        /* Use system fonts on very slow connections as fallback */
+        font-family: 'Ubuntu', 'Roboto', system-ui, -apple-system, sans-serif;
+    }
+    
+    /* Optimize heading sizes for mobile screens */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-family-ubuntu);
+        font-weight: 500; /* Use medium weight for better mobile rendering */
+    }
+}
+
+/* High-DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        /* Sharper font rendering on high-DPI Android devices */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
 /*#endregion */
 
 /*#region Mobile Phone Heading Styles */
@@ -502,13 +576,48 @@ body.is-phone {
     --h6-size: 1em;
 }
 
-body.is-phone .heading-collapse-indicator.collapse-indicator.collapse-icon {
-    transform: rotate(0deg);
+body.is-phone .heading-collapse-indicator.collapse-icon.is-collapsed>svg {
+	transition: transform 0.1s ease-in-out;
+	transform: rotate(90deg);
 }
 
-body.is-phone .heading-collapse-indicator.collapse-indicator.collapse-icon.is-collapsed {
-    transition: transform .1s ease-in-out;
-    transform: rotate(180deg);
+.header .data-bar:not(:empty) {
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 3px solid #434242;
+}
+
+.header .data-bar {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 3px solid #434242;
 }
 
 /*#endregion */
+
+/*#region Responsive Design */
+
+body:not(.is-large-screen) {
+    --sidebar-width-right: min(20em, 60vw);
+    --sidebar-width-left: min(20em, 60vw);
+}
+
+body:not(.is-large-screen) input[type=search], 
+body:not(.is-large-screen) .nav-file-title, 
+body:not(.is-large-screen) .nav-folder-title, 
+body:not(.is-large-screen) .tree-item-inner.heading-link 
+{
+    font-size: 0.9em;
+}
+
+body:not(.is-large-screen) .tree-container .feature-title,
+body:not(.is-large-screen) .feature-title 
+{
+    font-size: 0.9em !important;
+}
+
+/*#endregion */
+
+

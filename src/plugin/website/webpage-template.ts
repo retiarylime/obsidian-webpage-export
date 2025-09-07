@@ -32,6 +32,12 @@ export class WebpageTemplate
 		head.innerHTML = `<meta charset="UTF-8">` + head.innerHTML;
 		head.innerHTML += `<meta property="og:site_name" content="${this.options.siteName}">`;
 		head.innerHTML += `<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">`;
+		
+		// Add Ubuntu font preloading for optimal mobile performance
+		head.innerHTML += `<link rel="preconnect" href="https://fonts.googleapis.com">`;
+		head.innerHTML += `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`;
+		head.innerHTML += `<link rel="preload" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">`;
+		head.innerHTML += `<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap"></noscript>`;
 
 		if (!this.options.combineAsSingleFile)
 		{
