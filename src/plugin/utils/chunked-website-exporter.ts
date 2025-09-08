@@ -184,7 +184,7 @@ EXPORT RESUMED: ${timestamp}
 	 * Check if chunked export should be used
 	 */
 	public static shouldUseChunkedExport(files: TFile[]): boolean {
-		return files.length > 10; // Temporarily lowered for testing
+		return files.length > 200;
 	}
 	
 	/**
