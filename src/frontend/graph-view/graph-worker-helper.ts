@@ -115,7 +115,19 @@ export class GraphRenderWorker
 		}
 		else
 		{
-			this.worker = new Worker(new URL(workerPath, window.location.href).pathname);
+			// Check if we're in a chunk export by looking for chunk export flags
+			// ChunkedWebsiteExporter sets _chunkExporterOverride flag on exportOptions
+			const exportOptions = (ObsidianSite as any)?.exportOptions;
+			const isChunkExport = exportOptions?._chunkExporterOverride === true || 
+								  exportOptions?._crashRecoveryMode === true;
+			
+			// For chunk exports, use .href to avoid CORS issues
+			// For regular exports, use .pathname for relative paths
+			if (isChunkExport) {
+				this.worker = new Worker(new URL(workerPath, window.location.href).href);
+			} else {
+				this.worker = new Worker(new URL(workerPath, window.location.href).pathname);
+			}
 		}
 
 
