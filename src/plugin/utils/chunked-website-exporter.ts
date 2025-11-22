@@ -4,6 +4,8 @@ import { Path } from "./path";
 import { ExportLog, MarkdownRendererAPI } from "../render-api/render-api";
 import { Utils } from "./utils";
 import { Settings } from "../settings/settings";
+import { Webpage } from "../website/webpage";
+import { ExportPreset } from "../settings/settings";
 
 /**
  * Progress tracking for crash recovery with full state persistence
@@ -471,51 +473,33 @@ EXPORT RESUMED: ${timestamp}
 
 				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
 
-				// CRITICAL FIX: Download all files to disk - this was missing!
+				// CRITICAL FIX: Download all files to disk - use exactly the same logic as regular exporter
 				ExportLog.log(`💾 Starting download of all files to disk - ${finalWebsite.index.webpages.length} webpages, ${finalWebsite.index.attachments.length} attachments`);
 
-				// Collect all files for download (similar to regular exporter)
-				const allWebpages = Array.from(finalWebsite.index.webpages.values());
-				const allAttachments = Array.from(finalWebsite.index.attachments.values());
+				// Use exactly the same logic as the regular exporter
+				let newFiles = finalWebsite.index.newFiles;
+				let updatedFiles = finalWebsite.index.updatedFiles;
 
-				// Filter MP3 attachments (only download as attachments, not webpages)
-				const mp3Attachments = allAttachments.filter(file =>
-					file.sourcePath && ["mp3", "wav", "ogg", "aac", "m4a", "flac"].includes(file.sourcePath.split('.').pop()?.toLowerCase() || '')
-				);
-
-				// Separate webpages and attachments
-				const webpagesToDownload = allWebpages;
-				const attachmentsToDownload = allAttachments.filter(f => !mp3Attachments.includes(f));
-
-				ExportLog.log(`📊 Download breakdown: ${webpagesToDownload.length} webpages, ${attachmentsToDownload.length} regular attachments, ${mp3Attachments.length} MP3 attachments`);
-
-				// Download all files
-				if (webpagesToDownload.length > 0) {
-					ExportLog.log(`🌐 Downloading ${webpagesToDownload.length} webpages...`);
-					await Utils.downloadAttachments(webpagesToDownload);
+				// If we're not combining as single file, include webpages in the download
+				if (!Settings.exportOptions.combineAsSingleFile) {
+					// Download all files including webpages
+					ExportLog.log(`📄 Downloading ${newFiles.length} new files including webpages`);
+					ExportLog.log(`📄 Downloading ${updatedFiles.length} updated files including webpages`);
+				} else {
+					// Filter out webpages for single file export (they're embedded in the single file)
+					newFiles = newFiles.filter((f) => !(f instanceof Webpage));
+					updatedFiles = updatedFiles.filter((f) => !(f instanceof Webpage));
+					ExportLog.log(`📄 Downloading ${newFiles.length} new attachments (webpages excluded for single file)`);
+					ExportLog.log(`📄 Downloading ${updatedFiles.length} updated attachments (webpages excluded for single file)`);
 				}
 
-				if (attachmentsToDownload.length > 0) {
-					ExportLog.log(`📎 Downloading ${attachmentsToDownload.length} regular attachments...`);
-					await Utils.downloadAttachments(attachmentsToDownload);
-				}
+				await Utils.downloadAttachments(newFiles);
+				await Utils.downloadAttachments(updatedFiles);
 
-				if (mp3Attachments.length > 0) {
-					ExportLog.log(`🎵 Downloading ${mp3Attachments.length} MP3 attachments...`);
-					await Utils.downloadAttachments(mp3Attachments);
-				}
-
-				// Download site-lib files (metadata, search index)
-				try {
-					const metadataAttachment = finalWebsite.index.websiteDataAttachment();
-					const searchIndexAttachment = finalWebsite.index.indexDataAttachment();
-
-					await Utils.downloadAttachments([metadataAttachment]);
-					await Utils.downloadAttachments([searchIndexAttachment]);
-
-					ExportLog.log(`📚 Downloaded site-lib files: metadata.json, search-index.json`);
-				} catch (siteLibError) {
-					ExportLog.warning(`⚠️ Failed to download some site-lib files:`, siteLibError);
+				if (Settings.exportPreset != ExportPreset.RawDocuments)
+				{
+					await Utils.downloadAttachments([finalWebsite.index.websiteDataAttachment()]);
+					await Utils.downloadAttachments([finalWebsite.index.indexDataAttachment()]);
 				}
 
 				ExportLog.log(`✅ All files downloaded to disk successfully!`);
