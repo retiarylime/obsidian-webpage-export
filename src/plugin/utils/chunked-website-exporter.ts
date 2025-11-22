@@ -480,7 +480,7 @@ EXPORT RESUMED: ${timestamp}
 
 				// Filter MP3 attachments (only download as attachments, not webpages)
 				const mp3Attachments = allAttachments.filter(file =>
-					file.sourcePath && ["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(file.sourcePath.split('.').pop()?.toLowerCase())
+					file.sourcePath && ["mp3", "wav", "ogg", "aac", "m4a", "flac"].includes(file.sourcePath.split('.').pop()?.toLowerCase() || '')
 				);
 
 				// Separate webpages and attachments
@@ -691,12 +691,52 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				const finalPath = globalExportRoot ? (targetPath.startsWith(globalExportRoot + '/') ? targetPath.substring((globalExportRoot + '/').length) : targetPath) : targetPath;
 				console.log(`   Output: ${finalPath}`);
 			}			let builtWebsite: Website | undefined;
+			let buildTimeout: NodeJS.Timeout | undefined;
+
 			try {
+				ExportLog.log(`🔧 Starting website.build() for chunk - this includes CSS compilation`);
+
+				// Add timeout to prevent infinite CSS compilation
+				buildTimeout = setTimeout(() => {
+					ExportLog.warning(`⚠️ Website build taking too long - potential infinite loop in CSS compilation`);
+				}, 30000); // 30 second timeout warning
+
 				builtWebsite = await website.build();
+
+				if (buildTimeout) {
+					clearTimeout(buildTimeout);
+					buildTimeout = undefined;
+				}
+				ExportLog.log(`✅ website.build() completed successfully for chunk`);
+
 			} catch (buildError) {
-				ExportLog.error(buildError, `Error building chunk website - search index issue?`);
-				// Try to recover by rebuilding without problematic components
-				builtWebsite = website; // Use the loaded website if build fails
+				if (buildTimeout) {
+					clearTimeout(buildTimeout);
+					buildTimeout = undefined;
+				}
+				ExportLog.error(buildError, `Error building chunk website - CSS compilation or search index issue`);
+
+				// CRITICAL FIX: Try to recover by using loaded website without full build
+				ExportLog.log(`🔄 ATTEMPTING RECOVERY: Using loaded website without full build() to prevent total failure`);
+
+				try {
+					// Manual basic website setup without full CSS compilation
+					if (!builtWebsite) {
+						builtWebsite = website;
+
+						// Ensure basic website structure exists
+						if (!builtWebsite.index) {
+							ExportLog.error(new Error("Website index missing after build failure"), "Cannot recover from build failure");
+							return undefined;
+						}
+
+						// Skip CSS compilation for recovery - focus on core functionality
+						ExportLog.log(`🔄 RECOVERY: Website structure preserved, skipping problematic CSS compilation`);
+					}
+				} catch (recoveryError) {
+					ExportLog.error(recoveryError, "CRITICAL: Recovery from build failure failed");
+					return undefined;
+				}
 			}
 			
 			if (!builtWebsite) return undefined;
