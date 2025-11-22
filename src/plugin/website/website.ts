@@ -296,9 +296,7 @@ export class Website
 			await Utils.delay(0);
 			if (built) await this.index.addFile(webpage);
 			else await this.index.removeFile(webpage);
-			// save the file and then dispose of the webpage
-			if (!this.exportOptions.combineAsSingleFile)
-				await webpage.download();
+			// Note: Webpage downloading is now handled in exporter.ts to prevent duplicates and ensure consistent flow
 			
 			if (this.exportOptions.autoDisposeWebpages)
 				webpage.dispose();
