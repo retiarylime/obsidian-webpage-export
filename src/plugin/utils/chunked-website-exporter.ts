@@ -400,16 +400,21 @@ EXPORT RESUMED: ${timestamp}
 					// Memory cleanup
 					await this.performMemoryCleanup(i + 1, chunks.length);
 					
+					// CRITICAL FIX: Download HTML files incrementally after each chunk to prevent data loss on interruption
+					if (finalWebsite && !Settings.exportOptions.combineAsSingleFile) {
+						await this.downloadIncrementalChunkFiles(finalWebsite, chunkWebsite, i + 1);
+					}
+
 					// CRITICAL: Only mark chunk as completed AFTER all processing succeeds
 					// This ensures incomplete chunks are restarted from the beginning on crash recovery
 					progress.completedChunks.push(i);
-					
+
 					// Enhanced: Save website state for true continuity across restarts
 					if (finalWebsite) {
 						progress.lastChunkWebsiteState = this.serializeWebsiteState(finalWebsite);
 						ExportLog.log(`💾 Chunk ${i + 1} completed successfully - saved website state (${progress.lastChunkWebsiteState.webpages.length} pages, ${progress.lastChunkWebsiteState.attachments.length} attachments)`);
 					}
-					
+
 					await this.saveProgress(progress);
 					ExportLog.log(`✅ Chunk ${i + 1}/${chunks.length} completed and saved to disk`);
 					
@@ -2278,6 +2283,57 @@ EXPORT SESSION END: ${new Date().toISOString()}
 		} catch (error) {
 			ExportLog.error(error, `Failed to download incremental attachments after chunk ${currentChunk}`);
 			// Don't throw - we want the chunked export to continue even if some downloads fail
+		}
+	}
+
+	/**
+	 * CRITICAL FIX: Download HTML files incrementally after each chunk to prevent data loss on interruption
+	 * This ensures HTML files are written to disk immediately rather than waiting for final completion
+	 */
+	private static async downloadIncrementalChunkFiles(finalWebsite: Website, chunkWebsite: Website, chunkNumber: number): Promise<void> {
+		try {
+			ExportLog.log(`📄 Downloading HTML files incrementally for chunk ${chunkNumber}...`);
+
+			const { Utils } = await import("../utils/utils");
+			const { Webpage } = await import("../website/webpage");
+
+			// Get only the new webpages from this chunk to download
+			const chunkWebpages = chunkWebsite.index.webpages.filter(wp => wp && wp.targetPath);
+
+			if (chunkWebpages.length > 0) {
+				ExportLog.log(`📄 Downloading ${chunkWebpages.length} HTML files from chunk ${chunkNumber}`);
+
+				// Log some sample files being downloaded
+				const sampleFiles = chunkWebpages.slice(0, 3);
+				sampleFiles.forEach(wp => {
+					ExportLog.log(`  📄 Downloading: ${wp.sourcePath} -> ${wp.targetPath.path}`);
+				});
+
+				if (chunkWebpages.length > 3) {
+					ExportLog.log(`  📄 ... and ${chunkWebpages.length - 3} more HTML files`);
+				}
+
+				// Download the HTML files for this chunk
+				await Utils.downloadAttachments(chunkWebpages);
+
+				ExportLog.log(`✅ Downloaded ${chunkWebpages.length} HTML files from chunk ${chunkNumber}`);
+
+				// Remove downloaded webpages from finalWebsite queues to prevent re-download
+				const downloadedPaths = new Set(chunkWebpages.map(wp => wp.targetPath.path));
+				finalWebsite.index.newFiles = finalWebsite.index.newFiles.filter(f =>
+					!(f instanceof Webpage) || !f.targetPath || !downloadedPaths.has(f.targetPath.path));
+				finalWebsite.index.updatedFiles = finalWebsite.index.updatedFiles.filter(f =>
+					!(f instanceof Webpage) || !f.targetPath || !downloadedPaths.has(f.targetPath.path));
+
+				ExportLog.log(`🧹 Cleared ${chunkWebpages.length} HTML files from final download queues`);
+
+			} else {
+				ExportLog.log(`ℹ️ No HTML files to download from chunk ${chunkNumber}`);
+			}
+
+		} catch (error) {
+			ExportLog.error(error, `Failed to download incremental HTML files for chunk ${chunkNumber}`);
+			// Don't throw - continue with export even if incremental download fails
 		}
 	}
 
