@@ -104,21 +104,35 @@ export class HTMLExporter
 					}
 					else
 					{
+						// Download all files including webpages if not combined into single file
+						let newFiles = website.index.newFiles;
+						let updatedFiles = website.index.updatedFiles;
+
+						// If we're not combining as single file, include webpages in the download
+						if (!Settings.exportOptions.combineAsSingleFile) {
+							// Download all files including webpages
+							console.log(`📄 Downloading ${newFiles.length} new files including webpages`);
+							console.log(`📄 Downloading ${updatedFiles.length} updated files including webpages`);
+						} else {
+							// Filter out webpages for single file export (they're embedded in the single file)
+							newFiles = newFiles.filter((f) => !(f instanceof Webpage));
+							updatedFiles = updatedFiles.filter((f) => !(f instanceof Webpage));
+							console.log(`📄 Downloading ${newFiles.length} new attachments (webpages excluded for single file)`);
+							console.log(`📄 Downloading ${updatedFiles.length} updated attachments (webpages excluded for single file)`);
+						}
+
 						// Debug: Check MP3 files before download
-						const newAttachments = website.index.newFiles.filter((f) => !(f instanceof Webpage));
-						const updatedAttachments = website.index.updatedFiles.filter((f) => !(f instanceof Webpage));
-						
 						const allMP3s = website.index.newFiles.concat(website.index.updatedFiles).filter(f => f.sourcePath?.endsWith(".mp3"));
 						console.log(`🎵 DEBUG: Found ${allMP3s.length} MP3 files total:`);
 						allMP3s.forEach(mp3 => {
 							console.log(`  - ${mp3.sourcePath} -> ${mp3.targetPath.path} (${mp3.constructor.name}, instanceof Webpage: ${mp3 instanceof Webpage})`);
 						});
-						
-						const mp3Attachments = newAttachments.concat(updatedAttachments).filter(f => f.sourcePath?.endsWith(".mp3"));
+
+						const mp3Attachments = newFiles.concat(updatedFiles).filter(f => f.sourcePath?.endsWith(".mp3"));
 						console.log(`🎵 DEBUG: ${mp3Attachments.length} MP3 files will be downloaded as attachments`);
-						
-						await Utils.downloadAttachments(newAttachments);
-						await Utils.downloadAttachments(updatedAttachments);
+
+						await Utils.downloadAttachments(newFiles);
+						await Utils.downloadAttachments(updatedFiles);
 
 						if (Settings.exportPreset != ExportPreset.RawDocuments)
 						{
@@ -186,13 +200,30 @@ export class HTMLExporter
 				}
 				else
 				{
-					await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
-					await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
+					// Download all files including webpages if not combined into single file
+					let newFiles = website.index.newFiles;
+					let updatedFiles = website.index.updatedFiles;
+
+					// If we're not combining as single file, include webpages in the download
+					if (!Settings.exportOptions.combineAsSingleFile) {
+						// Download all files including webpages
+						console.log(`📄 REGULAR: Downloading ${newFiles.length} new files including webpages`);
+						console.log(`📄 REGULAR: Downloading ${updatedFiles.length} updated files including webpages`);
+					} else {
+						// Filter out webpages for single file export (they're embedded in the single file)
+						newFiles = newFiles.filter((f) => !(f instanceof Webpage));
+						updatedFiles = updatedFiles.filter((f) => !(f instanceof Webpage));
+						console.log(`📄 REGULAR: Downloading ${newFiles.length} new attachments (webpages excluded for single file)`);
+						console.log(`📄 REGULAR: Downloading ${updatedFiles.length} updated attachments (webpages excluded for single file)`);
+					}
+
+					await Utils.downloadAttachments(newFiles);
+					await Utils.downloadAttachments(updatedFiles);
 
 					// Debug: log MP3 download filtering for regular export
 					const regularNewMP3s = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
-					const regularNewMP3Attachments = regularNewMP3s.filter(f => !(f instanceof Webpage));
-					const regularNewMP3Webpages = regularNewMP3s.filter(f => f instanceof Webpage);
+					const regularNewMP3Attachments = newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
+					const regularNewMP3Webpages = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3") && f instanceof Webpage);
 					if (regularNewMP3s.length > 0) {
 						console.log(`🎵 REGULAR DOWNLOAD FILTER - MP3 files: ${regularNewMP3s.length} total, ${regularNewMP3Attachments.length} attachments to download, ${regularNewMP3Webpages.length} webpages filtered out`);
 						regularNewMP3Attachments.forEach(f => console.log(`  ✅ Will download: ${f.sourcePath} -> ${f.targetPath.path}`));
