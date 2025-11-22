@@ -468,10 +468,59 @@ EXPORT RESUMED: ${timestamp}
 				
 				// Clean up progress
 				await this.cleanupProgress(destination);
-				
+
 				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
+
+				// CRITICAL FIX: Download all files to disk - this was missing!
+				ExportLog.log(`💾 Starting download of all files to disk - ${finalWebsite.index.webpages.length} webpages, ${finalWebsite.index.attachments.length} attachments`);
+
+				// Collect all files for download (similar to regular exporter)
+				const allWebpages = Array.from(finalWebsite.index.webpages.values());
+				const allAttachments = Array.from(finalWebsite.index.attachments.values());
+
+				// Filter MP3 attachments (only download as attachments, not webpages)
+				const mp3Attachments = allAttachments.filter(file =>
+					file.sourcePath && ["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(file.sourcePath.split('.').pop()?.toLowerCase())
+				);
+
+				// Separate webpages and attachments
+				const webpagesToDownload = allWebpages;
+				const attachmentsToDownload = allAttachments.filter(f => !mp3Attachments.includes(f));
+
+				ExportLog.log(`📊 Download breakdown: ${webpagesToDownload.length} webpages, ${attachmentsToDownload.length} regular attachments, ${mp3Attachments.length} MP3 attachments`);
+
+				// Download all files
+				if (webpagesToDownload.length > 0) {
+					ExportLog.log(`🌐 Downloading ${webpagesToDownload.length} webpages...`);
+					await Utils.downloadAttachments(webpagesToDownload);
+				}
+
+				if (attachmentsToDownload.length > 0) {
+					ExportLog.log(`📎 Downloading ${attachmentsToDownload.length} regular attachments...`);
+					await Utils.downloadAttachments(attachmentsToDownload);
+				}
+
+				if (mp3Attachments.length > 0) {
+					ExportLog.log(`🎵 Downloading ${mp3Attachments.length} MP3 attachments...`);
+					await Utils.downloadAttachments(mp3Attachments);
+				}
+
+				// Download site-lib files (metadata, search index)
+				try {
+					const metadataAttachment = finalWebsite.index.websiteDataAttachment();
+					const searchIndexAttachment = finalWebsite.index.indexDataAttachment();
+
+					await Utils.downloadAttachments([metadataAttachment]);
+					await Utils.downloadAttachments([searchIndexAttachment]);
+
+					ExportLog.log(`📚 Downloaded site-lib files: metadata.json, search-index.json`);
+				} catch (siteLibError) {
+					ExportLog.warning(`⚠️ Failed to download some site-lib files:`, siteLibError);
+				}
+
+				ExportLog.log(`✅ All files downloaded to disk successfully!`);
 			}
-			
+
 			return finalWebsite;
 			
 		} catch (error) {
