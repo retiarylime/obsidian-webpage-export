@@ -153,6 +153,30 @@ export class Website
 			ExportLog.error(error, "Problem creating webpage template");
 		}
 
+		// Log file distribution statistics
+		const fileStats = {
+			total: this.sourceFiles.length,
+			markdown: 0,
+			audio: 0,
+			convertable: 0,
+			other: 0
+		};
+
+		this.sourceFiles.forEach(file => {
+			const ext = file.extension.toLowerCase();
+			if (ext === 'md') fileStats.markdown++;
+			else if (["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(ext)) fileStats.audio++;
+			else if (MarkdownRendererAPI.isConvertable(ext)) fileStats.convertable++;
+			else fileStats.other++;
+		});
+
+		ExportLog.log(`📊 File Statistics: Total=${fileStats.total}, MD=${fileStats.markdown}, Audio=${fileStats.audio}, Convertable=${fileStats.convertable}, Other=${fileStats.other}`);
+
+		if (fileStats.markdown === 0) {
+			ExportLog.warning(`⚠️ No markdown files found in ${fileStats.total} files. The vault may contain only media files or incorrect export path.`);
+			ExportLog.warning(`⚠️ Sample files detected: ${this.sourceFiles.slice(0, 5).map(f => `${f.path} (${f.extension})`).join(', ')}`);
+		}
+
 		// create webpages
 		for (const file of this.sourceFiles)
 		{
@@ -164,27 +188,34 @@ export class Website
 				// Skip standalone processing of audio files - they should only be processed when embedded in markdown
 				// This matches the behavior of the regular exporter
 				if (isAudioFile) {
+					ExportLog.log(`🚫 Skipping audio file: ${file.path}`);
 					continue;
 				}
 
 				// Make sure files which need to be saved directly without conversion are added to the index as attachments
 				if (!isConvertable || (MarkdownRendererAPI.viewableMediaExtensions.contains(file.extension)))
 				{
+					ExportLog.log(`📎 Processing as attachment: ${file.path} (convertable: ${isConvertable})`);
 					const data = Buffer.from(await app.vault.readBinary(file));
 					const path = this.getTargetPathForFile(file);
 					let attachment = new Attachment(data, path, file, this.exportOptions);
 					attachment.showInTree = true;
-					
+
 					await this.index.addFile(attachment);
 				}
 
 				// Create pages for normal convertable files (md, canvas, excalidraw, etc) as well as convertable media files (png, pdf, etc)
 				if (isConvertable)
 				{
+					ExportLog.log(`📄 Processing as webpage: ${file.path} (convertable: ${isConvertable})`);
 					let webpage = new Webpage(file, file.name, this, this.exportOptions);
 					webpage.showInTree = true;
-					
+
 					await this.index.addFile(webpage);
+				}
+				else
+				{
+					ExportLog.log(`❓ Unhandled file type: ${file.path} (convertable: ${isConvertable}, audio: ${isAudioFile})`);
 				}
 
 				ExportLog.progress(0.1, "Initializing Document", file.path, "var(--color-yellow)");

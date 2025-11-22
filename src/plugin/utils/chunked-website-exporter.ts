@@ -557,6 +557,37 @@ EXPORT SESSION END: ${new Date().toISOString()}
 			
 			ExportLog.log(`🔧 Pre-load Settings and website.exportOptions override - exportRoot: "${globalExportRoot}", flattenExportPaths: false`);
 			
+			// Log chunk file statistics
+			const chunkFileStats: {
+				total: number,
+				markdown: number,
+				audio: number,
+				convertable: number,
+				other: number,
+				samples: string[]
+			} = {
+				total: files.length,
+				markdown: 0,
+				audio: 0,
+				convertable: 0,
+				other: 0,
+				samples: []
+			};
+
+			files.forEach(file => {
+				const ext = file.extension.toLowerCase();
+				if (ext === 'md') chunkFileStats.markdown++;
+				else if (["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(ext)) chunkFileStats.audio++;
+				else if (MarkdownRendererAPI.isConvertable(ext)) chunkFileStats.convertable++;
+				else chunkFileStats.other++;
+			});
+
+			// Collect sample files for debugging
+			chunkFileStats.samples = files.slice(0, 3).map(f => `${f.path} (${f.extension})`);
+
+			ExportLog.log(`🔧 Chunk File Statistics: Total=${chunkFileStats.total}, MD=${chunkFileStats.markdown}, Audio=${chunkFileStats.audio}, Convertable=${chunkFileStats.convertable}, Other=${chunkFileStats.other}`);
+			ExportLog.log(`🔧 Chunk Sample files: ${chunkFileStats.samples.join(', ')}`);
+
 			// Load files - this will cause website.load() to calculate and overwrite website.exportOptions.exportRoot
 			console.log(`🔧🔧 CALLING website.load() with ${files.length} files`);
 			await website.load(files);
