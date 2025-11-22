@@ -309,8 +309,20 @@ EXPORT RESUMED: ${timestamp}
 				ExportLog.log(`🔨 Processing chunk ${i + 1}/${chunks.length}`);
 				
 				try {
+					// CRITICAL DEBUGGING: Add immediate logs to track if buildChunkWebsite is being called
+					console.log(`🚨🚨🚨 ABOUT TO CALL buildChunkWebsite for chunk ${i + 1}/${chunks.length}`);
+					console.log(`🚨🚨🚨 Chunk ${i + 1} has ${chunks[i].length} files:`, chunks[i].slice(0, 3).map(f => `${f.path} (${f.extension})`));
+					ExportLog.log(`🚨🚨🚨 About to call buildChunkWebsite for chunk ${i + 1}/${chunks.length} with ${chunks[i].length} files`);
+
 					// Build chunk website with calculated globalExportRoot to match regular exporter exactly
 					const chunkWebsite: Website | undefined = await this.buildChunkWebsite(chunks[i], destination, globalExportRoot, i === 0 && !finalWebsite);
+
+					console.log(`🚨🚨🚨 buildChunkWebsite completed for chunk ${i + 1}, result: ${chunkWebsite ? 'SUCCESS' : 'FAILED'}`);
+					ExportLog.log(`🚨🚨🚨 buildChunkWebsite completed for chunk ${i + 1}, result: ${chunkWebsite ? 'SUCCESS' : 'FAILED'}`);
+
+					if (!chunkWebsite) {
+						throw new Error(`Failed to build chunk ${i + 1}`);
+					}
 					if (!chunkWebsite) {
 						throw new Error(`Failed to build chunk ${i + 1}`);
 					}
