@@ -153,7 +153,7 @@ export class Website
 			ExportLog.error(error, "Problem creating webpage template");
 		}
 
-		// Log file distribution statistics
+		// Log file distribution statistics - USE MULTIPLE LOGGING METHODS TO ENSURE VISIBILITY
 		const fileStats = {
 			total: this.sourceFiles.length,
 			markdown: 0,
@@ -161,6 +161,10 @@ export class Website
 			convertable: 0,
 			other: 0
 		};
+
+		// CRITICAL: Force immediate console output to bypass any logging interception
+		console.log(`🔍🔍🔍 WEBSITE.LOAD() STARTED: Processing ${this.sourceFiles.length} files`);
+		console.log(`🔍🔍🔍 FIRST 5 FILES:`, this.sourceFiles.slice(0, 5).map(f => `${f.path} (${f.extension})`));
 
 		this.sourceFiles.forEach(file => {
 			const ext = file.extension.toLowerCase();
@@ -170,11 +174,22 @@ export class Website
 			else fileStats.other++;
 		});
 
-		ExportLog.log(`📊 File Statistics: Total=${fileStats.total}, MD=${fileStats.markdown}, Audio=${fileStats.audio}, Convertable=${fileStats.convertable}, Other=${fileStats.other}`);
+		// Use multiple logging methods to ensure this appears in the log
+		const statsMessage = `📊 File Statistics: Total=${fileStats.total}, MD=${fileStats.markdown}, Audio=${fileStats.audio}, Convertable=${fileStats.convertable}, Other=${fileStats.other}`;
+		console.log(`🔍🔍🔍 ${statsMessage}`);
+		ExportLog.log(statsMessage);
 
 		if (fileStats.markdown === 0) {
-			ExportLog.warning(`⚠️ No markdown files found in ${fileStats.total} files. The vault may contain only media files or incorrect export path.`);
-			ExportLog.warning(`⚠️ Sample files detected: ${this.sourceFiles.slice(0, 5).map(f => `${f.path} (${f.extension})`).join(', ')}`);
+			const warningMessage = `⚠️ No markdown files found in ${fileStats.total} files. The vault may contain only media files or incorrect export path.`;
+			const sampleMessage = `⚠️ Sample files detected: ${this.sourceFiles.slice(0, 5).map(f => `${f.path} (${f.extension})`).join(', ')}`;
+
+			console.log(`🔍🔍🔍 ${warningMessage}`);
+			console.log(`🔍🔍🔍 ${sampleMessage}`);
+			ExportLog.warning(warningMessage);
+			ExportLog.warning(sampleMessage);
+		} else {
+			console.log(`🔍🔍🔍 ✅ Found ${fileStats.markdown} markdown files! Processing should create webpages.`);
+			ExportLog.log(`✅ Found ${fileStats.markdown} markdown files! Processing should create webpages.`);
 		}
 
 		// create webpages
