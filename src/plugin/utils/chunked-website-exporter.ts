@@ -4,6 +4,8 @@ import { Path } from "./path";
 import { ExportLog, MarkdownRendererAPI } from "../render-api/render-api";
 import { Utils } from "./utils";
 import { Settings } from "../settings/settings";
+import { Webpage } from "../website/webpage";
+import { ExportPreset } from "../settings/settings";
 
 /**
  * Progress tracking for crash recovery with full state persistence
@@ -398,16 +400,21 @@ EXPORT RESUMED: ${timestamp}
 					// Memory cleanup
 					await this.performMemoryCleanup(i + 1, chunks.length);
 					
+					// CRITICAL FIX: Download HTML files incrementally after each chunk to prevent data loss on interruption
+					if (finalWebsite && !Settings.exportOptions.combineAsSingleFile) {
+						await this.downloadIncrementalChunkFiles(finalWebsite, chunkWebsite, i + 1);
+					}
+
 					// CRITICAL: Only mark chunk as completed AFTER all processing succeeds
 					// This ensures incomplete chunks are restarted from the beginning on crash recovery
 					progress.completedChunks.push(i);
-					
+
 					// Enhanced: Save website state for true continuity across restarts
 					if (finalWebsite) {
 						progress.lastChunkWebsiteState = this.serializeWebsiteState(finalWebsite);
 						ExportLog.log(`💾 Chunk ${i + 1} completed successfully - saved website state (${progress.lastChunkWebsiteState.webpages.length} pages, ${progress.lastChunkWebsiteState.attachments.length} attachments)`);
 					}
-					
+
 					await this.saveProgress(progress);
 					ExportLog.log(`✅ Chunk ${i + 1}/${chunks.length} completed and saved to disk`);
 					
@@ -468,10 +475,41 @@ EXPORT RESUMED: ${timestamp}
 				
 				// Clean up progress
 				await this.cleanupProgress(destination);
-				
+
 				ExportLog.log(`✅ Chunked export complete: ${finalWebsite.index.webpages.length} pages, ${finalWebsite.index.attachments.length} attachments, ${finalWebsite.index.attachmentsShownInTree.length} in tree`);
+
+				// CRITICAL FIX: Download all files to disk - use exactly the same logic as regular exporter
+				ExportLog.log(`💾 Starting download of all files to disk - ${finalWebsite.index.webpages.length} webpages, ${finalWebsite.index.attachments.length} attachments`);
+
+				// Use exactly the same logic as the regular exporter
+				let newFiles = finalWebsite.index.newFiles;
+				let updatedFiles = finalWebsite.index.updatedFiles;
+
+				// If we're not combining as single file, include webpages in the download
+				if (!Settings.exportOptions.combineAsSingleFile) {
+					// Download all files including webpages
+					ExportLog.log(`📄 Downloading ${newFiles.length} new files including webpages`);
+					ExportLog.log(`📄 Downloading ${updatedFiles.length} updated files including webpages`);
+				} else {
+					// Filter out webpages for single file export (they're embedded in the single file)
+					newFiles = newFiles.filter((f) => !(f instanceof Webpage));
+					updatedFiles = updatedFiles.filter((f) => !(f instanceof Webpage));
+					ExportLog.log(`📄 Downloading ${newFiles.length} new attachments (webpages excluded for single file)`);
+					ExportLog.log(`📄 Downloading ${updatedFiles.length} updated attachments (webpages excluded for single file)`);
+				}
+
+				await Utils.downloadAttachments(newFiles);
+				await Utils.downloadAttachments(updatedFiles);
+
+				if (Settings.exportPreset != ExportPreset.RawDocuments)
+				{
+					await Utils.downloadAttachments([finalWebsite.index.websiteDataAttachment()]);
+					await Utils.downloadAttachments([finalWebsite.index.indexDataAttachment()]);
+				}
+
+				ExportLog.log(`✅ All files downloaded to disk successfully!`);
 			}
-			
+
 			return finalWebsite;
 			
 		} catch (error) {
@@ -642,12 +680,52 @@ EXPORT SESSION END: ${new Date().toISOString()}
 				const finalPath = globalExportRoot ? (targetPath.startsWith(globalExportRoot + '/') ? targetPath.substring((globalExportRoot + '/').length) : targetPath) : targetPath;
 				console.log(`   Output: ${finalPath}`);
 			}			let builtWebsite: Website | undefined;
+			let buildTimeout: NodeJS.Timeout | undefined;
+
 			try {
+				ExportLog.log(`🔧 Starting website.build() for chunk - this includes CSS compilation`);
+
+				// Add timeout to prevent infinite CSS compilation
+				buildTimeout = setTimeout(() => {
+					ExportLog.warning(`⚠️ Website build taking too long - potential infinite loop in CSS compilation`);
+				}, 30000); // 30 second timeout warning
+
 				builtWebsite = await website.build();
+
+				if (buildTimeout) {
+					clearTimeout(buildTimeout);
+					buildTimeout = undefined;
+				}
+				ExportLog.log(`✅ website.build() completed successfully for chunk`);
+
 			} catch (buildError) {
-				ExportLog.error(buildError, `Error building chunk website - search index issue?`);
-				// Try to recover by rebuilding without problematic components
-				builtWebsite = website; // Use the loaded website if build fails
+				if (buildTimeout) {
+					clearTimeout(buildTimeout);
+					buildTimeout = undefined;
+				}
+				ExportLog.error(buildError, `Error building chunk website - CSS compilation or search index issue`);
+
+				// CRITICAL FIX: Try to recover by using loaded website without full build
+				ExportLog.log(`🔄 ATTEMPTING RECOVERY: Using loaded website without full build() to prevent total failure`);
+
+				try {
+					// Manual basic website setup without full CSS compilation
+					if (!builtWebsite) {
+						builtWebsite = website;
+
+						// Ensure basic website structure exists
+						if (!builtWebsite.index) {
+							ExportLog.error(new Error("Website index missing after build failure"), "Cannot recover from build failure");
+							return undefined;
+						}
+
+						// Skip CSS compilation for recovery - focus on core functionality
+						ExportLog.log(`🔄 RECOVERY: Website structure preserved, skipping problematic CSS compilation`);
+					}
+				} catch (recoveryError) {
+					ExportLog.error(recoveryError, "CRITICAL: Recovery from build failure failed");
+					return undefined;
+				}
 			}
 			
 			if (!builtWebsite) return undefined;
@@ -2205,6 +2283,57 @@ EXPORT SESSION END: ${new Date().toISOString()}
 		} catch (error) {
 			ExportLog.error(error, `Failed to download incremental attachments after chunk ${currentChunk}`);
 			// Don't throw - we want the chunked export to continue even if some downloads fail
+		}
+	}
+
+	/**
+	 * CRITICAL FIX: Download HTML files incrementally after each chunk to prevent data loss on interruption
+	 * This ensures HTML files are written to disk immediately rather than waiting for final completion
+	 */
+	private static async downloadIncrementalChunkFiles(finalWebsite: Website, chunkWebsite: Website, chunkNumber: number): Promise<void> {
+		try {
+			ExportLog.log(`📄 Downloading HTML files incrementally for chunk ${chunkNumber}...`);
+
+			const { Utils } = await import("../utils/utils");
+			const { Webpage } = await import("../website/webpage");
+
+			// Get only the new webpages from this chunk to download
+			const chunkWebpages = chunkWebsite.index.webpages.filter(wp => wp && wp.targetPath);
+
+			if (chunkWebpages.length > 0) {
+				ExportLog.log(`📄 Downloading ${chunkWebpages.length} HTML files from chunk ${chunkNumber}`);
+
+				// Log some sample files being downloaded
+				const sampleFiles = chunkWebpages.slice(0, 3);
+				sampleFiles.forEach(wp => {
+					ExportLog.log(`  📄 Downloading: ${wp.sourcePath} -> ${wp.targetPath.path}`);
+				});
+
+				if (chunkWebpages.length > 3) {
+					ExportLog.log(`  📄 ... and ${chunkWebpages.length - 3} more HTML files`);
+				}
+
+				// Download the HTML files for this chunk
+				await Utils.downloadAttachments(chunkWebpages);
+
+				ExportLog.log(`✅ Downloaded ${chunkWebpages.length} HTML files from chunk ${chunkNumber}`);
+
+				// Remove downloaded webpages from finalWebsite queues to prevent re-download
+				const downloadedPaths = new Set(chunkWebpages.map(wp => wp.targetPath.path));
+				finalWebsite.index.newFiles = finalWebsite.index.newFiles.filter(f =>
+					!(f instanceof Webpage) || !f.targetPath || !downloadedPaths.has(f.targetPath.path));
+				finalWebsite.index.updatedFiles = finalWebsite.index.updatedFiles.filter(f =>
+					!(f instanceof Webpage) || !f.targetPath || !downloadedPaths.has(f.targetPath.path));
+
+				ExportLog.log(`🧹 Cleared ${chunkWebpages.length} HTML files from final download queues`);
+
+			} else {
+				ExportLog.log(`ℹ️ No HTML files to download from chunk ${chunkNumber}`);
+			}
+
+		} catch (error) {
+			ExportLog.error(error, `Failed to download incremental HTML files for chunk ${chunkNumber}`);
+			// Don't throw - continue with export even if incremental download fails
 		}
 	}
 

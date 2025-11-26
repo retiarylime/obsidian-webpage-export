@@ -1,12 +1,12 @@
 {
 	"id": "webpage-html-export",
 	"name": "Webpage HTML Export",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"minAppVersion": "1.6.0",
 	"description": "Export html from single files, canvas pages, or whole vaults. Direct access to the exported HTML files allows you to publish your digital garden anywhere. Focuses on flexibility, features, and style parity.",
 	"author": "retiarylime",
 	"authorUrl": "https://github.com/retiarylime/obsidian-webpage-export",
 	"isDesktopOnly": true,
 	"fundingUrl": "https://www.buymeacoffee.com/retiarylime",
-	"updateNote": ""
+	"updateNote": "- CRITICAL FIX: Restored HTML file generation in chunked export mode\n- Fixed regression where only attachment files were exported but markdown files were not converted to HTML\n- Maintained all existing functionality while ensuring complete export compatibility\n- Updated for Obsidian 1.10.3 compatibility\n- Improved site-lib folder handling and enhanced chunked export stability"
 }

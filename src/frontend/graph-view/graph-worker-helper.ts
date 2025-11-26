@@ -105,7 +105,14 @@ export class GraphRenderWorker
 			console.log("Failed to transfer control to offscreen canvas");
 		}
 
-        var workerPath = `${ObsidianSite.document.info.pathToRoot}/${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`;
+        // Normalize pathToRoot to avoid double-slashes when concatenating
+        let rootPath = (ObsidianSite.document.info.pathToRoot ?? "").toString();
+        if (rootPath === '.' || rootPath === './') rootPath = '';
+        // strip trailing slashes
+        rootPath = rootPath.replace(/\/+$|\/+$/g, '');
+        var workerPath = rootPath
+            ? `${rootPath}/${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`
+            : `${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`;
 
 		if (window.location.protocol === 'file:')
 		{
