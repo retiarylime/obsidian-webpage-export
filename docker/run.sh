@@ -2,10 +2,8 @@
 
 if [[ -n EXPORT_ENTIRE_VAULT ]]; then
   # Copy the plugin to the vault
-  # mkdir -p /vault/.obsidian/plugins/webpage-html-export
-  # cp /plugin/* /vault/.obsidian/plugins/webpage-html-export/
-mkdir -p /home/rl/vault/.obsidian/plugins/webpage-html-export
-  cp /plugin/* /home/rl/vault/.obsidian/plugins/webpage-html-export/
+  mkdir -p /vault/.obsidian/plugins/webpage-html-export
+  cp /plugin/* /vault/.obsidian/plugins/webpage-html-export/
 fi
 
 RUST_LOG=debug xvfb-run electron-injector \
