@@ -3,6 +3,7 @@ services:
     build: .
     ports:
       - "5900:5900"
+      - "8315:8315"
 
     volumes:
       - ./vault:/vault
