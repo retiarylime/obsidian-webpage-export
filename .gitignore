@@ -31,6 +31,6 @@ build
 dist
 
 
-todo.txt
+*.txt
 vault/
 output/
