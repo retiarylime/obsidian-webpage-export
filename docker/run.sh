@@ -7,11 +7,9 @@ if [[ -n EXPORT_ENTIRE_VAULT ]]; then
 fi
 
 RUST_LOG=debug xvfb-run electron-injector \
-  --delay=15000 \
+  --delay=5000 \
   --script=/export-vault.mjs \
   obsidian \
-    --arg=--remote-debugging-port=8315 \
-    --arg=--remote-debugging-address=0.0.0.0 \
     --arg=--remote-allow-origins=* \
     --arg=--no-sandbox \
     --arg=--no-xshm \
