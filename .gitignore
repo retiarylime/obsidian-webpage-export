@@ -34,3 +34,7 @@ dist
 *.txt
 vault/
 output/
+docker-compose.yaml
+Dockerfile
+data.json
+output/
