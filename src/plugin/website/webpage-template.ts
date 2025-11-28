@@ -25,12 +25,19 @@ export class WebpageTemplate
 	{
 		this.doc = document.implementation.createHTMLDocument();
 
-		const collapseSidebarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><path d="M21 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H21C22.1046 21 23 20.1046 23 19V5C23 3.89543 22.1046 3 21 3Z"></path><path d="M10 4V20"></path><path d="M4 7H7"></path><path d="M4 10H7"></path><path d="M4 13H7"></path></svg>`;
-		
+	const leftCollapseSidebarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="24" viewBox="0 0 8 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon left-sidebar-triangle"><path d="M0 5L4 12L0 19"></path></svg>`;
+	const rightCollapseSidebarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="8" height="24" viewBox="0 0 8 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon right-sidebar-triangle"><path d="M7 5L3 12L7 19"></path></svg>`;
+
 		const head = this.doc.head;
 		head.innerHTML = `<meta charset="UTF-8">` + head.innerHTML;
 		head.innerHTML += `<meta property="og:site_name" content="${this.options.siteName}">`;
 		head.innerHTML += `<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">`;
+		
+		// Add Ubuntu font preloading for optimal mobile performance
+		head.innerHTML += `<link rel="preconnect" href="https://fonts.googleapis.com">`;
+		head.innerHTML += `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`;
+		head.innerHTML += `<link rel="preload" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">`;
+		head.innerHTML += `<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap"></noscript>`;
 
 		if (!this.options.combineAsSingleFile)
 		{
@@ -55,7 +62,7 @@ export class WebpageTemplate
 					const leftTopbar = leftSidebar.createDiv({attr: {class: "sidebar-topbar"}});
 						const leftTopbarContent = leftTopbar.createDiv({attr: {class: "topbar-content"}});
 						const leftCollapseIcon = leftTopbar.createDiv({attr: {class: "clickable-icon sidebar-collapse-icon"}});
-							leftCollapseIcon.innerHTML = collapseSidebarIcon;
+							leftCollapseIcon.innerHTML = leftCollapseSidebarIcon;
 					const leftSidebarContentWrapper = leftSidebar.createDiv({attr: {class: "sidebar-content-wrapper"}});
 						const leftSidebarContent = leftSidebarContentWrapper.createDiv({attr: {id: "left-sidebar-content", class: "leaf-content"}});
 			const centerContent = mainHorizontal.createDiv({attr: {id: "center-content", class: "leaf"}});
@@ -65,7 +72,7 @@ export class WebpageTemplate
 					const rightTopbar = rightSidebar.createDiv({attr: {class: "sidebar-topbar"}});
 						const rightTopbarContent = rightTopbar.createDiv({attr: {class: "topbar-content"}});
 						const rightCollapseIcon = rightTopbar.createDiv({attr: {class: "clickable-icon sidebar-collapse-icon"}});
-							rightCollapseIcon.innerHTML = collapseSidebarIcon;
+							rightCollapseIcon.innerHTML = rightCollapseSidebarIcon;
 					const rightSidebarContentWrapper = rightSidebar.createDiv({attr: {class: "sidebar-content-wrapper"}});
 						const rightSidebarContent = rightSidebarContentWrapper.createDiv({attr: {id: "right-sidebar-content", class: "leaf-content"}});
 
