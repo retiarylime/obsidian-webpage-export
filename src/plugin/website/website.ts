@@ -32,8 +32,7 @@ export class Website
 	constructor(destination: Path | string, options?: ExportPipelineOptions)
 	{
 		if (typeof destination == "string") destination = new Path(destination);
-		// CRITICAL FIX: Don't modify global Settings.exportOptions - use a proper copy
-		this.exportOptions = Object.assign({}, Settings.exportOptions, options);
+		this.exportOptions = Object.assign(Settings.exportOptions, options);
 		if (!destination.isDirectoryFS) throw new Error("Website destination must be a folder: " + destination.path);
 		this.destination = destination;
 	}
@@ -125,12 +124,7 @@ export class Website
 		this.sourceFiles = files?.filter((file) => file) ?? [];
 
 		let rootPath = this.findCommonRootPath(this.sourceFiles);
-		
-		// CRITICAL FIX: Don't overwrite exportRoot if it's been set by chunked exporter
-		// The chunked exporter sets a special flag to indicate it has already calculated the global root
-		if (!(this.exportOptions as any)._chunkExporterOverride) {
-			this.exportOptions.exportRoot = rootPath;
-		}
+		this.exportOptions.exportRoot = rootPath;
 		console.log("Root path: " + rootPath);
 
 		await AssetHandler.reloadAssets(this.exportOptions);
@@ -153,84 +147,29 @@ export class Website
 			ExportLog.error(error, "Problem creating webpage template");
 		}
 
-		// Log file distribution statistics - USE MULTIPLE LOGGING METHODS TO ENSURE VISIBILITY
-		const fileStats = {
-			total: this.sourceFiles.length,
-			markdown: 0,
-			audio: 0,
-			convertable: 0,
-			other: 0
-		};
-
-		// CRITICAL: Force immediate console output to bypass any logging interception
-		console.log(`🔍🔍🔍 WEBSITE.LOAD() STARTED: Processing ${this.sourceFiles.length} files`);
-		console.log(`🔍🔍🔍 FIRST 5 FILES:`, this.sourceFiles.slice(0, 5).map(f => `${f.path} (${f.extension})`));
-
-		this.sourceFiles.forEach(file => {
-			const ext = file.extension.toLowerCase();
-			if (ext === 'md') fileStats.markdown++;
-			else if (["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(ext)) fileStats.audio++;
-			else if (MarkdownRendererAPI.isConvertable(ext)) fileStats.convertable++;
-			else fileStats.other++;
-		});
-
-		// Use multiple logging methods to ensure this appears in the log
-		const statsMessage = `📊 File Statistics: Total=${fileStats.total}, MD=${fileStats.markdown}, Audio=${fileStats.audio}, Convertable=${fileStats.convertable}, Other=${fileStats.other}`;
-		console.log(`🔍🔍🔍 ${statsMessage}`);
-		ExportLog.log(statsMessage);
-
-		if (fileStats.markdown === 0) {
-			const warningMessage = `⚠️ No markdown files found in ${fileStats.total} files. The vault may contain only media files or incorrect export path.`;
-			const sampleMessage = `⚠️ Sample files detected: ${this.sourceFiles.slice(0, 5).map(f => `${f.path} (${f.extension})`).join(', ')}`;
-
-			console.log(`🔍🔍🔍 ${warningMessage}`);
-			console.log(`🔍🔍🔍 ${sampleMessage}`);
-			ExportLog.warning(warningMessage);
-			ExportLog.warning(sampleMessage);
-		} else {
-			console.log(`🔍🔍🔍 ✅ Found ${fileStats.markdown} markdown files! Processing should create webpages.`);
-			ExportLog.log(`✅ Found ${fileStats.markdown} markdown files! Processing should create webpages.`);
-		}
-
 		// create webpages
 		for (const file of this.sourceFiles)
 		{
 			try
 			{
 				const isConvertable = MarkdownRendererAPI.isConvertable(file.extension);
-				const isAudioFile = ["mp3", "wav", "ogg", "aac", "m4a", "flac"].contains(file.extension);
-
-				// Skip standalone processing of audio files - they should only be processed when embedded in markdown
-				// This matches the behavior of the regular exporter
-				if (isAudioFile) {
-					ExportLog.log(`🚫 Skipping audio file: ${file.path}`);
-					continue;
-				}
 
 				// Make sure files which need to be saved directly without conversion are added to the index as attachments
 				if (!isConvertable || (MarkdownRendererAPI.viewableMediaExtensions.contains(file.extension)))
 				{
-					ExportLog.log(`📎 Processing as attachment: ${file.path} (convertable: ${isConvertable})`);
 					const data = Buffer.from(await app.vault.readBinary(file));
 					const path = this.getTargetPathForFile(file);
 					let attachment = new Attachment(data, path, file, this.exportOptions);
 					attachment.showInTree = true;
-
 					await this.index.addFile(attachment);
 				}
 
 				// Create pages for normal convertable files (md, canvas, excalidraw, etc) as well as convertable media files (png, pdf, etc)
 				if (isConvertable)
 				{
-					ExportLog.log(`📄 Processing as webpage: ${file.path} (convertable: ${isConvertable})`);
 					let webpage = new Webpage(file, file.name, this, this.exportOptions);
 					webpage.showInTree = true;
-
 					await this.index.addFile(webpage);
-				}
-				else
-				{
-					ExportLog.log(`❓ Unhandled file type: ${file.path} (convertable: ${isConvertable}, audio: ${isAudioFile})`);
 				}
 
 				ExportLog.progress(0.1, "Initializing Document", file.path, "var(--color-yellow)");
@@ -342,7 +281,9 @@ export class Website
 			await Utils.delay(0);
 			if (built) await this.index.addFile(webpage);
 			else await this.index.removeFile(webpage);
-			// Note: Webpage downloading is now handled in exporter.ts to prevent duplicates and ensure consistent flow
+			// save the file and then dispose of the webpage
+			if (!this.exportOptions.combineAsSingleFile)
+				await webpage.download();
 			
 			if (this.exportOptions.autoDisposeWebpages)
 				webpage.dispose();
@@ -500,12 +441,6 @@ export class Website
 
 		const attachment = new Attachment(data, target, file, this.exportOptions);
 		if (!attachment.sourcePath) attachment.sourcePath = attachedFile.pathname;
-		
-		// Debug: log MP3 attachment creation from embedded references
-		if (attachedFile.pathname.endsWith(".mp3")) {
-			console.log(`🎵 createAttachmentFromSrc MP3: ${src} -> ${attachedFile.pathname} -> ${target.path} (${data.length} bytes)`);
-		}
-		
 		return attachment;
 	}
 

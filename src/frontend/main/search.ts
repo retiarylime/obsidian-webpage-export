@@ -77,7 +77,7 @@ export class Search
 			if ((result.score < results[0].score * 0.30 && showPaths.length > 4) || result.score < results[0].score * 0.1) 
 				break;
 
-			showPaths.push(result.url);
+			showPaths.push(result.path);
 
 			// generate matching header links to display under the search result
 			if(query.length > 2)
@@ -105,7 +105,7 @@ export class Search
 					if (breakEarly) break;
 				}
 
-				headerLinks.set(result.url, headers);
+				headerLinks.set(result.path, headers);
 			}
 		}
 
@@ -120,7 +120,7 @@ export class Search
 		if (!ObsidianSite.fileTree)
 		{
 			const list = document.createElement('div');
-			results.filter((result: any) => result.url.endsWith(".html"))
+			results.filter((result: any) => result.path.endsWith(".html"))
 					.slice(0, 20).forEach((result: any) => 
 					{
 						const item = document.createElement('div');
@@ -129,7 +129,7 @@ export class Search
 						const link = document.createElement('a');
 						link.classList.add('tree-item-self');
 
-						const searchURL = result.url + '?mark=' + encodeURIComponent(query);
+						const searchURL = result.path + '?mark=' + encodeURIComponent(query);
 						link.setAttribute('href', searchURL);
 						link.appendChild(document.createTextNode(result.title));
 						item.appendChild(link);
@@ -207,7 +207,7 @@ export class Search
 		try
 		{
 			// @ts-ignore
-			this.index = MiniSearch.loadJS(indexJSON, { fields: ['title', 'url', 'tags', 'headers'] });
+			this.index = MiniSearch.loadJS(indexJSON, { fields: ['title', 'path', 'tags', 'headers'] });
 		}
 		catch (e)
 		{

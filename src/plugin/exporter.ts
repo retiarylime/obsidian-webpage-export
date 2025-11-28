@@ -6,7 +6,6 @@ import { Website } from "src/plugin/website/website";
 import { ExportLog, MarkdownRendererAPI } from "src/plugin/render-api/render-api";
 import { ExportInfo, ExportModal } from "src/plugin/settings/export-modal";
 import { Webpage } from "./website/webpage";
-import { ChunkedWebsiteExporter } from "./utils/chunked-website-exporter";
 
 export class HTMLExporter
 {
@@ -50,112 +49,6 @@ export class HTMLExporter
 
 	public static async exportFiles(files: TFile[], destination: Path, saveFiles: boolean, deleteOld: boolean) : Promise<Website | undefined>
 	{
-		// DEBUG: Always log export decision
-		ExportLog.log(`🔍 EXPORT DECISION: ${files.length} files detected`);
-		const shouldUseChunked = ChunkedWebsiteExporter.shouldUseChunkedExport(files);
-		ExportLog.log(`🔍 EXPORT DECISION: shouldUseChunkedExport = ${shouldUseChunked} (threshold: >200 files)`);
-		
-		// Check if we should use chunked export for large file sets
-		if (shouldUseChunked)
-		{
-			ExportLog.log(`📦 Large vault detected (${files.length} files) - using chunked export`);
-			
-			// Begin batch processing exactly like the original exporter for identical behavior
-			MarkdownRendererAPI.beginBatch();
-			let website = undefined;
-			try
-			{
-				website = await ChunkedWebsiteExporter.exportInChunks(files, destination);
-				
-				if (!website) {
-					new Notice("❌ Export Cancelled", 5000);
-					return;
-				}
-
-				// Handle post-export operations for chunked export (identical to original)
-				if (deleteOld)
-				{
-					let i = 0;
-					ExportLog.addToProgressCap(website.index.deletedFiles.length / 2);
-					for (const dFile of website.index.deletedFiles)
-					{
-						const path = new Path(dFile, destination.path);
-						
-						// don't delete font files
-						if (path.extension == "woff" || path.extension == "woff2" || path.extension == "ttf" || path.extension == "otf")
-						{
-							ExportLog.progress(0.5, "Deleting Old Files", "Skipping: " + path.path, "var(--color-yellow)");
-							continue;
-						}
-
-						await path.delete();
-						ExportLog.progress(0.5, "Deleting Old Files", "Deleting: " + path.path, "var(--color-red)");
-						i++;
-					};
-
-					await Path.removeEmptyDirectories(destination.path);
-				}
-				
-				if (saveFiles) 
-				{
-					if (Settings.exportOptions.combineAsSingleFile)
-					{
-						await website.saveAsCombinedHTML();
-					}
-					else
-					{
-						// Download all files including webpages if not combined into single file
-						let newFiles = website.index.newFiles;
-						let updatedFiles = website.index.updatedFiles;
-
-						// If we're not combining as single file, include webpages in the download
-						if (!Settings.exportOptions.combineAsSingleFile) {
-							// Download all files including webpages
-							console.log(`📄 Downloading ${newFiles.length} new files including webpages`);
-							console.log(`📄 Downloading ${updatedFiles.length} updated files including webpages`);
-						} else {
-							// Filter out webpages for single file export (they're embedded in the single file)
-							newFiles = newFiles.filter((f) => !(f instanceof Webpage));
-							updatedFiles = updatedFiles.filter((f) => !(f instanceof Webpage));
-							console.log(`📄 Downloading ${newFiles.length} new attachments (webpages excluded for single file)`);
-							console.log(`📄 Downloading ${updatedFiles.length} updated attachments (webpages excluded for single file)`);
-						}
-
-						// Debug: Check MP3 files before download
-						const allMP3s = website.index.newFiles.concat(website.index.updatedFiles).filter(f => f.sourcePath?.endsWith(".mp3"));
-						console.log(`🎵 DEBUG: Found ${allMP3s.length} MP3 files total:`);
-						allMP3s.forEach(mp3 => {
-							console.log(`  - ${mp3.sourcePath} -> ${mp3.targetPath.path} (${mp3.constructor.name}, instanceof Webpage: ${mp3 instanceof Webpage})`);
-						});
-
-						const mp3Attachments = newFiles.concat(updatedFiles).filter(f => f.sourcePath?.endsWith(".mp3"));
-						console.log(`🎵 DEBUG: ${mp3Attachments.length} MP3 files will be downloaded as attachments`);
-
-						await Utils.downloadAttachments(newFiles);
-						await Utils.downloadAttachments(updatedFiles);
-
-						if (Settings.exportPreset != ExportPreset.RawDocuments)
-						{
-							await Utils.downloadAttachments([website.index.websiteDataAttachment()]);
-							await Utils.downloadAttachments([website.index.indexDataAttachment()]);
-						}
-					}
-				}
-			}
-			catch (e)
-			{
-				new Notice("❌ Export Failed: " + e, 5000);
-				ExportLog.error(e, "Export Failed", true);
-			}
-
-			// End batch processing exactly like the original exporter
-			MarkdownRendererAPI.endBatch();
-			
-			return website;
-		}
-
-		// Regular export for smaller vaults
-		ExportLog.log(`📄 Small vault detected (${files.length} files) - using regular export`);
 		MarkdownRendererAPI.beginBatch();
 		let website = undefined;
 		try
@@ -200,45 +93,8 @@ export class HTMLExporter
 				}
 				else
 				{
-					// Download all files including webpages if not combined into single file
-					let newFiles = website.index.newFiles;
-					let updatedFiles = website.index.updatedFiles;
-
-					// If we're not combining as single file, include webpages in the download
-					if (!Settings.exportOptions.combineAsSingleFile) {
-						// Download all files including webpages
-						console.log(`📄 REGULAR: Downloading ${newFiles.length} new files including webpages`);
-						console.log(`📄 REGULAR: Downloading ${updatedFiles.length} updated files including webpages`);
-					} else {
-						// Filter out webpages for single file export (they're embedded in the single file)
-						newFiles = newFiles.filter((f) => !(f instanceof Webpage));
-						updatedFiles = updatedFiles.filter((f) => !(f instanceof Webpage));
-						console.log(`📄 REGULAR: Downloading ${newFiles.length} new attachments (webpages excluded for single file)`);
-						console.log(`📄 REGULAR: Downloading ${updatedFiles.length} updated attachments (webpages excluded for single file)`);
-					}
-
-					await Utils.downloadAttachments(newFiles);
-					await Utils.downloadAttachments(updatedFiles);
-
-					// Debug: log MP3 download filtering for regular export
-					const regularNewMP3s = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
-					const regularNewMP3Attachments = newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
-					const regularNewMP3Webpages = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3") && f instanceof Webpage);
-					if (regularNewMP3s.length > 0) {
-						console.log(`🎵 REGULAR DOWNLOAD FILTER - MP3 files: ${regularNewMP3s.length} total, ${regularNewMP3Attachments.length} attachments to download, ${regularNewMP3Webpages.length} webpages filtered out`);
-						regularNewMP3Attachments.forEach(f => console.log(`  ✅ Will download: ${f.sourcePath} -> ${f.targetPath.path}`));
-						regularNewMP3Webpages.forEach(f => console.log(`  ❌ Filtered out: ${f.sourcePath} -> ${f.targetPath.path} (${f.constructor.name})`));
-					}
-
-					// Debug: log MP3 download filtering for chunked export
-					const newMP3s = website.index.newFiles.filter(f => f.sourcePath?.endsWith(".mp3"));
-					const newMP3Attachments = newMP3s.filter(f => !(f instanceof Webpage));
-					const newMP3Webpages = newMP3s.filter(f => f instanceof Webpage);
-					if (newMP3s.length > 0) {
-						console.log(`🎵 CHUNKED DOWNLOAD FILTER - MP3 files: ${newMP3s.length} total, ${newMP3Attachments.length} attachments to download, ${newMP3Webpages.length} webpages filtered out`);
-						newMP3Attachments.forEach(f => console.log(`  ✅ Will download: ${f.sourcePath} -> ${f.targetPath.path}`));
-						newMP3Webpages.forEach(f => console.log(`  ❌ Filtered out: ${f.sourcePath} -> ${f.targetPath.path} (${f.constructor.name})`));
-					}
+					await Utils.downloadAttachments(website.index.newFiles.filter((f) => !(f instanceof Webpage)));
+					await Utils.downloadAttachments(website.index.updatedFiles.filter((f) => !(f instanceof Webpage)));
 
 					if (Settings.exportPreset != ExportPreset.RawDocuments)
 					{

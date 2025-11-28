@@ -26,13 +26,11 @@ export class Index
 	private stopWords = ["a", "about", "actually", "almost", "also", "although", "always", "am", "an", "and", "any", "are", "as", "at", "be", "became", "become", "but", "by", "can", "could", "did", "do", "does", "each", "either", "else", "for", "from", "had", "has", "have", "hence", "how", "i", "if", "in", "is", "it", "its", "just", "may", "maybe", "me", "might", "mine", "must", "my", "mine", "must", "my", "neither", "nor", "not", "of", "oh", "ok", "when", "where", "whereas", "wherever", "whenever", "whether", "which", "while", "who", "whom", "whoever", "whose", "why", "will", "with", "within", "without", "would", "yes", "yet", "you", "your"];
 	private minisearchOptions = 
 	{
-		fields: ['title', 'aliases', 'headers', 'tags', 'content'],
-		storeFields: ['title', 'aliases', 'headers', 'tags', 'url'],
+		idField: 'path',
+		fields: ['title', 'aliases', 'headers', 'tags', 'path', 'content'],
+		storeFields: ['title', 'aliases', 'headers', 'tags', 'path'],
 		processTerm: (term:any, _fieldName:any) =>
-			this.stopWords.includes(term) ? null : term.toLowerCase(),
-		// CRITICAL: Disable auto-vacuum to prevent TreeIterator corruption
-		// Auto-vacuum can corrupt the tree structure during iteration
-		autoVacuum: false
+			this.stopWords.includes(term) ? null : term.toLowerCase()
 	}
 
 	public webpages: Webpage[] = [];
@@ -57,85 +55,33 @@ export class Index
 		this.website = website;
 		this.exportOptions = options;
 
-		// CRITICAL FIX: Skip metadata loading during crash recovery - let crash recovery handle restoration
-		if ((this.exportOptions as any)._crashRecoveryMode) {
-			ExportLog.log("🔄 Crash recovery mode: Skipping metadata loading (will be restored by crash recovery)");
-			// Create minimal websiteData structure that crash recovery can populate
-			this.websiteData = {} as WebsiteData;
-			this.websiteData.createdTime = Date.now();
-		} else {
-			try
+		try
+		{
+			// try to load website data
+			const metadataPath = this.website.destination.join(AssetHandler.libraryPath).joinString(Shared.metadataFileName);
+	
+			const metadata = await metadataPath.readAsString();
+			if (metadata) 
 			{
-				// try to load website data
-				const metadataPath = this.website.destination.join(AssetHandler.libraryPath).joinString(Shared.metadataFileName);
-		
-				const metadata = await metadataPath.readAsString();
-				if (metadata) 
-				{
-					this.oldWebsiteData = JSON.parse(metadata) as WebsiteData;
-					this.websiteData = JSON.parse(metadata) as WebsiteData;
+				this.oldWebsiteData = JSON.parse(metadata) as WebsiteData;
+				this.websiteData = JSON.parse(metadata) as WebsiteData;
 
-					this.deletedFiles = this.oldWebsiteData.allFiles ?? [];
-				}
-				else
-				{
-					console.log("No metadata found. Creating new metadata.");
-					this.websiteData = {} as WebsiteData;
-					this.websiteData.createdTime = Date.now();
-				}
-				
-				// default values
-				if (!this.websiteData.shownInTree) this.websiteData.shownInTree = [];
-				if (!this.websiteData.attachments) this.websiteData.attachments = [];
-				if (!this.websiteData.allFiles) this.websiteData.allFiles = [];
-				if (!this.websiteData.webpages) this.websiteData.webpages = {};
-				if (!this.websiteData.fileInfo) this.websiteData.fileInfo = {};
-				if (!this.websiteData.sourceToTarget) this.websiteData.sourceToTarget = {};
-				this.websiteData.featureOptions = 
-				{
-					backlinks: options.backlinkOptions,
-					tags: options.tagOptions,
-					alias: options.aliasOptions,
-					properties: options.propertiesOptions,
-					fileNavigation: options.fileNavigationOptions,
-					search: options.searchOptions,
-					outline: options.outlineOptions,
-					themeToggle: options.themeToggleOptions,
-					graphView: options.graphViewOptions,
-					sidebar: options.sidebarOptions,
-					customHead: options.customHeadOptions,
-					document: options.documentOptions,
-					rss: options.rssOptions,
-					linkPreview: options.linkPreviewOptions,
-				};
-				
-				// set global values
-				this.websiteData.modifiedTime = Date.now();
-				this.websiteData.siteName = this.website.exportOptions.siteName ?? "";
-				this.websiteData.vaultName = app.vault.getName();
-				this.websiteData.exportRoot = this.website.exportOptions.exportRoot ?? "";
-				this.websiteData.baseURL = this.website.exportOptions.rssOptions.siteUrl ?? "";
-				this.websiteData.pluginVersion = HTMLExportPlugin.pluginVersion;
-				this.websiteData.themeName = this.website.exportOptions.themeName ?? "Default";
-				this.websiteData.bodyClasses = await WebpageTemplate.getValidBodyClasses() ?? "";
-				this.websiteData.hasFavicon = this.exportOptions.faviconPath != "";
+				this.deletedFiles = this.oldWebsiteData.allFiles ?? [];
 			}
-			catch (e)
+			else
 			{
-				ExportLog.warning(e, "Failed to load metadata.json. Recreating metadata.");
+				console.log("No metadata found. Creating new metadata.");
+				this.websiteData = {} as WebsiteData;
+				this.websiteData.createdTime = Date.now();
 			}
-		}
-		
-		// Ensure default values are set regardless of crash recovery or normal loading
-		if (!this.websiteData.shownInTree) this.websiteData.shownInTree = [];
-		if (!this.websiteData.attachments) this.websiteData.attachments = [];
-		if (!this.websiteData.allFiles) this.websiteData.allFiles = [];
-		if (!this.websiteData.webpages) this.websiteData.webpages = {};
-		if (!this.websiteData.fileInfo) this.websiteData.fileInfo = {};
-		if (!this.websiteData.sourceToTarget) this.websiteData.sourceToTarget = {};
-		
-		// Set feature options (crash recovery will use these defaults, regular loading already set them above)
-		if (!this.websiteData.featureOptions) {
+			
+			// default values
+			if (!this.websiteData.shownInTree) this.websiteData.shownInTree = [];
+			if (!this.websiteData.attachments) this.websiteData.attachments = [];
+			if (!this.websiteData.allFiles) this.websiteData.allFiles = [];
+			if (!this.websiteData.webpages) this.websiteData.webpages = {};
+			if (!this.websiteData.fileInfo) this.websiteData.fileInfo = {};
+			if (!this.websiteData.sourceToTarget) this.websiteData.sourceToTarget = {};
 			this.websiteData.featureOptions = 
 			{
 				backlinks: options.backlinkOptions,
@@ -153,10 +99,8 @@ export class Index
 				rss: options.rssOptions,
 				linkPreview: options.linkPreviewOptions,
 			};
-		}
-		
-		// Set global values (crash recovery will use these defaults, regular loading already set them above) 
-		if (!this.websiteData.modifiedTime) {
+			
+			// set global values
 			this.websiteData.modifiedTime = Date.now();
 			this.websiteData.siteName = this.website.exportOptions.siteName ?? "";
 			this.websiteData.vaultName = app.vault.getName();
@@ -166,6 +110,10 @@ export class Index
 			this.websiteData.themeName = this.website.exportOptions.themeName ?? "Default";
 			this.websiteData.bodyClasses = await WebpageTemplate.getValidBodyClasses() ?? "";
 			this.websiteData.hasFavicon = this.exportOptions.faviconPath != "";
+		}
+		catch (e)
+		{
+			ExportLog.warning(e, "Failed to load metadata.json. Recreating metadata.");
 		}
 
 		// load current index or create a new one if it doesn't exist
@@ -362,33 +310,9 @@ export class Index
 			this.sourceToWebpage.set(file.sourcePath, file);
 		}
 
-		// CRITICAL FIX: Only store raw Attachments in sourceToAttachment, not Webpages
-		// This prevents Webpage instances from overriding raw binary Attachment instances
-		if (file instanceof Attachment && !(file instanceof Webpage) && file.sourcePath && !this.sourceToAttachment.has(file.sourcePath))
+		if (file instanceof Attachment && file.sourcePath && !this.sourceToAttachment.has(file.sourcePath))
 		{
 			this.sourceToAttachment.set(file.sourcePath, file);
-			
-			// Debug: MP3 attachment mapping
-			if (file.sourcePath?.endsWith(".mp3")) {
-				console.log(`🎵 INDEX: Mapping MP3 raw attachment: ${file.sourcePath} -> ${file.targetPath.path} (type: ${file.constructor.name})`);
-			}
-		}
-		else if (file instanceof Attachment && !(file instanceof Webpage) && file.sourcePath && this.sourceToAttachment.has(file.sourcePath))
-		{
-			// Debug: Check if MP3 is being overridden
-			if (file.sourcePath?.endsWith(".mp3")) {
-				const existing = this.sourceToAttachment.get(file.sourcePath);
-				console.log(`🎵 INDEX: MP3 raw attachment mapping already exists - NOT overriding ${file.sourcePath}:`);
-				console.log(`  Existing: ${existing?.constructor.name} -> ${existing?.targetPath.path}`);
-				console.log(`  New: ${file.constructor.name} -> ${file.targetPath.path}`);
-			}
-		}
-		else if (file instanceof Webpage && file.sourcePath)
-		{
-			// Debug: Log when Webpages are NOT stored in sourceToAttachment
-			if (file.sourcePath?.endsWith(".mp3")) {
-				console.log(`🎵 INDEX: MP3 Webpage NOT stored in sourceToAttachment: ${file.sourcePath} -> ${file.targetPath.path} (type: ${file.constructor.name})`);
-			}
 		}
 
 		// only update the index if the file is new or updated
@@ -560,206 +484,26 @@ export class Index
 
 	private async addWebpageToMinisearch(webpage: Webpage)
 	{
-		if (!this.minisearch) return;
-
-		const webpagePath = webpage.targetPath.path;
-		
-		// CRITICAL: Complete isolation of MiniSearch operations to prevent TreeIterator corruption
-		try {
-			// First, validate the minisearch instance is healthy
-			if (!this.minisearch || typeof this.minisearch.has !== 'function') {
-				ExportLog.warning(`MiniSearch instance invalid, rebuilding from scratch`);
-				await this.rebuildMinisearch();
-				if (!this.minisearch) return; // Still failed, abort
+		if (this.minisearch)
+		{
+			const webpagePath = webpage.targetPath.path;
+			if (this.minisearch.has(webpagePath)) 
+			{
+				this.minisearch.discard(webpagePath);
 			}
 
-			// CRITICAL: Safe discard operation with comprehensive error handling
-			let needsDiscard = false;
-			try {
-				needsDiscard = this.minisearch.has(webpagePath);
-			} catch (hasError) {
-				ExportLog.warning(`MiniSearch has() check failed, rebuilding index: ${hasError.message}`);
-				await this.rebuildMinisearch();
-				if (!this.minisearch) return; // Rebuild failed, abort
-				
-				// Try has() again after rebuild
-				try {
-					needsDiscard = this.minisearch.has(webpagePath);
-				} catch (secondHasError) {
-					ExportLog.error(secondHasError, `MiniSearch still broken after rebuild, skipping ${webpagePath}`);
-					return; // Give up on this document
-				}
-			}
+			const headersInfo = await webpage.outputData.renderedHeadings;
+			if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) headersInfo.shift();
+			const headers = headersInfo.map((header) => header.heading);
 
-			// Only discard if we confirmed the document exists
-			if (needsDiscard) {
-				try {
-					// CRITICAL: Additional safety check before discard
-					if (!this.minisearch || typeof this.minisearch.discard !== 'function') {
-						ExportLog.warning(`MiniSearch instance corrupted before discard, rebuilding`);
-						await this.rebuildMinisearch();
-						if (!this.minisearch) return;
-						needsDiscard = false; // Skip discard after rebuild
-					} else {
-						// CRITICAL: Wrap discard operation to catch TreeIterator corruption
-						// The error often occurs during vacuum operations triggered by discard
-						try {
-							this.minisearch.discard(webpagePath);
-						} catch (discardError) {
-							// Check if this is a TreeIterator corruption error
-							if (discardError.message && (discardError.message.includes('keys') || 
-							   discardError.message.includes('TreeIterator') || 
-							   discardError.message.includes('Cannot read properties of undefined'))) {
-								ExportLog.warning(`Detected MiniSearch TreeIterator corruption during discard for ${webpagePath}, rebuilding index`);
-								await this.rebuildMinisearch();
-								if (!this.minisearch) return; // Rebuild failed, abort
-							} else {
-								// Re-throw non-TreeIterator errors
-								throw discardError;
-							}
-						}
-					}
-				} catch (discardError) {
-					// Fallback: MiniSearch TreeIterator error - index is corrupted, rebuild it
-					ExportLog.warning(`MiniSearch discard failed for ${webpagePath}, rebuilding index: ${discardError.message}`);
-					await this.rebuildMinisearch();
-					if (!this.minisearch) return; // Rebuild failed, abort
-					
-					// Don't try to discard again after rebuild - just proceed to add
-				}
-			}
-		} catch (criticalError) {
-			ExportLog.error(criticalError, `Critical MiniSearch error, creating fresh index`);
-			// Create completely fresh instance
-			this.minisearch = new Minisearch(this.minisearchOptions);
-		}
-
-		// Prepare document data with comprehensive validation
-		let headersInfo: any[] = [];
-		let headers: string[] = [];
-		
-		try {
-			headersInfo = await webpage.outputData.renderedHeadings || [];
-			if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == webpage.title) {
-				headersInfo.shift();
-			}
-			headers = headersInfo.map((header) => header.heading);
-		} catch (headerError) {
-			ExportLog.warning(`Failed to extract headers for ${webpagePath}: ${headerError.message}`);
-			headers = [];
-		}
-
-		// Create validated document
-		const searchDocument = {
-			id: webpagePath,
-			title: webpage.title || webpage.source?.basename || 'Untitled',
-			aliases: Array.isArray(webpage.outputData?.aliases) ? webpage.outputData.aliases : [],
-			headers: Array.isArray(headers) ? headers : [],
-			tags: Array.isArray(webpage.outputData?.allTags) ? webpage.outputData.allTags : [],
-			url: webpagePath,
-			content: ((webpage.outputData?.description || '') + " " + (webpage.outputData?.searchContent || '')).trim() || webpage.title || 'No content',
-		};
-
-		// CRITICAL: Comprehensive document validation before adding to MiniSearch
-		if (!searchDocument.id || typeof searchDocument.id !== 'string' || searchDocument.id.length === 0) {
-			ExportLog.warning(`Invalid document ID for ${webpagePath}, skipping search index entry`);
-			return;
-		}
-		
-		if (!searchDocument.title || typeof searchDocument.title !== 'string') {
-			searchDocument.title = 'Untitled';
-		}
-		
-		if (!searchDocument.content || typeof searchDocument.content !== 'string') {
-			searchDocument.content = searchDocument.title;
-		}
-		
-		// Ensure arrays don't contain null/undefined values
-		searchDocument.aliases = searchDocument.aliases.filter(a => a != null && typeof a === 'string');
-		searchDocument.headers = searchDocument.headers.filter(h => h != null && typeof h === 'string');
-		searchDocument.tags = searchDocument.tags.filter(t => t != null && typeof t === 'string');
-		
-		// CRITICAL: Safe add operation with error recovery
-		try {
-			if (!this.minisearch) return; // Safety check
-			
-			// Additional safety check before add operation
-			if (typeof this.minisearch.add !== 'function') {
-				ExportLog.warning(`MiniSearch instance corrupted before add, creating fresh index`);
-				this.minisearch = new Minisearch(this.minisearchOptions);
-			}
-			
-			this.minisearch.add(searchDocument);
-		} catch (addError) {
-			ExportLog.error(addError, `MiniSearch add failed for ${webpagePath}, attempting final recovery`);
-			
-			// Last resort: create completely fresh instance and try once more
-			try {
-				this.minisearch = new Minisearch(this.minisearchOptions);
-				this.minisearch.add(searchDocument);
-				ExportLog.log(`Successfully added ${webpagePath} to fresh search index`);
-			} catch (finalError) {
-				ExportLog.error(finalError, `Failed to add ${webpagePath} even with fresh index - skipping document`);
-				// Continue without this document rather than crashing the entire export
-			}
-		}
-	}
-
-	/**
-	 * Rebuild the MiniSearch index from scratch when corruption is detected
-	 */
-	private async rebuildMinisearch(): Promise<void>
-	{
-		try {
-			ExportLog.log("Rebuilding corrupted MiniSearch index...");
-			
-			// Create fresh MiniSearch instance
-			this.minisearch = new Minisearch(this.minisearchOptions);
-			
-			// Re-add all existing webpages to the fresh index
-			let rebuiltCount = 0;
-			for (const existingWebpage of this.webpages) {
-				try {
-					if (!existingWebpage.targetPath) continue;
-					
-					const webpagePath = existingWebpage.targetPath.path;
-					
-					// Get headers safely
-					let headers: string[] = [];
-					try {
-						const headersInfo = await existingWebpage.outputData?.renderedHeadings || [];
-						if (headersInfo.length > 0 && headersInfo[0].level == 1 && headersInfo[0].heading == existingWebpage.title) {
-							headersInfo.shift();
-						}
-						headers = headersInfo.map((header) => header.heading);
-					} catch {
-						headers = [];
-					}
-
-					// Create validated document for rebuilding
-					const rebuildDocument = {
-						id: webpagePath,
-						title: existingWebpage.title || existingWebpage.source?.basename || 'Untitled',
-						aliases: Array.isArray(existingWebpage.outputData?.aliases) ? existingWebpage.outputData.aliases : [],
-						headers: Array.isArray(headers) ? headers : [],
-						tags: Array.isArray(existingWebpage.outputData?.allTags) ? existingWebpage.outputData.allTags : [],
-						url: webpagePath,
-						content: ((existingWebpage.outputData?.description || '') + " " + (existingWebpage.outputData?.searchContent || '')).trim() || existingWebpage.title || 'No content',
-					};
-
-					this.minisearch.add(rebuildDocument);
-					rebuiltCount++;
-				} catch (rebuildError) {
-					// Skip problematic documents during rebuild
-					ExportLog.warning(`Skipped webpage during index rebuild: ${existingWebpage.source?.path} - ${rebuildError.message}`);
-				}
-			}
-			
-			ExportLog.log(`MiniSearch index rebuilt successfully with ${rebuiltCount} documents`);
-		} catch (rebuildError) {
-			ExportLog.error(rebuildError, "Failed to rebuild MiniSearch index");
-			// Create minimal working index
-			this.minisearch = new Minisearch(this.minisearchOptions);
+			this.minisearch.add({
+				title: webpage.title,
+				aliases: webpage.outputData.aliases,
+				headers: headers,
+				tags: webpage.outputData.allTags,
+				path: webpagePath,
+				content: webpage.outputData.description + " " + webpage.outputData.searchContent,
+			});
 		}
 	}
 
