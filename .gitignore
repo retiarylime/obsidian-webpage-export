@@ -31,7 +31,7 @@ build
 dist
 
 
-todo.txt
+*.txt
 vault/
 output/
 docker-compose.yaml

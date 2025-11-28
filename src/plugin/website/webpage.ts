@@ -68,7 +68,15 @@ export class Webpage extends Attachment
 		if (!MarkdownRendererAPI.isConvertable(file.extension)) throw new Error("File type not supported: " + file.extension);
 
 		const targetPath = website.getTargetPathForFile(file, filename);
-		options = Object.assign(Settings.exportOptions, options);
+		// CRITICAL FIX: Don't modify global Settings.exportOptions - use a proper copy
+		options = Object.assign({}, Settings.exportOptions, options);
+
+		// DEBUG: Log what's happening in Webpage constructor for mixed vaults
+		if (options.exportRoot === "" || options.exportRoot === undefined) {
+			console.log(`🔧 Webpage constructor - file: ${file.path}, filename: ${filename}`);
+			console.log(`🔧 Webpage constructor - targetPath before: ${targetPath.path}`);
+			console.log(`🔧 Webpage constructor - exportRoot: "${options.exportRoot}", flattenExportPaths: ${options.flattenExportPaths}`);
+		}
 
 		super("", targetPath, file, options);
 		this.targetPath.setExtension("html");
@@ -76,8 +84,20 @@ export class Webpage extends Attachment
 		this.source = file;
 		this.website = website;
 
-		if (this.exportOptions.flattenExportPaths) 
+		// DEBUG: Log path after parent constructor
+		if (options.exportRoot === "" || options.exportRoot === undefined) {
+			console.log(`🔧 Webpage constructor - targetPath after parent: ${this.targetPath.path}`);
+		}
+
+		if (this.exportOptions.flattenExportPaths) {
+			console.log(`🔧 FLATTENING PATH: ${this.targetPath.path} -> flattened`);
 			this.targetPath.parent = Path.emptyPath;
+		}
+
+		// DEBUG: Final path
+		if (options.exportRoot === "" || options.exportRoot === undefined) {
+			console.log(`🔧 Webpage constructor - FINAL targetPath: ${this.targetPath.path}`);
+		}
 	}
 
 	public outputData: WebpageOutputData = new WebpageOutputData();
@@ -603,6 +623,12 @@ export class Webpage extends Attachment
 	public async getAttachments(): Promise<Attachment[]>
 	{
 		const sources = this.srcLinks;
+		
+		// Debug: log if this is a markdown file with embedded MP3s
+		if (this.source.extension === "md" && sources.some(src => src.includes(".mp3"))) {
+			console.log(`🎵 MARKDOWN with MP3: ${this.source.path} found embedded sources:`, sources.filter(src => src.includes(".mp3")));
+		}
+		
 		for (const src of sources)
 		{
 			if ((!src.startsWith("app://") && /\w+:(\/\/|\\\\)/.exec(src)) || // link is a URL except for app://
@@ -618,6 +644,11 @@ export class Webpage extends Attachment
 			{
 				ExportLog.log("Attachment source not found: " + src);
 				continue;
+			}
+
+			// Debug: log if we're creating an MP3 attachment from embedded reference
+			if (sourcePath.endsWith(".mp3")) {
+				console.log(`🎵 EMBEDDED MP3 attachment created: ${sourcePath} -> ${attachment.targetPath.path} (type: ${attachment.constructor.name})`);
 			}
 
 			if (!this.attachments.includes(attachment)) 

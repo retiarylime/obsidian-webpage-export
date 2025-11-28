@@ -105,7 +105,14 @@ export class GraphRenderWorker
 			console.log("Failed to transfer control to offscreen canvas");
 		}
 
-		var workerPath = `${ObsidianSite.document.info.pathToRoot}/${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`;
+        // Normalize pathToRoot to avoid double-slashes when concatenating
+        let rootPath = (ObsidianSite.document.info.pathToRoot ?? "").toString();
+        if (rootPath === '.' || rootPath === './') rootPath = '';
+        // strip trailing slashes
+        rootPath = rootPath.replace(/\/+$|\/+$/g, '');
+        var workerPath = rootPath
+            ? `${rootPath}/${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`
+            : `${Shared.libFolderName}/${Shared.scriptsFolderName}/graph-render-worker.js`;
 
 		if (window.location.protocol === 'file:')
 		{
@@ -115,7 +122,19 @@ export class GraphRenderWorker
 		}
 		else
 		{
-			this.worker = new Worker(new URL(workerPath, window.location.href).pathname);
+			// Check if we're in a chunk export by looking for chunk export flags
+			// ChunkedWebsiteExporter sets _chunkExporterOverride flag on exportOptions
+			const exportOptions = (ObsidianSite as any)?.exportOptions;
+			const isChunkExport = exportOptions?._chunkExporterOverride === true || 
+								  exportOptions?._crashRecoveryMode === true;
+			
+			// For chunk exports, use .href to avoid CORS issues
+			// For regular exports, use .pathname for relative paths
+			if (isChunkExport) {
+				this.worker = new Worker(new URL(workerPath, window.location.href).href);
+			} else {
+				this.worker = new Worker(new URL(workerPath, window.location.href).pathname);
+			}
 		}
 
 
@@ -214,7 +233,7 @@ export class GraphRenderWorker
 		const alpha = parseFloat(opacity);
 		const result = 
 		{
-			a: (alpha * (color?.alpha ?? 1)) ?? 1,
+			a: color ? alpha * color.alpha : alpha,
 			rgb: (color?.red ?? 0x880000) << 16 | (color?.green ?? 0x008800)  << 8 | (color?.blue ?? 0x000088)
 		};
 
