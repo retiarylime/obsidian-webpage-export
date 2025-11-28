@@ -65,33 +65,11 @@ export class Attachment
 
 	private removeRootFromPath(path: Path, allowSlugify: boolean = true)
 	{
-		console.log(`🔧 DOWNLOADABLE removeRootFromPath called:`);
-		console.log(`   path: "${path.path}"`);
-		console.log(`   exportRoot: "${this.exportOptions.exportRoot}"`);
-		console.log(`   exportRoot type: ${typeof this.exportOptions.exportRoot}`);
-		console.log(`   flattenExportPaths: ${this.exportOptions.flattenExportPaths}`);
-		
-		// CHUNKED EXPORT FIX: For mixed vaults (empty exportRoot), preserve full directory structure
-		if (this.exportOptions.exportRoot === "" || this.exportOptions.exportRoot === undefined) {
-			// Don't remove any root - preserve the full relative directory structure
-			console.log(`🔧 ✅ Preserving full path for mixed vault: "${path.path}"`);
-			return path;
-		}
-		
-		console.log(`🔧 ❌ Applying root stripping logic for exportRoot: "${this.exportOptions.exportRoot}"`);
-		
-		// Original logic for normal exports
 		// remove the export root from the target path
 		const root = new Path(this.exportOptions.exportRoot ?? "").slugify(allowSlugify && this.exportOptions.slugifyPaths).path + "/";
-		console.log(`   root to strip: "${root}"`);
-		
 		if (path.path.startsWith(root))
 		{
-			const oldPath = path.path;
 			path.reparse(path.path.substring(root.length));
-			console.log(`   stripped "${root}" from "${oldPath}" -> "${path.path}"`);
-		} else {
-			console.log(`   path doesn't start with root, no stripping applied`);
 		}
 		return path;
 	}
