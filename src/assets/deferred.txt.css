@@ -475,7 +475,6 @@ body #center-content>.obsidian-document>.markdown-preview-sizer
 
 /*#region Font Import */
 
-/*
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 /* Define Ubuntu font family with comprehensive mobile-friendly fallbacks */
@@ -551,7 +550,6 @@ h1, h2, h3, h4, h5, h6 {
         -moz-osx-font-smoothing: grayscale;
     }
 }
-*/
 
 /*#endregion */
 
