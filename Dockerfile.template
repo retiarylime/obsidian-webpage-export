@@ -45,6 +45,7 @@ COPY --from=plugin \
   /app/main.js \
   /app/styles.css \
   /app/manifest.json \
+  /app/node_modules \
   /plugin/
 
 # Copy the inject scripts
